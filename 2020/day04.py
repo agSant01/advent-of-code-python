@@ -1,5 +1,5 @@
 import re
-import utils as ut
+import yearutils as yu
 
 
 def parse(line: str):
@@ -9,7 +9,7 @@ def parse(line: str):
 
 
 def day4p1():
-    passports = ut.get_input('day04_input.txt', parse)
+    passports = yu.get_input('day04_input.txt', parse)
     valid = 0
     curr_p = {}
     for p in passports:
@@ -78,7 +78,7 @@ def isValidPassport(p):
 
 
 def day4p2():
-    passports = ut.get_input('day04_input.txt', parse)
+    passports = yu.get_input('day04_input.txt', parse)
     valid = 0
     curr_p = {}
     for p in passports:

@@ -45,7 +45,7 @@ def _create_py_file(day: str):
     opt_filename = '{"_test" if test else ""}'
 
     lines = [
-        'import utils as ut',
+        'import yearutils as yu',
         '',
         'def get_filename(test=False):',
         f'   return f\'day{day}_input{opt_filename}.txt\'',
@@ -54,7 +54,7 @@ def _create_py_file(day: str):
         '    return line',
         '',
         f'def day{day}p1():',
-        '   data = ut.get_input(get_filename(test=True), parse1)',
+        '   data = yu.get_input(get_filename(test=True), parse1)',
         '   for d in data:',
         '       print(d)',
         '',
@@ -62,7 +62,7 @@ def _create_py_file(day: str):
         '    return parse1(line)',
         '',
         f'def day{day}p2():',
-        '   data = ut.get_input(get_filename(test=True), parse2)',
+        '   data = yu.get_input(get_filename(test=True), parse2)',
         '   for d in data:',
         '       pass',
         '',

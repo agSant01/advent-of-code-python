@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -10,7 +10,7 @@ def parse(line):
 
 
 def day01p1():
-    result = ut.get_input(get_filename(test=False), parse)
+    result = yu.get_input(get_filename(test=False), parse)
     floor = 0
     for paren in result[0]:
         if paren == '(':
@@ -21,7 +21,7 @@ def day01p1():
 
 
 def day01p2():
-    result = ut.get_input(get_filename(test=False), parse)
+    result = yu.get_input(get_filename(test=False), parse)
     floor = 0
     for idx, paren in enumerate(result[0]):
         if paren == '(':

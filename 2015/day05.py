@@ -1,5 +1,5 @@
 from os import nice
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -52,7 +52,7 @@ def isValid(s: str):
 
 
 def day05p1():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
     nice_ = 0
     for word in data:
         if isValid(word):
@@ -77,7 +77,7 @@ def repeated(word):
 
 
 def day05p2():
-    words = ut.get_input(get_filename(test=False), parse)
+    words = yu.get_input(get_filename(test=False), parse)
     nice_ = 0
     for word in words:
 

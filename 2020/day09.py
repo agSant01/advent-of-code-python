@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -17,7 +17,7 @@ def find(sum_, numbers):
 
 
 def day09p1():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     preamble = 25
 
@@ -75,7 +75,7 @@ def contSum(numToSum, data):
 
 
 def day09p2():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     invalid_num = findInvalidNum(data)
     seq = contSum(invalid_num, data)

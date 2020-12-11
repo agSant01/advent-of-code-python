@@ -1,7 +1,7 @@
 import string
 import hashlib
 import crypt
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -13,7 +13,7 @@ def parse(line):
 
 
 def day04p1():
-    input = ut.get_input(get_filename(test=False), parse)[0]
+    input = yu.get_input(get_filename(test=False), parse)[0]
     i = 0
     while True:
         toH = input + str(i)
@@ -26,7 +26,7 @@ def day04p1():
 
 
 def day04p2():
-    data = ut.get_input(get_filename(test=False), parse)[0]
+    data = yu.get_input(get_filename(test=False), parse)[0]
 
     i = 0
     while True:

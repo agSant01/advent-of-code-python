@@ -1,5 +1,5 @@
 from os import curdir
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -12,7 +12,7 @@ def parse(line):
 
 
 def day08p1():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     cntr = 0
     curr_ = 0
@@ -82,7 +82,7 @@ def run_boot(data):
 
 
 def day08p2():
-    original = ut.get_input(get_filename(test=False), parse)
+    original = yu.get_input(get_filename(test=False), parse)
     check_points = []
     for idx, val in enumerate(original):
         if val[0] in ['jmp', 'nop']:

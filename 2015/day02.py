@@ -1,5 +1,5 @@
 from os import getresgid
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -32,7 +32,7 @@ def getBow(a):
 
 def day02p1():
     # (l,w,h)
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
     total_area = 0
     for d in data:
         total_area += getArea(d)
@@ -40,7 +40,7 @@ def day02p1():
 
 
 def day02p2():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
     total_area = 0
     for d in data:
         total_area += getBow(d)

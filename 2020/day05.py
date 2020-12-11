@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 import math
 
 
@@ -38,7 +38,7 @@ def get_col(code):
 
 
 def day5p1():
-    bpas = ut.get_input('day05_input_test.txt', parse)
+    bpas = yu.get_input('day05_input_test.txt', parse)
     ids = []
     for p in bpas:
         # print(get_row(p[0]), get_col(p[1]), get_row(p[0]) * 8+get_col(p[1]))
@@ -48,7 +48,7 @@ def day5p1():
 
 
 def day5p2():
-    bpas = ut.get_input('day05_input_test.txt', parse)
+    bpas = yu.get_input('day05_input_test.txt', parse)
     ids = []
     for p in bpas:
         # print(get_row(p[0]), get_col(p[1]), get_row(p[0]) * 8+get_col(p[1]))

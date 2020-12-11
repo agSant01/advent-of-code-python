@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False, opt=''):
@@ -63,7 +63,7 @@ def find_parents(find, g_dict):
 
 
 def day07p1():
-    data = ut.get_input(get_filename(test=False), parse1)
+    data = yu.get_input(get_filename(test=False), parse1)
     g_dict = dict()
 
     for d in data:
@@ -99,7 +99,7 @@ def find_childs(parent, g_dict):
 
 
 def day07p2():
-    data = ut.get_input(get_filename(test=False, opt=''), parse2)
+    data = yu.get_input(get_filename(test=False, opt=''), parse2)
     g_dict = dict()
 
     for d in data:

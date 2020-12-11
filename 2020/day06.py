@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def parse(line):
@@ -9,7 +9,7 @@ def parse(line):
 
 
 def day06p1():
-    persons = ut.get_input("day06_input.txt", parse)
+    persons = yu.get_input("day06_input.txt", parse)
 
     total_sum = 0
     group_answers = set()
@@ -25,7 +25,7 @@ def day06p1():
 
 
 def day06p2():
-    persons = ut.get_input("day06_input.txt", parse)
+    persons = yu.get_input("day06_input.txt", parse)
 
     total_sum = 0
 

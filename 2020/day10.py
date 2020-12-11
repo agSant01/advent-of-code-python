@@ -3,7 +3,7 @@ import math
 import collections
 from os import stat
 from typing import Collection, List
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -30,7 +30,7 @@ def find_jolt_diffs(joltages: List[int]):
 
 
 def day10p1():
-    joltages = ut.get_input(get_filename(test=False), parse1)
+    joltages = yu.get_input(get_filename(test=False), parse1)
 
     joltage_diffs = find_jolt_diffs(joltages)
 
@@ -61,7 +61,7 @@ def find_arr_rec(joltages, DP, idx):
 
 
 def day10p2():
-    joltages = ut.get_input(get_filename(test=False), parse2)
+    joltages = yu.get_input(get_filename(test=False), parse2)
 
     joltages.append(0)
     joltages.append(max(joltages) + 3)

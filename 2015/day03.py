@@ -1,5 +1,5 @@
 import collections
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -11,7 +11,7 @@ def parse(line):
 
 
 def day03p1():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     houses = collections.defaultdict(int)
 
@@ -59,7 +59,7 @@ def deliverToy(direction, curr_pos, houses):
 
 
 def day03p2():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     santa_houses = collections.defaultdict(int)
     robosanta_houses = collections.defaultdict(int)

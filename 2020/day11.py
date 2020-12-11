@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -76,7 +76,7 @@ def ripple(seats):
 
 
 def day11p1():
-    seats = ut.get_input(get_filename(test=False), parse1)
+    seats = yu.get_input(get_filename(test=False), parse1)
     # print(seats)
 
     change = True
@@ -184,7 +184,7 @@ def ripple2(seats):
 
 
 def day11p2():
-    seats = ut.get_input(get_filename(test=False), parse1)
+    seats = yu.get_input(get_filename(test=False), parse1)
 
     change = True
     newSeats = seats.copy()

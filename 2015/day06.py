@@ -1,4 +1,4 @@
-import utils as ut
+import yearutils as yu
 
 
 def get_filename(test=False):
@@ -46,7 +46,7 @@ def toggle(mtx, left, right):
 
 
 def day06p1():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     mtrx = [[False for i in range(1000)] for j in range(1000)]
 
@@ -85,7 +85,7 @@ def toggle2(mtx, left, right):
 
 
 def day06p2():
-    data = ut.get_input(get_filename(test=False), parse)
+    data = yu.get_input(get_filename(test=False), parse)
 
     mtrx = [[0 for i in range(1000)] for j in range(1000)]
 
