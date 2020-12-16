@@ -15,6 +15,30 @@ def parse1(line):
     return line
 
 
+def getRules(currLine, data):
+    rules = {}
+    while currLine < len(data) and len(data[currLine]) != 0:
+        line = data[currLine]
+        line = line.split(':')
+        ranges = list(map(lambda x: x.strip(), line[1].split(' or ')))
+
+        key = line[0]
+
+        rules[key] = list(
+            map(lambda x: list(map(int, x.split('-'))), ranges))
+
+        currLine += 1
+    return rules, currLine
+
+
+def parseTickets(currLine, data):
+    nearby_tickets = []
+    while currLine < len(data) and len(data[currLine]) != 0:
+        nearby_tickets.append(list(map(int, data[currLine].split(','))))
+        currLine += 1
+    return nearby_tickets, currLine
+
+
 def isValid(t, rules):
     for field in t:
         f = False
@@ -32,29 +56,11 @@ def isValid(t, rules):
 def day16p1():
     data = get_input(parse1, test=False)
 
-    rules = {}
-    my_ticket = []
-    nearby_tickets = []
-    currLine = 0
-    while len(data[currLine]) != 0:
-        line = data[currLine]
-        line = line.split(':')
-        ranges = list(map(lambda x: x.strip(), line[1].split(' or ')))
-
-        key = line[0]
-
-        rules[key] = list(
-            map(lambda x: list(map(int, x.split('-'))), ranges))
-
-        currLine += 1
-
+    rules, currLine = getRules(0, data)
     currLine += 2
-    my_ticket = list(map(int, data[currLine].split(',')))
-
     currLine += 3
-    while currLine < len(data) and len(data[currLine]) != 0:
-        nearby_tickets.append(list(map(int, data[currLine].split(','))))
-        currLine += 1
+    nearby_tickets, currLine = parseTickets(currLine, data)
+
     # print(rules)
     # print(my_ticket)
     # print(nearby_tickets)
@@ -74,9 +80,9 @@ def parse2(line):
     return parse1(line)
 
 
-def getValidLocation(tck, rules):
+def getValidLocation(tckt, rules):
     valid_locations = set(rules.keys())
-    for f in tck:
+    for f in tckt:
         vt = set()
         for k, rs in rules.items():
             flg = False
@@ -93,77 +99,69 @@ def getValidLocation(tck, rules):
 def day16p2():
     data = get_input(parse2, test=False)
 
-    rules = {}
-    my_ticket = []
-    nearby_tickets = []
-    currLine = 0
-    while len(data[currLine]) != 0:
-        line = data[currLine]
-        line = line.split(':')
-        ranges = list(map(lambda x: x.strip(), line[1].split(' or ')))
-
-        key = line[0]
-
-        rules[key] = list(
-            map(lambda x: list(map(int, x.split('-'))), ranges))
-
-        currLine += 1
-
+    # Get Rules
+    rules, currLine = getRules(0, data)
+    # Get My Ticket
     currLine += 2
     my_ticket = list(map(int, data[currLine].split(',')))
-
+    # Get Nearby Ticket
     currLine += 3
-    while currLine < len(data) and len(data[currLine]) != 0:
-        nearby_tickets.append(list(map(int, data[currLine].split(','))))
-        currLine += 1
+    nearby_tickets, currLine = parseTickets(currLine, data)
+
     # print(rules)
     # print(my_ticket)
     # print(nearby_tickets)
 
-    valid_tck = []
+    valid_tckt = []
     for n in nearby_tickets:
         value, f = isValid(n, rules)
         if f:
-            valid_tck.append(n)
+            valid_tckt.append(n)
 
-    # print(valid_tck)
+    # print(valid_tckt)
     # print(rules)
 
     valid_type_col = {}
 
-    for c in range(len(valid_tck[0])):
-        col_i = [row[c] for row in valid_tck]
-        print(col_i)
+    for c in range(len(valid_tckt[0])):
+        # Get all the values of column c
+        col_i = [row[c] for row in valid_tckt]
+
+        # There exists valid ranges for Rule r
+        # find Rules that satisfiy values in col_i
+        # col_i: [] get all tha valid labels for given column values
+        # set() of valid labels
         valid_type_col[c] = getValidLocation(col_i, rules)
 
-    print(valid_type_col)
-
+    # used labels
     used = set()
 
-    new_m = {}
+    # new map of len(Labels): ColNumber
+    lbl_len_to_col = {}
     for col, vtc in valid_type_col.items():
-        new_m[len(vtc)] = col
-    print(new_m)
+        lbl_len_to_col[len(vtc)] = col
 
-    my_t_map = {}
-    for k in sorted(new_m.keys()):
-        col = new_m[k]
-        class_ = valid_type_col[col]
-        print(class_, k, col)
+    # Find the remaining labels for the Col
+    # start by the col with only 1 option
+    my_tckt_map = {}
+    for k in sorted(lbl_len_to_col.keys()):
+        col = lbl_len_to_col[k]
+        labels = valid_type_col[col]
 
-        my_t_map[col] = list(class_.symmetric_difference(used))[0]
+        # if label has not been used, then it will appear only on Labels
+        # get the symetric diff
+        my_tckt_map[col] = list(labels.symmetric_difference(used))[0]
 
-        used = used.union(class_)
-        print(class_, used)
+        # add labels to used
+        used = used.union(labels)
 
-    print(my_t_map)
-
+    # filter the columns by those that contain 'departure'
     filtered_cols = list(
-        filter(lambda x: 'departure' in x[1], my_t_map.items()))
+        filter(lambda x: 'departure' in x[1], my_tckt_map.items()))
 
+    # get the multiplication of the Values on the Labels
     res = 1
     for col, _ in filtered_cols:
-        print(my_ticket[col])
         res *= my_ticket[col]
 
     return res
