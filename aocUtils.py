@@ -51,7 +51,7 @@ def init_year(year: int = None):
             f.write(l + '\n')
 
 
-def create_input_files(day, data, year=None):
+def create_input_files(day, data, year=None, force=False):
     day = str(day).zfill(2)
     if not year:
         year = datetime.today().year
@@ -59,25 +59,25 @@ def create_input_files(day, data, year=None):
     console('Creating Input files')
 
     input_f = os.path.join(str(year), f"day{day}_input.txt")
-    console(f'Creating Input file: {input_f}')
-    input_ft = os.path.join(str(year), f"day{day}_input_test.txt")
-    console(f'Creating Input file: {input_ft}')
-    if os.path.exists(input_f):
+    if os.path.exists(input_f) and not force:
         console(f'File: {input_f} already exists!!!')
         exit(1)
 
+    console(f'Creating Input file: {input_f}')
     with open(input_f, 'w') as f:
         f.write(data)
 
-    if os.path.exists(input_ft):
+    input_ft = os.path.join(str(year), f"day{day}_input_test.txt")
+    if os.path.exists(input_ft) and not force:
         console(f'File: {input_ft} already exists!!!')
         exit(1)
 
+    console(f'Creating Input file: {input_ft}')
     with open(input_ft, 'w') as f:
         f.write('')
 
 
-def get_input_data(day, year=None):
+def get_input_data(day, year=None, force=False):
     day = int(day)
     if not year:
         year = datetime.today().year
@@ -97,7 +97,7 @@ def get_input_data(day, year=None):
         console(f'Response Content: {data.content}')
         exit(1)
 
-    create_input_files(day, data.content.decode(), year)
+    create_input_files(day, data.content.decode(), year, force)
 
 
 def create_day(day: str, year: str = None):
@@ -148,6 +148,9 @@ def main():
     parser.add_argument('--init-year', '-iy',
                         type=int, nargs='?', default=False, required=False)
 
+    parser.add_argument('--force', '-f', action='store_true',
+                        default=False, required=False)
+
     args = parser.parse_args()
     # Debug
     # console(args)
@@ -162,7 +165,7 @@ def main():
     if args.create_day:
         create_day(args.create_day, args.year)
     elif args.input_data:
-        get_input_data(args.input_data, args.year)
+        get_input_data(args.input_data, args.year, args.force)
 
 
 if __name__ == "__main__":
