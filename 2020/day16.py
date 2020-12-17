@@ -80,17 +80,14 @@ def parse2(line):
     return parse1(line)
 
 
-def getValidLocation(tckt, rules):
+def getValidLocations(tckt_col_i, rules):
     valid_locations = set(rules.keys())
-    for f in tckt:
+    for f in tckt_col_i:
         vt = set()
         for k, rs in rules.items():
-            flg = False
             for r in rs:
                 if r[0] <= f <= r[1]:
-                    flg = True
-            if flg:
-                vt.add(k)
+                    vt.add(k)
         valid_locations = valid_locations.intersection(vt)
 
     return valid_locations
@@ -114,15 +111,15 @@ def day16p2():
 
     valid_tckt = []
     for n in nearby_tickets:
-        value, f = isValid(n, rules)
-        if f:
+        _, flg = isValid(n, rules)
+        if flg:
             valid_tckt.append(n)
 
     # print(valid_tckt)
     # print(rules)
 
+    # Get the valid labels for columns
     valid_type_col = {}
-
     for c in range(len(valid_tckt[0])):
         # Get all the values of column c
         col_i = [row[c] for row in valid_tckt]
@@ -131,7 +128,7 @@ def day16p2():
         # find Rules that satisfiy values in col_i
         # col_i: [] get all tha valid labels for given column values
         # set() of valid labels
-        valid_type_col[c] = getValidLocation(col_i, rules)
+        valid_type_col[c] = getValidLocations(col_i, rules)
 
     # used labels
     used = set()
