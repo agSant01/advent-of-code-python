@@ -88,7 +88,7 @@ def getValidLocations(tckt_col_i, rules):
             for r in rs:
                 if r[0] <= f <= r[1]:
                     vt.add(k)
-        valid_locations = valid_locations.intersection(vt)
+        valid_locations.intersection_update(vt)
 
     return valid_locations
 
@@ -141,7 +141,18 @@ def day16p2():
     # Find the remaining labels for the Col
     # start by the col with only 1 option
     my_tckt_map = {}
-    for k in sorted(lbl_len_to_col.keys()):
+
+    # instead of sorting the keys with O(n*log(n))
+    # to have the columns sorted in least labels (1 to n)
+    # Find the max and iterate through 1 -> MaxKey, Time Complexity O(n)
+    #
+    max_key = max(lbl_len_to_col.keys())
+
+    for k in range(1, max_key + 1):
+        # ignore if amount of labels does not exist
+        if k not in lbl_len_to_col:
+            continue
+
         col = lbl_len_to_col[k]
         labels = valid_type_col[col]
 
@@ -150,7 +161,7 @@ def day16p2():
         my_tckt_map[col] = list(labels.symmetric_difference(used))[0]
 
         # add labels to used
-        used = used.union(labels)
+        used.update(labels)
 
     # filter the columns by those that contain 'departure'
     filtered_cols = list(
