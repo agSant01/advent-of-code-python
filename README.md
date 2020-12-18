@@ -87,7 +87,7 @@ Optional Flag: `-y <year>` \
 DefaultValue: `Current Year`
 
 
-Manual query of data. Folder of `year` need to exist or already be initialized. See [Initialize Year](#initialize-ear). 
+Manual query of data. Folder of `year` need to exist or already be initialized. See [Initialize Year](#initialize-year). 
 
 ### Examples
 ```
