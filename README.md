@@ -67,7 +67,7 @@ DefaultValue: `Current Year`
 
 Create template for day under `./<year>/` directory.
 
-The year directory need to be initialized first, see [Initialize Year](##Initialize-Year).
+The year directory need to be initialized first, see [Initialize Year](#initialize-year).
 
 This command will also query [https://adventofcode.com/](https://adventofcode.com/) for the data for the given day if the data is available.
 
@@ -87,7 +87,7 @@ Optional Flag: `-y <year>` \
 DefaultValue: `Current Year`
 
 
-Manual query of data. Folder of `year` need to exist or already be initialized. See [Initialize Year](##Initialize-Year). 
+Manual query of data. Folder of `year` need to exist or already be initialized. See [Initialize Year](#initialize-ear). 
 
 ### Examples
 ```
