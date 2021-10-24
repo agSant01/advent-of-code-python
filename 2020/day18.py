@@ -41,8 +41,6 @@ def calculate(tokens, index=0):
 
         idx += 1
 
-    s.reverse()
-
     result = int(s.pop())
     while len(s) != 0:
         op = s.pop()
@@ -52,6 +50,7 @@ def calculate(tokens, index=0):
 
         if op == '*':
             result *= num_b
+
     return result, idx
 
 
@@ -144,7 +143,6 @@ def main():
     print('-'*(n), "Day 18 - Part 2", '-'*n)
     print('Result =>', day18p2())
     print()
-
 
 
 main()
