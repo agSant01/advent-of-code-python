@@ -65,24 +65,13 @@ def winner(player1, player2):
     hitpoints2, damage2, armor2 = player2
 
     # resulting damages of each player
-    d1_r = max(damage1 - armor2, 0)
-    d2_r = max(damage2 - armor1, 0)
+    d1_r = max(damage1 - armor2, 1)
+    d2_r = max(damage2 - armor1, 1)
 
     # player 1 goes first
     # hist by player 2
-    if d2_r == 0:
-        hits_to_p1 = math.inf
-    else:
-        hits_to_p1 = hitpoints1/d2_r
-
-    if d1_r == 0:
-        hits_to_p2 = math.inf
-    else:
-        hits_to_p2 = hitpoints2/d1_r - 1
-
-    if hits_to_p1 == math.inf and hits_to_p2 == math.inf:
-        # both are inf
-        return 'player1'
+    hits_to_p1 = hitpoints1/d2_r
+    hits_to_p2 = hitpoints2/d1_r - 1
 
     if hits_to_p1 - hits_to_p2 == 0:
         return 'tie'
@@ -124,10 +113,11 @@ def day21p1():
 
     combinations = generate_fight_configurations()
 
-    #  8 hit points, 5 damage, and 5 armor, and that the boss has 12 hit points, 7 damage, and 2 armor:
     for configuration in combinations:
-        result = winner([HITPOINTS, configuration[1],
-                         configuration[2]], battle_boss)
+        result = winner(
+            [HITPOINTS, configuration[1], configuration[2]],
+            battle_boss
+        )
         if result == 'player1':
             return configuration
 
