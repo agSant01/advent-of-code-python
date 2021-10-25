@@ -40,7 +40,7 @@ def init_year(year: int = None):
     console(f'Initializing year directory: ./{year}')
 
     if os.path.isdir(str(year)):
-        console(f'Directory: ./{year} already exists!!!')
+        console(f'[ERROR] Directory: ./{year} already exists!!!')
         exit(1)
     else:
         os.makedirs(str(year))
