@@ -73,7 +73,7 @@ def day03p2():
     # Each groups is the 3 sides of a triangle
     grouped_sides = map(
         lambda index: sorted(sides[index:index+3]),
-        range(0, len(sides), 3)
+        range(0, len(sides), 3)  # [0, 3, 6, ...]
     )
 
     # filter valid triangles
