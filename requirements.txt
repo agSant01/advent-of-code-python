@@ -1,0 +1,2 @@
+markdownify==0.9.4
+bs4==0.0.1
