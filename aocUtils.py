@@ -54,6 +54,7 @@ def init_year(year: int = None):
 
 
 def create_instruction_file(day, year=None):
+    day = str(day).zfill(2)
     if not year:
         console(
             '[ERROR] To download instruction files the year must be specified...')
