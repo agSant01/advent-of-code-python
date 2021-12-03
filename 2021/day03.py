@@ -30,24 +30,21 @@ def parse1(line):
 
 def day03p1():
     data = get_input(parse1, test=False)
-    map = collections.defaultdict(list)
-
-    for binary in data:
-        for idx, bit in enumerate(binary):
-            if idx not in map:
-                map[idx] = [0, 0]
-            map[idx][int(bit)] += 1
+    bits = len(data[0])
+    numbers = len(data)
 
     gamma = 0
-    ep = 0
-    bits = len(data[0])-1
-    for idx, value in map.items():
-        if value[0] > value[1]:
-            ep += 2**(bits-idx)
-        else:
-            gamma += 2**(bits-idx)
+    for pos in range(bits):
+        s1 = 0
+        for binary in data:
+            s1 += int(binary[pos])
+        if numbers-s1 < s1:
+            gamma += 2**(bits-pos-1)
 
-    return gamma*ep
+    # epsilon is negation of gamma
+    # python truncates the binary of a number
+    # -> ~gamma and (with a binary number of bits length of 1's)
+    return gamma * (~gamma & (1 << bits)-1)
 
 
 ################################################################################
@@ -69,16 +66,15 @@ def day03p2():
     oxygen_gen = [d for d in data]
     co2_scrub = [d for d in data]
 
+    def count(numbers: list, pos: int):
+        s1 = 0
+        for binary in numbers:
+            s1 += int(binary[pos])
+        return len(numbers)-s1, s1
+
     pos = 0
     while len(oxygen_gen) > 1:
-        s0 = 0
-        s1 = 0
-
-        for binary in oxygen_gen:
-            if binary[pos] == '0':
-                s0 += 1
-            else:
-                s1 += 1
+        s0, s1 = count(oxygen_gen, pos)
 
         win_ox = '1' if s1 >= s0 else '0'
 
@@ -87,13 +83,7 @@ def day03p2():
 
     pos = 0
     while len(co2_scrub) > 1 and pos < bit_len:
-        s0 = 0
-        s1 = 0
-        for binary in co2_scrub:
-            if binary[pos] == '0':
-                s0 += 1
-            else:
-                s1 += 1
+        s0, s1 = count(co2_scrub, pos)
 
         win_co = '0' if s0 <= s1 else '1'
 
