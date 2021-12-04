@@ -38,15 +38,6 @@ def has_bingo(plays: set) -> bool:
     Returns:
         bool: True if ig has bingo, otherwise returns False
     """
-    # check diagonal
-    diagonal = True
-    for c in [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)]:
-        if c not in plays:
-            diagonal = False
-            break
-    if diagonal:
-        return True
-
     # check horizontal
     for x in range(5):
         horizontal = True
@@ -57,7 +48,7 @@ def has_bingo(plays: set) -> bool:
         if horizontal:
             return True
 
-    # check diagonal
+    # check vertical
     for y in range(5):
         vertical = True
         for x in range(5):
