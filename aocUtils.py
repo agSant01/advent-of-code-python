@@ -92,7 +92,7 @@ def create_instruction_file(day, year=None):
     with open(file_path, 'w') as f:
         f.write(markdown)
 
-    console('Created instrutions MD file...')
+    console('Created instructions MD file...')
 
 
 def create_input_files(day, data, year=None, force=False):
