@@ -30,7 +30,6 @@ def has_bingo(plays: set) -> bool:
     """
     Time complexity:
      - Worst: O(m*n)
-     - Best: O(5) => O(1)
 
     Args:
         plays (set): set of (x, y) coordinates of valid plays
