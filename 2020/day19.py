@@ -1,3 +1,6 @@
+import re
+
+
 def get_filename(test=False):
     return f'day19_input{"_test" if test else ""}.txt'
 
@@ -33,57 +36,53 @@ def getRules(lines):
         items = []
         for char in divs[1].split('|'):
             items.append(char.strip().replace('\"', '').split())
-        m[int(divs[0])] = items
+        m[divs[0]] = items
 
     return m, idx + 1
 
 
-def createRuleStr(rules):
-    final_rule = ''
-    import collections
-    new_rules = collections.defaultdict(list)
-    visited = set()
-    stack = [(0, [])]
-    while len(stack) > 0:
-        id, rs = stack.pop()
+def createRuleStr_rec(rules: dict, id: str, rep=None):
+    rule = rules[id]
 
-        if id in visited:
-            continue
+    if rep:
+        if id == '8':
+            rep[0] += 1
+            if rep[0] > 10:
+                return ''
+        if id == '11':
+            rep[1] += 1
+            if rep[1] > 10:
+                return ''
 
-        # see if subrule exists
-        # if id in new_rules:
-        print(id, rs)
+    if len(rule) == 1:
+        if rule[0][0] in ['a', 'b']:
+            return rule[0][0]
 
-        for sr in rules[int(id)]:
-            for r in sr:
-                if r in ['a', 'b']:
-                    # stack.append((id, [r]))
-                    new_rules[int(id)] = r
-                else:
-                    if int(r) in new_rules:
-                        new_rules[id].append(new_rules[int(r)])
-                    else:
-                        stack.append((id, sr+r))
+    curr = []
+    for sr in rule:
+        k = ''
+        for item in sr:
+            k += createRuleStr_rec(rules, item, rep)
+        curr.append(k)
 
-                print(r)
-
-    print(new_rules)
-    # for id, rule in rules.items():
-    #     newSubRuleList = []
-    #     for subRule in rule:
-    #         if len(subRule) == 1 and subRule[0] in ['a', 'b']:
-    #             newSubRuleList.append()
-
+    return '(' + '|'.join(curr) + ')'
 
 ################################################################################
 
 
 def day19p1():
-    data = get_input(parse1, test=True)
+    data = get_input(parse1, test=False)
     rules, idx = getRules(data)
-    print(idx, rules)
+    data = data[idx:]
 
-    cr = createRuleStr(rules)
+    cr = createRuleStr_rec(rules, '0')
+
+    i = 0
+    for d in data:
+        if re.fullmatch(rf'{cr}', d):
+            i += 1
+
+    return i
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -99,9 +98,23 @@ def parse2(line):
 
 ################################################################################
 def day19p2():
-    data = get_input(parse2, test=True)
+    data = get_input(parse2, test=False)
+
+    rules, idx = getRules(data)
+
+    rules['8'] = [['42'], ['42', '8']]
+    rules['11'] = [['42', '31'], ['42', '11', '31']]
+
+    data = data[idx:]
+
+    cr = createRuleStr_rec(rules, '0', rep=[0, 0])
+
+    i = 0
     for d in data:
-        pass
+        if re.fullmatch(rf'{cr}', d):
+            i += 1
+
+    return i
 
 
 def main():
