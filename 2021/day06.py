@@ -1,7 +1,5 @@
-import collections
-import math
 import copy
-from typing import Dict
+from typing import List
 
 
 def get_filename(test=False):
@@ -65,7 +63,7 @@ def day06p2():
     data: list = get_input(parse2, test=False)[0]
 
     # Key will be the REPRODUCTION COUNTER. Value will be the quantity of Lanterns
-    lanternsCount: Dict[int, int] = collections.defaultdict(int)
+    lanternsCount: List[int] = [0 for _ in range(9)]
 
     # Lantern Dict Bucket Count
     for lantern in data:
@@ -74,16 +72,16 @@ def day06p2():
     MX_DAYS = 256
     for _ in range(MX_DAYS):
         # Copy to avoid memory issues
-        tmp: Dict[int, int] = copy.copy(lanternsCount)
-        for k, v in tmp.items():
-            if k == 0:
-                lanternsCount[6] += v
-                lanternsCount[8] += v
+        tmp = copy.copy(lanternsCount)
+        for counter in range(len(lanternsCount)):
+            if counter == 0:
+                lanternsCount[6] += tmp[0]
+                lanternsCount[8] += tmp[0]
             else:
-                lanternsCount[k-1] += v
-            lanternsCount[k] -= v
+                lanternsCount[counter-1] += tmp[counter]
+            lanternsCount[counter] -= tmp[counter]
 
-    return sum(lanternsCount.values())
+    return sum(lanternsCount)
 
 
 def main():
