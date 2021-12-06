@@ -71,15 +71,9 @@ def day06p2():
 
     MX_DAYS = 256
     for _ in range(MX_DAYS):
-        # Copy to avoid memory issues
-        tmp = copy.copy(lanternsCount)
-        for counter in range(len(lanternsCount)):
-            if counter == 0:
-                lanternsCount[6] += tmp[0]
-                lanternsCount[8] += tmp[0]
-            else:
-                lanternsCount[counter-1] += tmp[counter]
-            lanternsCount[counter] -= tmp[counter]
+        new_spawn = lanternsCount.pop(0)
+        lanternsCount[6] += new_spawn
+        lanternsCount.append(new_spawn)
 
     return sum(lanternsCount)
 
