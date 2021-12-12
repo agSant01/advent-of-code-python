@@ -59,7 +59,7 @@ def execute(instruction, registers, pc, program):
         x, y = instruction[1:]
         if x in 'abcd':
             x = registers[x]
-        if y in 'abcf':
+        if y in 'abcd':
             y = registers[y]
         if int(x) != 0:
             pc += int(y) - 1
