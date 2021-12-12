@@ -1,3 +1,6 @@
+import queue
+
+
 def get_filename(test=False):
     return f'day25_input{"_test" if test else ""}.txt'
 
@@ -30,24 +33,17 @@ def parse1(line: str):
 * `jnz x y` *jumps* to an instruction `y` away (positive means forward; negative means backward), but only if `x` is *not zero*.
 """
 
-LET_TO_INT = {
-    'a': 0,
-    'b': 1,
-    'c': 2,
-    'd': 3,
-}
-
-STREAM = []
+STREAM = queue.Queue()
 
 
 def io_stdout(value):
-    STREAM.insert(0, value)
+    STREAM.put(value)
 
 
 def read_from_stream():
-    if len(STREAM) == 0:
+    if STREAM.qsize() == 0:
         return '<empty>'
-    return STREAM.pop()
+    return STREAM.get()
 
 
 def execute(instruction, registers, pc, program):
@@ -55,27 +51,27 @@ def execute(instruction, registers, pc, program):
 
     if opcode == 'inc':
         x = instruction[1]
-        registers[LET_TO_INT[x]] += 1
+        registers[x] += 1
     elif opcode == 'dec':
         x = instruction[1]
-        registers[LET_TO_INT[x]] -= 1
+        registers[x] -= 1
     elif opcode == 'jnz':
         x, y = instruction[1:]
         if x in 'abcd':
-            x = registers[LET_TO_INT[x]]
+            x = registers[x]
         if y in 'abcf':
-            y = registers[LET_TO_INT[y]]
+            y = registers[y]
         if int(x) != 0:
             pc += int(y) - 1
     elif opcode == 'cpy':
         x, y = instruction[1:]
         if x in 'abcd':
-            x = registers[LET_TO_INT[x]]
-        registers[LET_TO_INT[y]] = int(x)
+            x = registers[x]
+        registers[y] = int(x)
     elif opcode == 'tgl':
         x = instruction[1]
         if x in 'abcd':
-            x = registers[LET_TO_INT[x]]
+            x = registers[x]
 
         if 0 <= pc+x < len(program):
             target_inst = program[pc+x]
@@ -92,7 +88,7 @@ def execute(instruction, registers, pc, program):
     elif opcode == 'out':
         x = instruction[1]
         if x in 'abcd':
-            x = registers[LET_TO_INT[x]]
+            x = registers[x]
         io_stdout(x)
     else:
         raise Exception('INVALID OPCODE:' + opcode)
@@ -140,7 +136,7 @@ def day25p1():
     program = get_input(parse1, test=False)
 
     for i in range(30, 500):
-        registers = [i, 0, 0, 0]
+        registers = {'a': i, 'b': 0, 'c': 0, 'd': 0}
         exit_result = run_program(program, registers)
         if exit_result == 0:
             return f'a: {i}', registers
