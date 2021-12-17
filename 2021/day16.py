@@ -1,6 +1,3 @@
-import functools
-import queue
-from types import FunctionType
 from typing import List, Tuple, Union
 
 
@@ -29,14 +26,42 @@ def parse1(line: str):
 ################################################################################
 
 
+class Packet:
+    def __init__(self, version, typeId) -> None:
+        self.version = version
+        self.typeId = typeId
+        self.lenTypeId = None
+        self._value = None
+        self.subPackets = []
+        self.bitLen = None
+
+    @property
+    def value(self) -> str:
+        return self._value
+
+    @value.setter
+    def value(self, value: List[str]):
+        self._value = ''.join(value)
+
+    def __str__(self) -> str:
+        if self.value:
+            content = f'<value:{self.value}>'
+        else:
+            content = f'<{len(self.subPackets)} SubPackets>'
+        return f'<Packet version:{self.version} typeId:{self.typeId} lenTypeId:{self.lenTypeId} contents:{content} bitLen:{self.bitLen}>'
+
+
 def hex_to_bin(hexstr: str):
     return bin(int(hexstr, 16))[2:].rjust(len(hexstr)*4, '0')
 
 
-def parse_packet(packet: str) -> Tuple[int, int, Union[List[str], str], int]:
+def parse_packet(packet: str) -> Packet:
     # Uncomment to see process
+
     version = int(packet[0:3], 2)
     typeId = int(packet[3:6], 2)
+
+    packetObj: Packet = Packet(version, typeId)
 
     # print('V:', version, '| T:', typeId)
 
@@ -48,46 +73,51 @@ def parse_packet(packet: str) -> Tuple[int, int, Union[List[str], str], int]:
             values.append(packet[curr+1:curr+5])
             curr += 5
         values.append(packet[curr+1:curr+5])
-        return (version, 4, ''.join(values), curr+5)
+        packetObj.value = values
+        packetObj.bitLen = curr+5
+        return packetObj
 
     HEADER_OFFSET = 7
-    len_type_id = packet[6]
-    subpackets = []
+
+    packetObj.lenTypeId = packet[6]
+
     curr = None
 
     # print('I:', len_type_id)
 
-    if len_type_id == '0':
+    if packetObj.lenTypeId == '0':
         bitsToLook = 15
         lenInBits = int(packet[HEADER_OFFSET:HEADER_OFFSET+bitsToLook], 2)
         curr = HEADER_OFFSET+bitsToLook
         while curr < lenInBits+(HEADER_OFFSET+bitsToLook):
-            subPacket = parse_packet(packet[curr:curr+lenInBits])
-            subpackets.append(subPacket)
-            curr += subPacket[-1]
+            subPacket: Packet = parse_packet(packet[curr:curr+lenInBits])
+            packetObj.subPackets.append(subPacket)
+            curr += subPacket.bitLen
     else:
         bitsToLook = 11
         totalSubPackets = int(
             packet[HEADER_OFFSET:HEADER_OFFSET+bitsToLook], 2)
         curr = HEADER_OFFSET+bitsToLook
         while totalSubPackets > 0:
-            subPacket = parse_packet(packet[curr:])
-            subpackets.append(subPacket)
-            curr += subPacket[-1]
+            subPacket: Packet = parse_packet(packet[curr:])
+            packetObj.subPackets.append(subPacket)
+            curr += subPacket.bitLen
             totalSubPackets -= 1
 
     # print('LastBit:', curr)
 
-    return (version, typeId, subpackets, curr)
+    packetObj.bitLen = curr
+
+    return packetObj
 
 
-def sum_packet_versions(tree) -> int:
-    if tree[1] == 4:
-        return tree[0]
+def sum_packet_versions(packet: Packet) -> int:
+    if packet.typeId == 4:
+        return packet.version
 
-    total = tree[0]
+    total = packet.version
 
-    for sp in tree[2]:
+    for sp in packet.subPackets:
         total += sum_packet_versions(sp)
 
     return total
@@ -103,7 +133,7 @@ def day16p1():
         # print(packet, 'Len Original:', len(packet)*4)
         packet = hex_to_bin(packet)
         syntax_tree = parse_packet(packet)
-        # print('ST:', syntax_tree)
+        print('ST:', syntax_tree)
         packetVersionSum = sum_packet_versions(syntax_tree)
         result.append(packetVersionSum)
 
@@ -122,28 +152,28 @@ def parse2(line):
 ################################################################################
 
 
-def execute_packets(tree: tuple) -> Union[int, bool]:
-    typeId = tree[1]
+def execute_packets(packet: Packet) -> Union[int, bool]:
+    typeId = packet.typeId
 
     if typeId == 4:
-        return int(tree[2], 2)
+        return int(packet.value, 2)
 
     if typeId == 0:
         # sum
         sumResult = 0
-        for sp in tree[2]:
+        for sp in packet.subPackets:
             sumResult += execute_packets(sp)
         return sumResult
 
     if typeId == 1:
         prodResult = 1
-        for sp in tree[2]:
+        for sp in packet.subPackets:
             prodResult *= execute_packets(sp)
         return prodResult
 
     if typeId == 2:
         minSp = None
-        for sp in tree[2]:
+        for sp in packet.subPackets:
             spRes = execute_packets(sp)
             if minSp is None or minSp > spRes:
                 minSp = spRes
@@ -151,7 +181,7 @@ def execute_packets(tree: tuple) -> Union[int, bool]:
 
     if typeId == 3:
         maxSp = None
-        for sp in tree[2]:
+        for sp in packet.subPackets:
             spRes = execute_packets(sp)
             if maxSp is None or maxSp < spRes:
                 maxSp = spRes
@@ -159,20 +189,20 @@ def execute_packets(tree: tuple) -> Union[int, bool]:
 
     if typeId == 5:
         # greater than
-        spRes1 = execute_packets(tree[2][0])
-        spRes2 = execute_packets(tree[2][1])
+        spRes1 = execute_packets(packet.subPackets[0])
+        spRes2 = execute_packets(packet.subPackets[1])
         return spRes1 > spRes2
 
     if typeId == 6:
         # less than
-        spRes1 = execute_packets(tree[2][0])
-        spRes2 = execute_packets(tree[2][1])
+        spRes1 = execute_packets(packet.subPackets[0])
+        spRes2 = execute_packets(packet.subPackets[1])
         return spRes1 < spRes2
 
     if typeId == 7:
         # equal than
-        spRes1 = execute_packets(tree[2][0])
-        spRes2 = execute_packets(tree[2][1])
+        spRes1 = execute_packets(packet.subPackets[0])
+        spRes2 = execute_packets(packet.subPackets[1])
         return spRes1 == spRes2
 
 ################################################################################
