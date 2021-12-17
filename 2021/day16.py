@@ -1,3 +1,5 @@
+import functools
+import operator
 from typing import List, Union
 
 
@@ -184,58 +186,25 @@ def parse2(line):
 ################################################################################
 
 
+OPERATIONS = {
+    0: sum,
+    1: lambda sps: functools.reduce(operator.mul, sps, 1),
+    2: min,
+    3: max,
+    5: lambda sps: sps[0] > sps[1],
+    6: lambda sps: sps[0] < sps[1],
+    7: lambda sps: sps[0] == sps[1]
+}
+
+
 def execute_packets(packet: Packet) -> Union[int, bool]:
     typeId = packet.typeId
 
     if typeId == 4:
         return bit_arr_to_dec(packet.value)
 
-    if typeId == 0:
-        # sum
-        sumResult = 0
-        for sp in packet.subPackets:
-            sumResult += execute_packets(sp)
-        return sumResult
+    return OPERATIONS[typeId]([execute_packets(sp) for sp in packet.subPackets])
 
-    if typeId == 1:
-        prodResult = 1
-        for sp in packet.subPackets:
-            prodResult *= execute_packets(sp)
-        return prodResult
-
-    if typeId == 2:
-        minSp = None
-        for sp in packet.subPackets:
-            spRes = execute_packets(sp)
-            if minSp is None or minSp > spRes:
-                minSp = spRes
-        return minSp
-
-    if typeId == 3:
-        maxSp = None
-        for sp in packet.subPackets:
-            spRes = execute_packets(sp)
-            if maxSp is None or maxSp < spRes:
-                maxSp = spRes
-        return maxSp
-
-    if typeId == 5:
-        # greater than
-        spRes1 = execute_packets(packet.subPackets[0])
-        spRes2 = execute_packets(packet.subPackets[1])
-        return spRes1 > spRes2
-
-    if typeId == 6:
-        # less than
-        spRes1 = execute_packets(packet.subPackets[0])
-        spRes2 = execute_packets(packet.subPackets[1])
-        return spRes1 < spRes2
-
-    if typeId == 7:
-        # equal than
-        spRes1 = execute_packets(packet.subPackets[0])
-        spRes2 = execute_packets(packet.subPackets[1])
-        return spRes1 == spRes2
 
 ################################################################################
 
