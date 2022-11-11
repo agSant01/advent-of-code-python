@@ -3,6 +3,7 @@ import datetime
 import os
 import re
 from datetime import datetime
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,6 +21,8 @@ def config():
     cfg = {}
     with open('.env') as f:
         for line in f:
+            if line.startswith('#'):
+                continue
             if len(line.strip()) == 0:
                 continue
             c = line.strip().split('=', 1)
@@ -131,7 +134,7 @@ def get_input_data(day, year=None, force=False):
 
     console(f'GET at {complete_url}')
 
-    headers = dict(cookie=CONFIG['SESSION_COOKIE'])
+    headers = dict(cookie=f"session={CONFIG['SESSION_COOKIE']}")
     data = requests.get(complete_url, headers=headers)
 
     if data.status_code == 200:
@@ -165,7 +168,7 @@ def create_day(day: str, year: str = None):
     create_instruction_file(day, year)
 
 
-def run(day, year=None):
+def run(day, year=None, part: List[str] = None):
     day = str(day).zfill(2)
     if not year:
         year = datetime.today().year
@@ -173,7 +176,7 @@ def run(day, year=None):
     console(f'Running script: ./{year}/day{day}.py')
 
     os.chdir(f'./{year}')
-    os.system(f'python3 ./day{day}.py')
+    os.system(f'python3 ./day{day}.py {part[0] if part else ""}')
 
 
 def main():
@@ -198,12 +201,18 @@ def main():
     parser.add_argument('--force', '-f', action='store_true',
                         default=False, required=False)
 
+    parser.add_argument('--part', '-p',
+                        type=int,
+                        choices=(1, 2),
+                        nargs=1,
+                        help='Run part 1 or 2', required=False)
+
     args = parser.parse_args()
     # Debug
     # console(args)
 
     if bool(args.run):
-        run(args.run, args.year)
+        run(args.run, args.year, args.part)
         exit()
 
     if args.init_year is None or bool(args.init_year):
