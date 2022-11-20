@@ -130,7 +130,8 @@ def day10p2():
             dense_hash.append(acc)
 
         # print(dense_hash)
-        dense_hashes += [''.join([hex(value)[2:] for value in dense_hash])]
+        dense_hashes += [''.join([hex(value)[2:].zfill(2)
+                                 for value in dense_hash])]
 
     return dense_hashes[0]
 
