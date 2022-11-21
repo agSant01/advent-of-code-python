@@ -70,7 +70,7 @@ def create_instruction_file(day, year=None):
 
     console(f'GET at {complete_url}')
 
-    headers = dict(cookie=CONFIG['SESSION_COOKIE'])
+    headers = dict(cookie=f"session={CONFIG['SESSION_COOKIE']}")
     data = requests.get(complete_url, headers=headers)
 
     if data.status_code == 200:
