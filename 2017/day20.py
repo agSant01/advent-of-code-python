@@ -46,16 +46,16 @@ class Particle():
         self.x = self.x_0.copy()
         self.v_0 = numpy.array(v)
         self.v = self.v_0.copy()
-        self.a = numpy.array(a)
+        self.acc = numpy.array(a)
 
     def manhattan_distance(self):
-        return add(self.x_0)
+        return add(i for i in self.x)
 
     def position_at_frame(self, frame):
-        return self.x_0 + (self.v_0 * frame) + (0.5 * (self.a) * (frame*frame))
+        return self.x_0 + (self.v_0 * frame) + (0.5 * (self.acc) * (frame*frame))
 
     def move(self):
-        self.v += self.a
+        self.v += self.acc
         self.x += self.v
         return self.x
 
@@ -63,7 +63,7 @@ class Particle():
         return self.__str__()
 
     def __str__(self) -> str:
-        return f'<Particle x_0={self.x_0} x={self.x} v_0={self.v_0} v={self.v} a={self.a}>'
+        return f'<Particle x_0={self.x_0} x={self.x} v_0={self.v_0} v={self.v} a={self.acc}>'
 
 
 def manhattan_distance(vector):
@@ -72,20 +72,18 @@ def manhattan_distance(vector):
 
 
 def day20p1():
-    data: List[Particle] = get_input(parse1, test=True)
-    min_a = sys.maxsize
-    p_c = None
-    idx = None
-    frame = 10_000
-    for i, d in enumerate(data):
-        pos_at_i = d.position_at_frame(frame)
-        sa = manhattan_distance(pos_at_i)
-        if sa < min_a:
-            min_a = sa
-            p_c = d
-            idx = i
+    data: List[Particle] = get_input(parse1, test=False)
+    min_acc = sys.maxsize
+    closest_particle = None
+    pid = None
+    for i, particle in enumerate(data):
+        acceleration_mag = sum(abs(i) for i in particle.acc)
+        if acceleration_mag < min_acc:
+            min_acc = acceleration_mag
+            closest_particle = particle
+            pid = i
 
-    return idx, p_c
+    return pid, closest_particle
 
 ################################################################################
 ############################### Start of Part 2 ################################
