@@ -23,8 +23,8 @@ arg_parser.add_argument(
 args, _ = arg_parser.parse_known_args(sys.argv)
 
 
-def get_input(parse, test=False):
-    data = []
+def get_input(parse: Callable[[str], str], test: bool = False) -> List[str]:
+    data: List[str] = []
     if args.input:
         filename = Path(args.input)
     else:
@@ -44,7 +44,7 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return int(line) if line else None
+    return line
 
 
 ################################################################################
@@ -53,22 +53,10 @@ def parse1(line: str):
 
 
 ################################################################################
-def day01p1():
-    data = get_input(parse1, test=False)
-    agg = 0
-    max_ = 0
-    max_idx = 0
-    idx = 1
+def day04p1():
+    data = get_input(parse1, test=True)
     for d in data:
-        if d is None:
-            if agg > max_:
-                max_idx = idx
-                max_ = agg
-            agg = 0
-            idx += 1
-        else:
-            agg += d
-    return max_idx, max_
+        print(d)
 
 
 ################################################################################
@@ -76,7 +64,7 @@ def day01p1():
 ################################################################################
 
 
-def parse2(line):
+def parse2(line: str):
     return parse1(line)
 
 
@@ -86,19 +74,10 @@ def parse2(line):
 
 
 ################################################################################
-
-
-def day01p2():
-    data = get_input(parse2, test=False)
-    agg_list = []
-    agg = 0
+def day04p2():
+    data = get_input(parse2, test=True)
     for d in data:
-        if d is None:
-            agg_list.append(agg)
-            agg = 0
-        else:
-            agg += d
-    return sum(sorted(agg_list)[-3:])
+        pass
 
 
 def main():
@@ -109,12 +88,12 @@ def main():
 
     if 1 in args.part:
         print()
-        print("-" * (n), "Day 01 - Part 1", "-" * n)
-        print("Result =>", day01p1())
+        print("-" * (n), "Day 04 - Part 1", "-" * n)
+        print("Result =>", day04p1())
         print()
     if 2 in args.part:
-        print("-" * (n), "Day 01 - Part 2", "-" * n)
-        print("Result =>", day01p1())
+        print("-" * (n), "Day 04 - Part 2", "-" * n)
+        print("Result =>", day04p2())
     print()
 
 
