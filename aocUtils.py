@@ -1,4 +1,3 @@
-import importlib.util
 import argparse
 import datetime
 import os
@@ -13,53 +12,61 @@ from markdownify import markdownify
 
 from templates import day as day_template
 
-BASE_URL = 'https://adventofcode.com'
+BASE_URL = "https://adventofcode.com"
 CONFIG = {}
 PREV_VERSIONS = [1]
 VERSION = 2
 
 
-def __valid_day(day: str):
-    day = int(day)
-    return str(day).zfill(2)
-
-
 def __init_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--create-day', '-cd',
-                        type=__valid_day,
-                        required=False)
-    parser.add_argument('--input-data', '-i',
-                        type=int, required=False)
-    parser.add_argument('--day-desc', '-dd', type=int,
-                        default=None, required=False, help='Day description. Download the instructions of the day at AOC as Markdown.'
-                        'Will only be able to download unlocked instructions. Would not download "Part 2" if "Part 1" is not completed.')
+    parser.add_argument("--create-day", "-cd", type=int, required=False)
+    parser.add_argument("--input-data", "-i", type=int, required=False)
+    parser.add_argument(
+        "--day-desc",
+        "-dd",
+        type=int,
+        default=None,
+        required=False,
+        help=(
+            "Day description. Download the instructions of the day at AOC as"
+            " Markdown.Will only be able to download unlocked instructions. Would not"
+            ' download "Part 2" if "Part 1" is not completed.'
+        ),
+    )
 
-    parser.add_argument('--run', '-r',
-                        type=int, required=False)
+    parser.add_argument("--run", "-r", type=int, required=False)
 
-    parser.add_argument('--year', '-y',
-                        type=int, default=None, required=False)
-    parser.add_argument('--init-year', '-iy',
-                        type=int, nargs='?', default=False, required=False)
-
-    parser.add_argument('--force', '-f', action='store_true',
-                        default=False, required=False)
-
-    parser.add_argument('--part', '-p',
-                        type=int,
-                        choices=(1, 2),
-                        nargs=1,
-                        help='Run part 1 or 2', required=False)
+    parser.add_argument("--year", "-y", type=int, default=None, required=False)
+    parser.add_argument(
+        "--init-year", "-iy", type=int, nargs="?", default=False, required=False
+    )
 
     parser.add_argument(
-        '--comp',
+        "--force", "-f", action="store_true", default=False, required=False
+    )
+
+    parser.add_argument(
+        "--part",
+        "-p",
+        type=int,
+        choices=(1, 2),
+        nargs=1,
+        help="Run part 1 or 2",
+        required=False,
+    )
+
+    parser.add_argument(
+        "--comp",
         type=int,
         choices=PREV_VERSIONS + [VERSION],
-        help=f'Run in compatibility mode.\nAvailable versions: {", ".join(map(str, PREV_VERSIONS + [VERSION]))}',
+        help=(
+            "Run in compatibility mode.\nAvailable versions:"
+            f' {", ".join(map(str, PREV_VERSIONS + [VERSION]))}'
+        ),
         required=False,
-        default=VERSION
+        default=VERSION,
     )
 
     return parser.parse_args()
@@ -70,33 +77,33 @@ ARGS = __init_args()
 
 def __config():
     cfg = {}
-    with open('.env') as f:
+    with open(".env") as f:
         for line in f:
-            if line.startswith('#'):
+            if line.startswith("#"):
                 continue
             if len(line.strip()) == 0:
                 continue
-            c = line.strip().split('=', 1)
+            c = line.strip().split("=", 1)
             cfg[c[0]] = c[1]
     return cfg
 
 
 def console(msg):
-    print(f'==>', msg)
+    print(f"==>", msg)
 
 
 def error(msg):
-    print(f'[ERROR]', msg)
+    print(f"[ERROR]", msg)
 
 
 def init_year(year: int = None):
     if not year:
         year = datetime.today().year
 
-    console(f'Initializing year directory: ./{year}')
+    console(f"Initializing year directory: ./{year}")
 
     if os.path.isdir(str(year)):
-        console(f'[ERROR] Directory: ./{year} already exists!!!')
+        console(f"[ERROR] Directory: ./{year} already exists!!!")
         exit(1)
     else:
         os.makedirs(str(year))
@@ -107,35 +114,34 @@ def create_instruction_file(day, year=None):
     if not year:
         year = datetime.today().year
 
-    file_path = Path(str(year), f'day{day}', 'instructions.md')
-    console(f'Downloading instructions file: {file_path}')
-    complete_url = f'{BASE_URL}/{year}/day/{int(day)}'
-    console(f'GET at {complete_url}')
+    file_path = Path(str(year), f"day{day}", "instructions.md")
+    console(f"Downloading instructions file: {file_path}")
+    complete_url = f"{BASE_URL}/{year}/day/{int(day)}"
+    console(f"GET at {complete_url}")
     headers = dict(cookie=f"session={CONFIG['SESSION_COOKIE']}")
     data = requests.get(complete_url, headers=headers)
     if data.status_code == 200:
-        console(f'Success:  {data.status_code}')
+        console(f"Success:  {data.status_code}")
     else:
-        console(f'Error:  {data.status_code}')
-        console(f'Response Content: {data.content}')
+        console(f"Error:  {data.status_code}")
+        console(f"Response Content: {data.content}")
         exit(1)
 
-    soup = BeautifulSoup(data.content.decode(), 'html.parser')
+    soup = BeautifulSoup(data.content.decode(), "html.parser")
 
-    tags = soup.find_all('article', class_=re.compile('day-desc'))
+    tags = soup.find_all("article", class_=re.compile("day-desc"))
 
     def remove_dash(tag):
-        str_ = tag.h2.string.replace('---', '').strip()
+        str_ = tag.h2.string.replace("---", "").strip()
         tag.h2.string.replace_with(str_)
         return str(tag)
 
-    markdown = markdownify(
-        ''.join(map(remove_dash, tags)), heading_style='ATX')
+    markdown = markdownify("".join(map(remove_dash, tags)), heading_style="ATX")
 
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         f.write(markdown)
 
-    console('Created instructions MD file...')
+    console("Created instructions MD file...")
 
 
 def create_input_files(day, year=None, force=False):
@@ -145,23 +151,23 @@ def create_input_files(day, year=None, force=False):
 
     data = get_input_data(day, year, force)
 
-    console('Creating Input files...')
+    console("Creating Input files...")
 
-    input_file: Path = Path(str(year), f"day{day}", 'input.txt')
+    input_file: Path = Path(str(year), f"day{day}", "input.txt")
 
     if input_file.exists() and not force:
-        console(f'File: {input_file} already exists!!!')
+        console(f"File: {input_file} already exists!!!")
         exit(1)
 
-    console(f'Creating Input file: {input_file}')
-    with open(input_file, 'w') as f:
+    console(f"Creating Input file: {input_file}")
+    with open(input_file, "w") as f:
         f.write(data)
 
-    input_test_file: Path = Path(str(year), f"day{day}", 'input_test.txt')
+    input_test_file: Path = Path(str(year), f"day{day}", "input_test.txt")
     if input_test_file.exists() and not force:
-        console(f'File: {input_test_file} already exists!!!')
+        console(f"File: {input_test_file} already exists!!!")
         exit(1)
-    console(f'Creating Input file: {input_test_file}')
+    console(f"Creating Input file: {input_test_file}")
     input_test_file.touch()
 
 
@@ -170,20 +176,20 @@ def get_input_data(day, year=None, force=False):
     if not year:
         year = datetime.today().year
 
-    console(f'Get input data for year: {year} \u272D day:{day}')
+    console(f"Get input data for year: {year} \u272D day:{day}")
 
-    complete_url = f'{BASE_URL}/{year}/day/{day}/input'
+    complete_url = f"{BASE_URL}/{year}/day/{day}/input"
 
-    console(f'GET at {complete_url}')
+    console(f"GET at {complete_url}")
 
     headers = dict(cookie=f"session={CONFIG['SESSION_COOKIE']}")
     data = requests.get(complete_url, headers=headers)
 
     if data.status_code == 200:
-        console(f'Success:  {data.status_code}')
+        console(f"Success:  {data.status_code}")
     else:
-        console(f'Error:  {data.status_code}')
-        console(f'Response Content: {data.content}')
+        console(f"Error:  {data.status_code}")
+        console(f"Response Content: {data.content}")
         exit(1)
 
     return data.content.decode()
@@ -196,16 +202,16 @@ def create_day(day: str, year: str = None):
 
     daycode_filepath: Path = Path(str(year), f"day{day}")
 
-    console(f'Creating day template: ./{daycode_filepath}')
+    console(f"Creating day template: ./{daycode_filepath}")
 
     if daycode_filepath.exists():
-        console(f'File: {daycode_filepath} already exists!!!')
+        console(f"File: {daycode_filepath} already exists!!!")
         exit(1)
 
     daycode_filepath.mkdir()
 
-    file_name = daycode_filepath / 'code.py'
-    with open(file_name, 'w') as f:
+    file_name = daycode_filepath / f"day{day}_code.py"
+    with open(file_name, "w") as f:
         f.write(day_template.lines(day))
 
     create_input_files(day, year)
@@ -217,17 +223,18 @@ def run(day, year=None, part: List[str] = None):
     if not year:
         year = datetime.today().year
     if ARGS.comp < 2:
-        console(f'Running script: ./{year}/day{day}.py')
-        os.chdir(f'./{year}')
-        os.system(f'python3 ./day{day}.py {part[0] if part else ""}')
+        console(f"Running script: ./{year}/day{day}.py")
+        os.system(f'python3.8 ./{year}/day{day}.py {part[0] if part else ""}')
     else:
         try:
-            console(f'Running script: ./{year}/day{day}/code.py')
-            fp = Path(str(year), f'day{day}', 'code.py')
-            os.system(
-                f'python3 {fp.absolute()} {part[0] if part else ""}')
+            console(f"Running script: ./{year}/day{day}/day{day}_code.py")
+            fp = Path(str(year), f"day{day}", f"day{day}_code.py")
+            if not fp.exists():
+                error("FileNotFoundError: Try using compatibility mode --comp")
+            else:
+                os.system(f'python3.8 {fp.absolute()} {part[0] if part else ""}')
         except FileNotFoundError:
-            error('FileNotFoundError: Try using compatibility mode --comp')
+            error("FileNotFoundError: Try using compatibility mode --comp")
 
 
 def main():
