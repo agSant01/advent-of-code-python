@@ -86,11 +86,11 @@ def main():
     if 1 in args.part:
         print()
         print('-'*(n), "Day ${day} - Part 1", '-'*n)
-        print('Result =>', day02p1())
+        print('Result =>', day${day}p1())
         print()
     if 2 in args.part:
         print('-'*(n), "Day ${day} - Part 2", '-'*n)
-        print('Result =>', day02p2())
+        print('Result =>', day${day}p2())
     print()
 
 

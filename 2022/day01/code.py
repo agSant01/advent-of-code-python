@@ -1,17 +1,42 @@
 import sys
+import argparse
+from pathlib import Path
 
+###########################################################################
+############################### Setup #####################################
+###########################################################################
+arg_parser = argparse.ArgumentParser()
 
-def get_filename(test=False):
-    return f'day01_input{"_test" if test else ""}.txt'
+arg_parser.add_argument(
+    '--input', '-i',
+    help='Input file path.',
+    type=Path,
+    required=False
+)
+arg_parser.add_argument('--part', '-p',
+                        type=int,
+                        default=(1, 2),
+                        choices=(1, 2),
+                        nargs=1,
+                        help='Run part 1 or 2',
+                        required=False
+                        )
+args, _ = arg_parser.parse_known_args(sys.argv)
 
 
 def get_input(parse, test=False):
     data = []
-    filename = get_filename(test)
+    if args.input:
+        filename = Path(args.input)
+    else:
+        filename = Path(__file__).parent / \
+            f'input{"_test" if test else ""}.txt'
+
     with open(filename, 'r') as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+###########################################################################
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -79,20 +104,14 @@ def main():
     n = (divs-msg)//2
     divs += 1
 
-    run_one = any(arg == "1" for arg in sys.argv)
-    run_two = any(arg == "2" for arg in sys.argv)
-
-    if run_one is False and run_two is False:
-        run_one = run_two = True
-
-    if run_one:
+    if 1 in args.part:
         print()
         print('-'*(n), "Day 01 - Part 1", '-'*n)
         print('Result =>', day01p1())
         print()
-    if run_two:
+    if 2 in args.part:
         print('-'*(n), "Day 01 - Part 2", '-'*n)
-        print('Result =>', day01p2())
+        print('Result =>', day01p1())
     print()
 
 
