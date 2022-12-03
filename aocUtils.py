@@ -1,23 +1,74 @@
+import importlib.util
 import argparse
 import datetime
 import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import List
 
 import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify
 
-from templates import day as dayutils
-from templates import year as yearutils
+from templates import day as day_template
+
+BASE_URL = 'https://adventofcode.com'
+CONFIG = {}
+PREV_VERSIONS = [1]
+VERSION = 2
 
 
-def console(msg):
-    print(f'==>', msg)
+def __valid_day(day: str):
+    day = int(day)
+    return str(day).zfill(2)
 
 
-def config():
+def __init_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--create-day', '-cd',
+                        type=__valid_day,
+                        required=False)
+    parser.add_argument('--input-data', '-i',
+                        type=int, required=False)
+    parser.add_argument('--day-desc', '-dd', type=int,
+                        default=None, required=False, help='Day description. Download the instructions of the day at AOC as Markdown.'
+                        'Will only be able to download unlocked instructions. Would not download "Part 2" if "Part 1" is not completed.')
+
+    parser.add_argument('--run', '-r',
+                        type=int, required=False)
+
+    parser.add_argument('--year', '-y',
+                        type=int, default=None, required=False)
+    parser.add_argument('--init-year', '-iy',
+                        type=int, nargs='?', default=False, required=False)
+
+    parser.add_argument('--force', '-f', action='store_true',
+                        default=False, required=False)
+
+    parser.add_argument('--part', '-p',
+                        type=int,
+                        choices=(1, 2),
+                        nargs=1,
+                        help='Run part 1 or 2', required=False)
+
+    parser.add_argument(
+        '--comp',
+        type=int,
+        choices=PREV_VERSIONS + [VERSION],
+        help=f'Run in compatibility mode.\nAvailable versions: {", ".join(map(str, PREV_VERSIONS + [VERSION]))}',
+        required=False,
+        default=VERSION
+    )
+
+    return parser.parse_args()
+
+
+ARGS = __init_args()
+
+
+def __config():
     cfg = {}
     with open('.env') as f:
         for line in f:
@@ -30,17 +81,17 @@ def config():
     return cfg
 
 
-CONFIG = {}
-BASE_URL = 'https://adventofcode.com'
+def console(msg):
+    print(f'==>', msg)
+
+
+def error(msg):
+    print(f'[ERROR]', msg)
 
 
 def init_year(year: int = None):
     if not year:
         year = datetime.today().year
-
-    year_file_name = f'yearutils.py'
-
-    fp = os.path.join(str(year), year_file_name)
 
     console(f'Initializing year directory: ./{year}')
 
@@ -50,29 +101,18 @@ def init_year(year: int = None):
     else:
         os.makedirs(str(year))
 
-    console(f'Creating dependency: ./{fp}')
-    with open(fp, 'w') as f:
-        for l in yearutils.lines():
-            f.write(l + '\n')
-
 
 def create_instruction_file(day, year=None):
     day = str(day).zfill(2)
     if not year:
-        console(
-            '[ERROR] To download instruction files the year must be specified...')
-        exit(1)
+        year = datetime.today().year
 
-    file_path = os.path.join(str(year), f'day{day}.md')
+    file_path = Path(str(year), f'day{day}', 'instructions.md')
     console(f'Downloading instructions file: {file_path}')
-
     complete_url = f'{BASE_URL}/{year}/day/{int(day)}'
-
     console(f'GET at {complete_url}')
-
     headers = dict(cookie=f"session={CONFIG['SESSION_COOKIE']}")
     data = requests.get(complete_url, headers=headers)
-
     if data.status_code == 200:
         console(f'Success:  {data.status_code}')
     else:
@@ -98,37 +138,39 @@ def create_instruction_file(day, year=None):
     console('Created instructions MD file...')
 
 
-def create_input_files(day, data, year=None, force=False):
+def create_input_files(day, year=None, force=False):
     day = str(day).zfill(2)
     if not year:
         year = datetime.today().year
 
-    console('Creating Input files')
+    data = get_input_data(day, year, force)
 
-    input_f = os.path.join(str(year), f"day{day}_input.txt")
-    if os.path.exists(input_f) and not force:
-        console(f'File: {input_f} already exists!!!')
+    console('Creating Input files...')
+
+    input_file: Path = Path(str(year), f"day{day}", 'input.txt')
+
+    if input_file.exists() and not force:
+        console(f'File: {input_file} already exists!!!')
         exit(1)
 
-    console(f'Creating Input file: {input_f}')
-    with open(input_f, 'w') as f:
+    console(f'Creating Input file: {input_file}')
+    with open(input_file, 'w') as f:
         f.write(data)
 
-    input_ft = os.path.join(str(year), f"day{day}_input_test.txt")
-    if os.path.exists(input_ft) and not force:
-        console(f'File: {input_ft} already exists!!!')
+    input_test_file: Path = Path(str(year), f"day{day}", 'input_test.txt')
+    if input_test_file.exists() and not force:
+        console(f'File: {input_test_file} already exists!!!')
         exit(1)
-
-    console(f'Creating Input file: {input_ft}')
-    with open(input_ft, 'w') as f:
-        f.write('')
+    console(f'Creating Input file: {input_test_file}')
+    input_test_file.touch()
 
 
 def get_input_data(day, year=None, force=False):
     day = int(day)
     if not year:
         year = datetime.today().year
-    console(f'Get input data for year:{year} \u272D day:{day}')
+
+    console(f'Get input data for year: {year} \u272D day:{day}')
 
     complete_url = f'{BASE_URL}/{year}/day/{day}/input'
 
@@ -144,7 +186,7 @@ def get_input_data(day, year=None, force=False):
         console(f'Response Content: {data.content}')
         exit(1)
 
-    create_input_files(day, data.content.decode(), year, force)
+    return data.content.decode()
 
 
 def create_day(day: str, year: str = None):
@@ -152,19 +194,21 @@ def create_day(day: str, year: str = None):
     if not year:
         year = datetime.today().year
 
-    py_filename = os.path.join(str(year), f"day{day}.py")
+    daycode_filepath: Path = Path(str(year), f"day{day}")
 
-    console(f'Creating day template: ./{py_filename}')
+    console(f'Creating day template: ./{daycode_filepath}')
 
-    if os.path.exists(py_filename):
-        console(f'File: {py_filename} already exists!!!')
+    if daycode_filepath.exists():
+        console(f'File: {daycode_filepath} already exists!!!')
         exit(1)
 
-    with open(py_filename, 'w') as f:
-        for l in dayutils.lines(day):
-            f.write(l + '\n')
+    daycode_filepath.mkdir()
 
-    get_input_data(day, year)
+    file_name = daycode_filepath / 'code.py'
+    with open(file_name, 'w') as f:
+        f.write(day_template.lines(day))
+
+    create_input_files(day, year)
     create_instruction_file(day, year)
 
 
@@ -172,60 +216,39 @@ def run(day, year=None, part: List[str] = None):
     day = str(day).zfill(2)
     if not year:
         year = datetime.today().year
-
-    console(f'Running script: ./{year}/day{day}.py')
-
-    os.chdir(f'./{year}')
-    os.system(f'python3 ./day{day}.py {part[0] if part else ""}')
+    if ARGS.comp < 2:
+        console(f'Running script: ./{year}/day{day}.py')
+        os.chdir(f'./{year}')
+        os.system(f'python3 ./day{day}.py {part[0] if part else ""}')
+    else:
+        try:
+            console(f'Running script: ./{year}/day{day}/code.py')
+            fp = Path(str(year), f'day{day}', 'code.py')
+            os.system(
+                f'python3 {fp.absolute()} {part[0] if part else ""}')
+        except FileNotFoundError:
+            error('FileNotFoundError: Try using compatibility mode --comp')
 
 
 def main():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('--create-day', '-cd',
-                        type=int, required=False)
-    parser.add_argument('--input-data', '-i',
-                        type=int, required=False)
-    parser.add_argument('--day-desc', '-dd', type=int,
-                        default=None, required=False, help='Day description. Download the instructions of the day at AOC as Markdown.'
-                        'Will only be able to download unlocked instructions. Would not download "Part 2" if "Part 1" is not completed.')
-
-    parser.add_argument('--run', '-r',
-                        type=int, required=False)
-
-    parser.add_argument('--year', '-y',
-                        type=int, default=None, required=False)
-    parser.add_argument('--init-year', '-iy',
-                        type=int, nargs='?', default=False, required=False)
-
-    parser.add_argument('--force', '-f', action='store_true',
-                        default=False, required=False)
-
-    parser.add_argument('--part', '-p',
-                        type=int,
-                        choices=(1, 2),
-                        nargs=1,
-                        help='Run part 1 or 2', required=False)
-
-    args = parser.parse_args()
     # Debug
     # console(args)
 
-    if bool(args.run):
-        run(args.run, args.year, args.part)
+    if bool(ARGS.run):
+        run(ARGS.run, ARGS.year, ARGS.part)
         exit()
 
-    if args.init_year is None or bool(args.init_year):
-        init_year(args.init_year)
+    if ARGS.init_year is None or bool(ARGS.init_year):
+        init_year(ARGS.init_year)
 
-    if args.create_day:
-        create_day(args.create_day, args.year)
-    elif args.input_data:
-        get_input_data(args.input_data, args.year, args.force)
-    elif args.day_desc:
-        create_instruction_file(args.day_desc, args.year)
+    if ARGS.create_day:
+        create_day(ARGS.create_day, ARGS.year)
+    elif ARGS.input_data:
+        create_input_files(ARGS.input_data, ARGS.year, ARGS.force)
+    elif ARGS.day_desc:
+        create_instruction_file(ARGS.day_desc, ARGS.year)
 
 
 if __name__ == "__main__":
-    CONFIG = config()
+    CONFIG = __config()
     main()
