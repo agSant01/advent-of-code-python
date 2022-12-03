@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.rmd": "markdown",
+        "*.txt": "plaintext",
+        "stdlib.h": "c"
+    },
+    "cSpell.words": ["daycode"],
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--max-line-length", "89"],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "89", "--preview"],
+    "isort.args": ["--profile=black"],
+    "[python]": {
+        "files.trimTrailingWhitespace": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
+}
