@@ -3,12 +3,11 @@ import sys
 from pathlib import Path
 from typing import Callable, List, Set
 
-sys.path.append(Path(__file__).parent.parent.as_posix())
-import lib
-
 ###########################################################################
 ############################### Setup #####################################
 ###########################################################################
+sys.path.append(Path(__file__).parent.parent.as_posix())
+import lib
 
 arg_parser = argparse.ArgumentParser()
 

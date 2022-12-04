@@ -1,12 +1,15 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Callable, List
 
 ###########################################################################
 ############################### Setup #####################################
 ###########################################################################
-arg_parser = argparse.ArgumentParser()
+sys.path.append(Path(__file__).parent.parent.as_posix())
+import lib
 
+arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument(
     "--input", "-i", help="Input file path.", type=Path, required=False
 )
@@ -29,6 +32,8 @@ def get_input(parse: Callable[[str], str], test: bool = False) -> List[str]:
         filename = Path(args.input)
     else:
         filename = Path(__file__).parent / f'input{"_test" if test else ""}.txt'
+        if not filename.exists():
+            filename = Path(__file__).parent / "input_test.txt"
 
     with open(filename, "r") as file:
         for line in file:
@@ -44,7 +49,8 @@ def get_input(parse: Callable[[str], str], test: bool = False) -> List[str]:
 
 
 def parse1(line: str):
-    return line
+    pairs = line.split(",")
+    return list(map(lambda x: list(map(int, x.split("-"))), pairs))
 
 
 ################################################################################
@@ -54,9 +60,16 @@ def parse1(line: str):
 
 ################################################################################
 def day04p1():
-    data = get_input(parse1, test=True)
-    for d in data:
-        print(d)
+    data = get_input(parse1, test=False)
+    overlaps = 0
+    for range1, range2 in data:
+        # print(range1, range2)
+        if range1[0] >= range2[0] and range1[1] <= range2[1]:
+            overlaps += 1
+        elif range2[0] >= range1[0] and range2[1] <= range1[1]:
+            overlaps += 1
+
+    return overlaps
 
 
 ################################################################################
@@ -75,9 +88,16 @@ def parse2(line: str):
 
 ################################################################################
 def day04p2():
-    data = get_input(parse2, test=True)
-    for d in data:
-        pass
+    data = get_input(parse2, test=False)
+    overlaps = 0
+    for range1, range2 in data:
+        # print(range1, range2)
+        if range1[0] < range2[0]:
+            overlaps += range1[1] >= range2[0]
+        else:
+            overlaps += range2[1] >= range1[0]
+
+    return overlaps
 
 
 def main():
