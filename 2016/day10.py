@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,10 +21,11 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    if 'value' in line:
-        return ['value', *re.findall('\d+|bot', line)]
+    if "value" in line:
+        return ["value", *re.findall("\d+|bot", line)]
     else:
-        return re.findall(r'\d+|low|high|bot|output', line)
+        return re.findall(r"\d+|low|high|bot|output", line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -41,7 +43,7 @@ def day10p1():
     queue = []
 
     for d in data:
-        if d[0] == 'value':
+        if d[0] == "value":
             bot_map[d[-1]].append(int(d[1]))
         else:
             queue.append(d)
@@ -66,19 +68,21 @@ def day10p1():
 
         bot_map[bot].clear()
 
-        if d[3] == 'output':
+        if d[3] == "output":
             output_map[d[4]].append(min_)
         else:
             bot_map[d[4]].append(min_)
 
-        if d[6] == 'output':
+        if d[6] == "output":
             output_map[d[7]].append(max_)
         else:
             bot_map[d[7]].append(max_)
 
     # print('bot', bot_map, 'out', output_map)
 
-    return 'Bot', the_bot
+    return "Bot", the_bot
+
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -86,6 +90,7 @@ def day10p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -105,14 +110,14 @@ def day10p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 10 - Part 1", '-'*n)
-    print('Result =>', day10p1())
+    print("-" * (n), "Day 10 - Part 1", "-" * n)
+    print("Result =>", day10p1())
     print()
-    print('-'*(n), "Day 10 - Part 2", '-'*n)
-    print('Result =>', day10p2())
+    print("-" * (n), "Day 10 - Part 2", "-" * n)
+    print("Result =>", day10p2())
     print()
 
 

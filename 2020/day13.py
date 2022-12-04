@@ -1,4 +1,3 @@
-from os import times
 
 
 def get_filename(test=False):
@@ -8,14 +7,14 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
 
 
 def parse1(line: str):
-    return list(map(lambda x: int(x), filter(lambda x: x.isnumeric(), line.split(','))))
+    return list(map(lambda x: int(x), filter(lambda x: x.isnumeric(), line.split(","))))
 
 
 def day13p1():
@@ -34,7 +33,7 @@ def day13p1():
 
 
 def parse2(line):
-    return line.split(',')
+    return line.split(",")
 
 
 def day13p2():
@@ -60,11 +59,11 @@ def day13p2():
             if (curr_ts + offset) % bus != 0:
                 break
             cnt += 1
-# 1202161486
-# 5876813119
-# 293840655950000000
-# 5,876,813,119
-# 1,202,161,486
+        # 1202161486
+        # 5876813119
+        # 293840655950000000
+        # 5,876,813,119
+        # 1,202,161,486
         if curr_ts % 10000000 == 0:
             print(curr_ts)
 

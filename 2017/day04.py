@@ -10,10 +10,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,6 +23,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -46,6 +48,7 @@ def day04p1():
 
     return valid
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -53,6 +56,7 @@ def day04p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -70,8 +74,7 @@ def day04p2():
             if len(word) == 0:
                 print(word)
                 exit()
-            word_code = sum(idx * ord(c)
-                            for idx, c in enumerate(sorted(word)))  # o(n)
+            word_code = sum(idx * ord(c) for idx, c in enumerate(sorted(word)))  # o(n)
 
             if word_code in char_dict:
                 possible_words = char_dict[word_code]
@@ -95,7 +98,7 @@ def day04p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -106,12 +109,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 04 - Part 1", '-'*n)
-        print('Result =>', day04p1())
+        print("-" * (n), "Day 04 - Part 1", "-" * n)
+        print("Result =>", day04p1())
         print()
     if run_two:
-        print('-'*(n), "Day 04 - Part 2", '-'*n)
-        print('Result =>', day04p2())
+        print("-" * (n), "Day 04 - Part 2", "-" * n)
+        print("Result =>", day04p2())
     print()
 
 

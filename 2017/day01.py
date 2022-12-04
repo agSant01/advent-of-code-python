@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,6 +21,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -43,6 +45,7 @@ def day01p1():
     for d in data:
         print(d, calculate_captcha(d))
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -50,6 +53,7 @@ def day01p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -65,7 +69,7 @@ def captcha_circular(string: str):
     cnt: int = 0
     for i in range(len_):
         current = string[i]
-        to_compare = string[(i+steps) % len_]
+        to_compare = string[(i + steps) % len_]
         if current == to_compare:
             cnt += int(current)
 
@@ -89,23 +93,23 @@ def day01p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
-    run_one = any(arg == '1' for arg in sys.argv)
-    run_two = any(arg == '2' for arg in sys.argv)
+    run_one = any(arg == "1" for arg in sys.argv)
+    run_two = any(arg == "2" for arg in sys.argv)
 
     if run_one is False and run_two is False:
         run_one = run_two = True
 
     if run_one:
         print()
-        print('-'*(n), "Day 01 - Part 1", '-'*n)
-        print('Result =>', day01p1())
+        print("-" * (n), "Day 01 - Part 1", "-" * n)
+        print("Result =>", day01p1())
         print()
     if run_two:
-        print('-'*(n), "Day 01 - Part 2", '-'*n)
-        print('Result =>', day01p2())
+        print("-" * (n), "Day 01 - Part 2", "-" * n)
+        print("Result =>", day01p2())
     print()
 
 

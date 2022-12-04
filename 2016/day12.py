@@ -1,4 +1,3 @@
-import re
 
 
 def get_filename(test=False):
@@ -8,10 +7,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,6 +20,7 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     return line.split()
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -34,36 +35,37 @@ def parse1(line: str):
 """
 
 LET_TO_INT = {
-    'a': 0,
-    'b': 1,
-    'c': 2,
-    'd': 3,
+    "a": 0,
+    "b": 1,
+    "c": 2,
+    "d": 3,
 }
 
 
 def execute(instruction, registers, pc):
     opcode = instruction[0]
-    if opcode == 'cpy':
+    if opcode == "cpy":
         x, y = instruction[1:]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[LET_TO_INT[x]]
         registers[LET_TO_INT[y]] = int(x)
-    elif opcode == 'inc':
+    elif opcode == "inc":
         x = instruction[1]
         registers[LET_TO_INT[x]] += 1
-    elif opcode == 'dec':
+    elif opcode == "dec":
         x = instruction[1]
         registers[LET_TO_INT[x]] -= 1
-    elif opcode == 'jnz':
+    elif opcode == "jnz":
         x, y = instruction[1:]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[LET_TO_INT[x]]
         if int(x) != 0:
             pc += int(y) - 1
     else:
-        raise Exception('INVALID OPCODE:' + opcode)
+        raise Exception("INVALID OPCODE:" + opcode)
 
     return pc + 1
+
 
 ################################################################################
 
@@ -86,6 +88,7 @@ def day12p1():
 
     return registers
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -93,6 +96,7 @@ def day12p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -112,14 +116,14 @@ def day12p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 12 - Part 1", '-'*n)
-    print('Result =>', day12p1())
+    print("-" * (n), "Day 12 - Part 1", "-" * n)
+    print("Result =>", day12p1())
     print()
-    print('-'*(n), "Day 12 - Part 2", '-'*n)
-    print('Result =>', day12p2())
+    print("-" * (n), "Day 12 - Part 2", "-" * n)
+    print("Result =>", day12p2())
     print()
 
 

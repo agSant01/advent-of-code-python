@@ -1,5 +1,4 @@
 import yearutils as yu
-import math
 
 
 def parse(line):
@@ -10,16 +9,16 @@ def get_row(code):
     h = 127
     l = 0
     for c in code:
-        if c == 'F':
-            h = l + (h-l)//2
+        if c == "F":
+            h = l + (h - l) // 2
         else:
-            l = l + (h-l)//2
-    s = ''
+            l = l + (h - l) // 2
+    s = ""
     for c in code:
-        if c == 'F':
-            s += '1'
+        if c == "F":
+            s += "1"
         else:
-            s += '0'
+            s += "0"
     print(s)
     print(int(s, 2))
     print(int(code, 2))
@@ -30,15 +29,15 @@ def get_col(code):
     h = 7
     l = 0
     for c in code:
-        if c == 'R':
-            l = l + (h-l)//2
+        if c == "R":
+            l = l + (h - l) // 2
         else:
-            h = l + (h-l)//2
+            h = l + (h - l) // 2
     return h
 
 
 def day5p1():
-    bpas = yu.get_input('day05_input_test.txt', parse)
+    bpas = yu.get_input("day05_input_test.txt", parse)
     ids = []
     for p in bpas:
         # print(get_row(p[0]), get_col(p[1]), get_row(p[0]) * 8+get_col(p[1]))
@@ -48,7 +47,7 @@ def day5p1():
 
 
 def day5p2():
-    bpas = yu.get_input('day05_input_test.txt', parse)
+    bpas = yu.get_input("day05_input_test.txt", parse)
     ids = []
     for p in bpas:
         # print(get_row(p[0]), get_col(p[1]), get_row(p[0]) * 8+get_col(p[1]))
@@ -56,8 +55,8 @@ def day5p2():
 
     ids = sorted(ids)
     print(ids)
-    for i in range(len(ids)-1):
-        if ids[i] + 1 != ids[i+1]:
+    for i in range(len(ids) - 1):
+        if ids[i] + 1 != ids[i + 1]:
             return ids[i] + 1
 
 

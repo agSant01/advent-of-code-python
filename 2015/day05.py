@@ -1,4 +1,3 @@
-from os import nice
 import yearutils as yu
 
 
@@ -18,7 +17,7 @@ def contains(s, a):
 
 
 def hasThreeVowels(s):
-    vowls = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
+    vowls = {"a": 0, "e": 0, "i": 0, "o": 0, "u": 0}
 
     for c in s:
         if c in vowls:
@@ -29,15 +28,15 @@ def hasThreeVowels(s):
 
 def hasTwoLetterSeq(s):
     i = 0
-    while i < len(s)-1:
-        if s[i] == s[i+1]:
+    while i < len(s) - 1:
+        if s[i] == s[i + 1]:
             return True
         i += 1
     return False
 
 
 def isValid(s: str):
-    if contains(s, ['ab', 'cd', 'pq', 'xy']):
+    if contains(s, ["ab", "cd", "pq", "xy"]):
         return False
 
     if not hasThreeVowels(s):
@@ -61,8 +60,8 @@ def day05p1():
 
 
 def containPairs(w: str):
-    for i in range(len(w)-1):
-        check = w.find(w[i:(i+2)], i+2)
+    for i in range(len(w) - 1):
+        check = w.find(w[i : (i + 2)], i + 2)
         if check != -1:
             return True
 
@@ -70,8 +69,8 @@ def containPairs(w: str):
 
 
 def repeated(word):
-    for i in range(0, len(word)-2):
-        if word[i] == word[i+2] and word[i+1] != word[i+2]:
+    for i in range(0, len(word) - 2):
+        if word[i] == word[i + 2] and word[i + 1] != word[i + 2]:
             return True
     return False
 
@@ -80,7 +79,6 @@ def day05p2():
     words = yu.get_input(get_filename(test=False), parse)
     nice_ = 0
     for word in words:
-
         if not containPairs(word):
             continue
 

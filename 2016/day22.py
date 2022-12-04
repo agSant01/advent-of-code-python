@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for idx, line in enumerate(file):
             data.append(parse(idx, line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,10 +23,11 @@ def parse1(idx: int, line: str):
     if idx < 2:
         return None
     l = line.split()
-    l[1] = int(l[1].replace('T', ''))
-    l[2] = int(l[2].replace('T', ''))
-    l[3] = int(l[3].replace('T', ''))
+    l[1] = int(l[1].replace("T", ""))
+    l[2] = int(l[2].replace("T", ""))
+    l[3] = int(l[3].replace("T", ""))
     return l
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -68,6 +70,8 @@ def day22p1():
     viable_pairs = get_viable_pairs(data)
 
     return len(viable_pairs)
+
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -75,6 +79,7 @@ def day22p1():
 
 def parse2(idx, line):
     return parse1(idx, line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -90,17 +95,17 @@ def day22p2():
 
     mx = 31
     my = 31
-    mtx = [['.' for _ in range(mx)] for _ in range(my)]
+    mtx = [["." for _ in range(mx)] for _ in range(my)]
 
     for node in data:
-        x, y = map(int, re.findall(r'x(\d+)-y(\d+)', node[0])[0])
+        x, y = map(int, re.findall(r"x(\d+)-y(\d+)", node[0])[0])
         if 92 < node[2]:
-            mtx[y][x] = '#'
+            mtx[y][x] = "#"
         if node[2] == 0:
-            mtx[y][x] = '_'
+            mtx[y][x] = "_"
 
-    mtx[0][0] = 'T'
-    mtx[0][30] = 'G'
+    mtx[0][0] = "T"
+    mtx[0][30] = "G"
 
     i = 0
     # This problem was done visually
@@ -108,7 +113,7 @@ def day22p2():
     # Then Move G to Right of T
     # Add 1
     for r in mtx:
-        print(i, '\t', ''.join(r))
+        print(i, "\t", "".join(r))
         i += 1
 
     # 9 + 26 + 25 + 1
@@ -124,14 +129,14 @@ def day22p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 22 - Part 1", '-'*n)
-    print('Result =>', day22p1())
+    print("-" * (n), "Day 22 - Part 1", "-" * n)
+    print("Result =>", day22p1())
     print()
-    print('-'*(n), "Day 22 - Part 2", '-'*n)
-    print('Result =>', day22p2())
+    print("-" * (n), "Day 22 - Part 2", "-" * n)
+    print("Result =>", day22p2())
     print()
 
 

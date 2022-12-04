@@ -5,10 +5,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -17,6 +18,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -29,8 +31,8 @@ def adjacents(x, y, matrix):
     wy = len(matrix)
     wx = len(matrix[0])
 
-    for cy in range(max(0, y-1), min(wy, y+2)):
-        for cx in range(max(0, x-1), min(wx, x+2)):
+    for cy in range(max(0, y - 1), min(wy, y + 2)):
+        for cx in range(max(0, x - 1), min(wx, x + 2)):
             adj.add((cx, cy))
 
     adj.discard((x, y))
@@ -39,14 +41,13 @@ def adjacents(x, y, matrix):
 
 
 def pp(grid):
-    print('-----')
+    print("-----")
     for d in grid:
         print(d)
-    print('-----')
+    print("-----")
 
 
 def calc_flashed(grid, only_flashes) -> bool:
-
     wx = len(grid[0])
     wy = len(grid)
 
@@ -88,6 +89,7 @@ def reshape(grid):
             newgrid[ri].append(int(oct))
     return newgrid
 
+
 ################################################################################
 
 
@@ -119,6 +121,7 @@ def day11p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -142,7 +145,7 @@ def day11p2():
             for oct in row:
                 if oct != 0:
                     all_zero = False
-                    break 
+                    break
 
         if all_zero:
             break
@@ -156,14 +159,14 @@ def day11p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 11 - Part 1", '-'*n)
-    print('Result =>', day11p1())
+    print("-" * (n), "Day 11 - Part 1", "-" * n)
+    print("Result =>", day11p1())
     print()
-    print('-'*(n), "Day 11 - Part 2", '-'*n)
-    print('Result =>', day11p2())
+    print("-" * (n), "Day 11 - Part 2", "-" * n)
+    print("Result =>", day11p2())
     print()
 
 

@@ -1,5 +1,3 @@
-from itertools import product
-import copy
 from typing import List
 
 
@@ -10,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -24,6 +23,7 @@ def parse1(line: str):
     if len(line) == 0:
         return None
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -49,8 +49,8 @@ def bit_arr_to_dec(bitArr: List[bool]) -> int:
 def decoded_pixel(x, y, lx, ly, matrix, default):
     binary = []
 
-    for j in range(y-1, y+2):
-        for i in range(x-1, x+2):
+    for j in range(y - 1, y + 2):
+        for i in range(x - 1, x + 2):
             if 0 <= j < ly and 0 <= i < lx:
                 binary.append(matrix[j][i])
             else:
@@ -67,32 +67,32 @@ def day20p1():
 
     encoding = data[0]
 
-    image = [[int(c == '#') for c in line] for line in data[2:]]
+    image = [[int(c == "#") for c in line] for line in data[2:]]
 
     len_x = len(image[0])
     len_y = len(image)
 
-    print('Lens', len_x, len_y)
+    print("Lens", len_x, len_y)
 
     turns = 2
     for t in range(turns):
         tmp = []
         len_x = len(image[0])
         len_y = len(image)
-        for j in range(-3, len(image)+3):
+        for j in range(-3, len(image) + 3):
             nr = []
-            for i in range(-3, len(image[0])+3):
+            for i in range(-3, len(image[0]) + 3):
                 encoded_pix = decoded_pixel(i, j, len_x, len_y, image, t & 1)
-                nr.append(int(encoding[encoded_pix] == '#'))
+                nr.append(int(encoding[encoded_pix] == "#"))
             tmp.append(nr)
         image = tmp
 
-    print('--------------')
+    print("--------------")
     s = 0
     for r in image:
-        print(''.join('#' if b == 1 else '.' for b in r))
+        print("".join("#" if b == 1 else "." for b in r))
         s += sum(r)
-    print('--------------')
+    print("--------------")
 
     return s
 
@@ -104,6 +104,7 @@ def day20p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -118,23 +119,23 @@ def day20p2():
 
     encoding = data[0]
 
-    image = [[int(c == '#') for c in line] for line in data[2:]]
+    image = [[int(c == "#") for c in line] for line in data[2:]]
 
     len_x = len(image[0])
     len_y = len(image)
 
-    print('Lens', len_x, len_y)
+    print("Lens", len_x, len_y)
 
     turns = 50
     for t in range(turns):
         tmp = []
         len_x = len(image[0])
         len_y = len(image)
-        for j in range(-3, len(image)+3):
+        for j in range(-3, len(image) + 3):
             nr = []
-            for i in range(-3, len(image[0])+3):
+            for i in range(-3, len(image[0]) + 3):
                 encoded_pix = decoded_pixel(i, j, len_x, len_y, image, t & 1)
-                nr.append(int(encoding[encoded_pix] == '#'))
+                nr.append(int(encoding[encoded_pix] == "#"))
             tmp.append(nr)
         image = tmp
 
@@ -144,14 +145,14 @@ def day20p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 20 - Part 1", '-'*n)
-    print('Result =>', day20p1())
+    print("-" * (n), "Day 20 - Part 1", "-" * n)
+    print("Result =>", day20p1())
     print()
-    print('-'*(n), "Day 20 - Part 2", '-'*n)
-    print('Result =>', day20p2())
+    print("-" * (n), "Day 20 - Part 2", "-" * n)
+    print("Result =>", day20p2())
     print()
 
 

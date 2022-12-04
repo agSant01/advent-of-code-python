@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,6 +22,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -39,15 +41,17 @@ def is_lowest(x, y, matrix):
     wy = len(matrix)
     wx = len(matrix[0])
 
-    for cy in range(max(0, y-1), min(wy, y+2)):
+    for cy in range(max(0, y - 1), min(wy, y + 2)):
         if int(matrix[cy][x]) < target:
             miny = cy
 
-    for cx in range(max(0, x-1), min(wx, x+2)):
+    for cx in range(max(0, x - 1), min(wx, x + 2)):
         if int(matrix[y][cx]) < target:
             minx = cx
 
     return minx == x and miny == y
+
+
 ################################################################################
 
 
@@ -55,7 +59,7 @@ def day09p1():
     data = get_input(parse1, test=False)
 
     total_lowest = 0
-    for ir,  row in enumerate(data):
+    for ir, row in enumerate(data):
         for ic, col in enumerate(row):
             total_lowest += is_lowest(ic, ir, data) * (1 + int(col))
 
@@ -70,6 +74,7 @@ def day09p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -81,10 +86,10 @@ def adjacents(x, y, matrix):
     wy = len(matrix)
     wx = len(matrix[0])
 
-    for cy in range(max(0, y-1), min(wy, y+2)):
+    for cy in range(max(0, y - 1), min(wy, y + 2)):
         adj.add((x, cy))
 
-    for cx in range(max(0, x-1), min(wx, x+2)):
+    for cx in range(max(0, x - 1), min(wx, x + 2)):
         adj.add((cx, y))
 
     adj.discard((x, y))
@@ -101,7 +106,7 @@ def find_basin_size(x, y, matrix, visited: set):
     basinValuesSum = int(matrix[y][x])
 
     for ax, ay in adjacents(x, y, matrix):
-        if matrix[ay][ax] == '9':
+        if matrix[ay][ax] == "9":
             continue
 
         if (ax, ay) in visited:
@@ -111,6 +116,7 @@ def find_basin_size(x, y, matrix, visited: set):
 
     return basinValuesSum
 
+
 ################################################################################
 
 
@@ -118,7 +124,7 @@ def day09p2():
     data = get_input(parse2, test=False)
 
     lowest_points = []
-    for ir,  row in enumerate(data):
+    for ir, row in enumerate(data):
         for ic, _ in enumerate(row):
             if is_lowest(ic, ir, data):
                 lowest_points.append((ic, ir))
@@ -138,14 +144,14 @@ def day09p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 09 - Part 1", '-'*n)
-    print('Result =>', day09p1())
+    print("-" * (n), "Day 09 - Part 1", "-" * n)
+    print("Result =>", day09p1())
     print()
-    print('-'*(n), "Day 09 - Part 2", '-'*n)
-    print('Result =>', day09p2())
+    print("-" * (n), "Day 09 - Part 2", "-" * n)
+    print("Result =>", day09p2())
     print()
 
 

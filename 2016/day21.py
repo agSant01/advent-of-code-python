@@ -1,7 +1,6 @@
 import itertools
-import collections
 import re
-from typing import Collection, List
+from typing import List
 
 
 def get_filename(test=False):
@@ -11,10 +10,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -23,6 +23,7 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -52,22 +53,23 @@ def scrambler(initial_text: str, instructions: List[str]):
     total_chars = len(char_arr)
 
     for inst in instructions:
-        if inst.startswith('swap position'):
-            x, y = map(int, re.findall(
-                r'swap position (\d+) with position (\d+)', inst)[0])
+        if inst.startswith("swap position"):
+            x, y = map(
+                int, re.findall(r"swap position (\d+) with position (\d+)", inst)[0]
+            )
             temp = char_arr[x]
             char_arr[x] = char_arr[y]
             char_arr[y] = temp
-        elif inst.startswith('swap letter'):
-            x, y = re.findall(r'letter ([a-z]) with letter ([a-z])', inst)[0]
+        elif inst.startswith("swap letter"):
+            x, y = re.findall(r"letter ([a-z]) with letter ([a-z])", inst)[0]
             x_idx = find_idx(x, char_arr)
             y_idx = find_idx(y, char_arr)
             for i in x_idx:
                 char_arr[i] = y
             for i in y_idx:
                 char_arr[i] = x
-        elif inst.startswith('rotate based'):
-            letter = re.findall(r'letter ([a-z]+)', inst)[0]
+        elif inst.startswith("rotate based"):
+            letter = re.findall(r"letter ([a-z]+)", inst)[0]
             # print(letter, char_arr)
             if letter not in char_arr:
                 continue
@@ -77,33 +79,37 @@ def scrambler(initial_text: str, instructions: List[str]):
             x += 1
             tmp = []
             for i in range(total_chars):
-                tmp.append(char_arr[(i-x) % total_chars])
+                tmp.append(char_arr[(i - x) % total_chars])
             char_arr = tmp
-        elif inst.startswith('rotate'):
-            x = re.findall(r'\d+', inst)[0]
+        elif inst.startswith("rotate"):
+            x = re.findall(r"\d+", inst)[0]
             x = int(x)
-            if 'right' in inst:
+            if "right" in inst:
                 tmp = []
                 for i in range(total_chars):
-                    tmp.append(char_arr[(i-x) % total_chars])
+                    tmp.append(char_arr[(i - x) % total_chars])
                 char_arr = tmp
-            elif 'left' in inst:
+            elif "left" in inst:
                 tmp = []
                 for i in range(total_chars):
-                    tmp.append(char_arr[(i+x) % total_chars])
+                    tmp.append(char_arr[(i + x) % total_chars])
                 char_arr = tmp
-        elif inst.startswith('reverse positions'):
-            x, y = map(int, re.findall(
-                r'reverse positions (\d+) through (\d+)', inst)[0])
-            char_arr = char_arr[:x] + \
-                list(reversed(char_arr[x:y+1])) + char_arr[y+1:]
-        elif inst.startswith('move position'):
-            x, y = map(int, re.findall(
-                r'move position (\d+) to position (\d+)', inst)[0])
+        elif inst.startswith("reverse positions"):
+            x, y = map(
+                int, re.findall(r"reverse positions (\d+) through (\d+)", inst)[0]
+            )
+            char_arr = (
+                char_arr[:x] + list(reversed(char_arr[x : y + 1])) + char_arr[y + 1 :]
+            )
+        elif inst.startswith("move position"):
+            x, y = map(
+                int, re.findall(r"move position (\d+) to position (\d+)", inst)[0]
+            )
             tmp = char_arr.pop(x)
             char_arr.insert(y, tmp)
 
-    return ''.join(char_arr)
+    return "".join(char_arr)
+
 
 ################################################################################
 
@@ -111,11 +117,12 @@ def scrambler(initial_text: str, instructions: List[str]):
 def day21p1():
     test = False
     data = get_input(parse1, test)
-    text = 'abcde'
+    text = "abcde"
     if not test:
-        text = 'abcdefgh'
+        text = "abcdefgh"
 
     return scrambler(text, data)
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -124,6 +131,7 @@ def day21p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -136,24 +144,24 @@ def parse2(line):
 def day21p2():
     data = get_input(parse2, test=False)
 
-    pwd = 'fbgdceah'
+    pwd = "fbgdceah"
 
     for p in itertools.permutations(pwd):
-        if scrambler(''.join(p), data) == pwd:
-            return ''.join(p)
+        if scrambler("".join(p), data) == pwd:
+            return "".join(p)
 
 
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 21 - Part 1", '-'*n)
-    print('Result =>', day21p1())
+    print("-" * (n), "Day 21 - Part 1", "-" * n)
+    print("Result =>", day21p1())
     print()
-    print('-'*(n), "Day 21 - Part 2", '-'*n)
-    print('Result =>', day21p2())
+    print("-" * (n), "Day 21 - Part 2", "-" * n)
+    print("Result =>", day21p2())
     print()
 
 

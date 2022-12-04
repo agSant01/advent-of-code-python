@@ -1,4 +1,3 @@
-import collections
 import sys
 
 
@@ -9,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,21 +20,15 @@ def get_input(parse, test=False):
 
 
 def parse1(line):
-    return line.split(',')
+    return line.split(",")
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
 
-DIAGONALS = {
-    'se': 'nw',
-    'nw': 'se',
-    'sw': 'ne',
-    'ne': 'sw',
-    'n': 's',
-    's': 'n'
-}
+DIAGONALS = {"se": "nw", "nw": "se", "sw": "ne", "ne": "sw", "n": "s", "s": "n"}
 
 
 def get_diagonal(direction):
@@ -42,30 +36,27 @@ def get_diagonal(direction):
 
 
 SAME = {
-    'nw': 'ne',
-    'ne': 'nw',
-    'sw': 'se',
-    'se': 'sw',
+    "nw": "ne",
+    "ne": "nw",
+    "sw": "se",
+    "se": "sw",
 }
 
 MATCH = {
-    'nw': 'n',
-    'ne': 'n',
-    'sw': 's',
-    'se': 's',
+    "nw": "n",
+    "ne": "n",
+    "sw": "s",
+    "se": "s",
 }
 
 
 def get_same(direction):
-    if direction in ['s', 'n']:
+    if direction in ["s", "n"]:
         return None
     return SAME[direction]
 
 
-OPOSITES = {
-    's': 'n',
-    'n': 's'
-}
+OPOSITES = {"s": "n", "n": "s"}
 ################################################################################
 
 
@@ -77,25 +68,25 @@ def day11p1():
         x, y, z = 0, 0, 0
         # s, q, r
         for direction in directions:
-            if direction == 'n':
+            if direction == "n":
                 x += 1
                 z -= 1
-            elif direction == 's':
+            elif direction == "s":
                 x -= 1
                 z += 1
-            elif direction == 'se':
+            elif direction == "se":
                 y += 1
                 x -= 1
-            elif direction == 'ne':
+            elif direction == "ne":
                 y += 1
                 z -= 1
-            elif direction == 'sw':
+            elif direction == "sw":
                 y -= 1
                 z += 1
-            elif direction == 'nw':
+            elif direction == "nw":
                 y -= 1
                 x += 1
-        steps_res.append((abs(z)+abs(x)+abs(y))//2)
+        steps_res.append((abs(z) + abs(x) + abs(y)) // 2)
 
     return steps_res
 
@@ -107,6 +98,7 @@ def day11p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -123,25 +115,25 @@ def day11p2():
         # s, q, r
         distances = []
         for direction in directions:
-            if direction == 'n':
+            if direction == "n":
                 x += 1
                 z -= 1
-            elif direction == 's':
+            elif direction == "s":
                 x -= 1
                 z += 1
-            elif direction == 'se':
+            elif direction == "se":
                 y += 1
                 x -= 1
-            elif direction == 'ne':
+            elif direction == "ne":
                 y += 1
                 z -= 1
-            elif direction == 'sw':
+            elif direction == "sw":
                 y -= 1
                 z += 1
-            elif direction == 'nw':
+            elif direction == "nw":
                 y -= 1
                 x += 1
-            distances.append((abs(z)+abs(x)+abs(y))//2)
+            distances.append((abs(z) + abs(x) + abs(y)) // 2)
 
         results.append(max(distances))
 
@@ -151,7 +143,7 @@ def day11p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -162,12 +154,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 11 - Part 1", '-'*n)
-        print('Result =>', day11p1())
+        print("-" * (n), "Day 11 - Part 1", "-" * n)
+        print("Result =>", day11p1())
         print()
     if run_two:
-        print('-'*(n), "Day 11 - Part 2", '-'*n)
-        print('Result =>', day11p2())
+        print("-" * (n), "Day 11 - Part 2", "-" * n)
+        print("Result =>", day11p2())
     print()
 
 

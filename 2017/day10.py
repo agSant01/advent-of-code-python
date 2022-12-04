@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -19,7 +20,8 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return list(map(int, line.split(',')))
+    return list(map(int, line.split(",")))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -27,19 +29,20 @@ def parse1(line: str):
 
 
 def pretty_print(hash_list, curr, sub_list_length):
-    end_pos = ((curr+sub_list_length) % len(hash_list)) - 1
+    end_pos = ((curr + sub_list_length) % len(hash_list)) - 1
     to_print = []
     for idx, hc in enumerate(hash_list):
         if idx == curr:
-            to_print.append(' (['+str(hc)+']')
+            to_print.append(" ([" + str(hc) + "]")
         else:
-            to_print.append(' ' + str(hc))
+            to_print.append(" " + str(hc))
         if idx == end_pos:
-            to_print.append(')')
-    print('Repr:',
-          ''.join(map(str, to_print))[1:],
-          f'\t| Curr:{ curr} | Length: {sub_list_length}'
-          )
+            to_print.append(")")
+    print(
+        "Repr:",
+        "".join(map(str, to_print))[1:],
+        f"\t| Curr:{ curr} | Length: {sub_list_length}",
+    )
 
 
 def twist_hash_string(hash_string, lengths, skip_size=0, current_pos=0):
@@ -50,8 +53,8 @@ def twist_hash_string(hash_string, lengths, skip_size=0, current_pos=0):
 
     for length in lengths:
         if length > 1:
-            end_pos = ((current_pos+length) % hash_len)-1
-            iters_ = abs(length)//2
+            end_pos = ((current_pos + length) % hash_len) - 1
+            iters_ = abs(length) // 2
             # pretty_print(internal_hash_string, current_pos, length)
             # print(f'iters {iters_} | end: {end_pos}')
             start_ptr = current_pos % hash_len
@@ -63,10 +66,11 @@ def twist_hash_string(hash_string, lengths, skip_size=0, current_pos=0):
                 end_pos -= 1
                 start_ptr = (start_ptr + 1) % hash_len
 
-        current_pos = (current_pos+skip_size+length) % hash_len
+        current_pos = (current_pos + skip_size + length) % hash_len
         skip_size += 1
 
     return internal_hash_string, current_pos % hash_len, skip_size
+
 
 ################################################################################
 
@@ -79,7 +83,7 @@ def day10p1():
     if is_debug_print:
         pretty_print([0, 1, 2, 3, 4], 0, 3)
         pretty_print([0, 1, 2, 3, 4], 3, 4)
-        pretty_print([0, 1, 2, 3, 4], (5+3) % 5, 1)
+        pretty_print([0, 1, 2, 3, 4], (5 + 3) % 5, 1)
         exit(0)
 
     hash_len = 5 if test else 256
@@ -100,6 +104,7 @@ def parse2(line: str):
         result_arr.append(ord(char))
     return result_arr
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -119,19 +124,19 @@ def day10p2():
         l += [17, 31, 73, 47, 23]
         for _ in range(rounds):
             sparse_hash, curr_pos, skip_size = twist_hash_string(
-                sparse_hash, l, skip_size=skip_size, current_pos=curr_pos)
+                sparse_hash, l, skip_size=skip_size, current_pos=curr_pos
+            )
 
         dense_hash = []
         for i in range(16):
             blk_start = i * 16
             acc = sparse_hash[blk_start]
             for i in range(15):
-                acc ^= sparse_hash[blk_start+i+1]
+                acc ^= sparse_hash[blk_start + i + 1]
             dense_hash.append(acc)
 
         # print(dense_hash)
-        dense_hashes += [''.join([hex(value)[2:].zfill(2)
-                                 for value in dense_hash])]
+        dense_hashes += ["".join([hex(value)[2:].zfill(2) for value in dense_hash])]
 
     return dense_hashes[0]
 
@@ -139,7 +144,7 @@ def day10p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -150,12 +155,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 10 - Part 1", '-'*n)
-        print('Result =>', day10p1())
+        print("-" * (n), "Day 10 - Part 1", "-" * n)
+        print("Result =>", day10p1())
         print()
     if run_two:
-        print('-'*(n), "Day 10 - Part 2", '-'*n)
-        print('Result =>', day10p2())
+        print("-" * (n), "Day 10 - Part 2", "-" * n)
+        print("Result =>", day10p2())
     print()
 
 

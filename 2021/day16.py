@@ -10,10 +10,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,6 +23,7 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -39,29 +41,32 @@ class Packet:
 
     def __str__(self) -> str:
         if self.value:
-            content = f'<value:{self.value}>'
+            content = f"<value:{self.value}>"
         else:
-            content = f'<{len(self.subPackets)} SubPackets>'
-        return f'<Packet version:{self.version} typeId:{self.typeId} lenTypeId:{self.lenTypeId} contents:{content} bitLen:{self.bitLen}>'
+            content = f"<{len(self.subPackets)} SubPackets>"
+        return (
+            "<Packet"
+            f" version:{self.version} typeId:{self.typeId} lenTypeId:{self.lenTypeId} contents:{content} bitLen:{self.bitLen}>"
+        )
 
 
 HEX_TO_BIT = {
-    '0': [0, 0, 0, 0],
-    '1': [0, 0, 0, 1],
-    '2': [0, 0, 1, 0],
-    '3': [0, 0, 1, 1],
-    '4': [0, 1, 0, 0],
-    '5': [0, 1, 0, 1],
-    '6': [0, 1, 1, 0],
-    '7': [0, 1, 1, 1],
-    '8': [1, 0, 0, 0],
-    '9': [1, 0, 0, 1],
-    'A': [1, 0, 1, 0],
-    'B': [1, 0, 1, 1],
-    'C': [1, 1, 0, 0],
-    'D': [1, 1, 0, 1],
-    'E': [1, 1, 1, 0],
-    'F': [1, 1, 1, 1],
+    "0": [0, 0, 0, 0],
+    "1": [0, 0, 0, 1],
+    "2": [0, 0, 1, 0],
+    "3": [0, 0, 1, 1],
+    "4": [0, 1, 0, 0],
+    "5": [0, 1, 0, 1],
+    "6": [0, 1, 1, 0],
+    "7": [0, 1, 1, 1],
+    "8": [1, 0, 0, 0],
+    "9": [1, 0, 0, 1],
+    "A": [1, 0, 1, 0],
+    "B": [1, 0, 1, 1],
+    "C": [1, 1, 0, 0],
+    "D": [1, 1, 0, 1],
+    "E": [1, 1, 1, 0],
+    "F": [1, 1, 1, 1],
 }
 
 
@@ -103,11 +108,11 @@ def parse_packet(packet: List[bool]) -> Packet:
         values = []
         curr = 6
         while packet[curr] != 0:
-            values.extend(packet[curr+1:curr+5])
+            values.extend(packet[curr + 1 : curr + 5])
             curr += 5
-        values.extend(packet[curr+1:curr+5])
+        values.extend(packet[curr + 1 : curr + 5])
         packetObj.value = values
-        packetObj.bitLen = curr+5
+        packetObj.bitLen = curr + 5
         return packetObj
 
     HEADER_OFFSET = 7
@@ -120,18 +125,18 @@ def parse_packet(packet: List[bool]) -> Packet:
 
     if packetObj.lenTypeId == 0:
         bitsToLook = 15
-        lenInBits = bit_arr_to_dec(
-            packet[HEADER_OFFSET:HEADER_OFFSET+bitsToLook])
-        curr = HEADER_OFFSET+bitsToLook
-        while curr < lenInBits+(HEADER_OFFSET+bitsToLook):
-            subPacket: Packet = parse_packet(packet[curr:curr+lenInBits])
+        lenInBits = bit_arr_to_dec(packet[HEADER_OFFSET : HEADER_OFFSET + bitsToLook])
+        curr = HEADER_OFFSET + bitsToLook
+        while curr < lenInBits + (HEADER_OFFSET + bitsToLook):
+            subPacket: Packet = parse_packet(packet[curr : curr + lenInBits])
             packetObj.subPackets.append(subPacket)
             curr += subPacket.bitLen
     else:
         bitsToLook = 11
         totalSubPackets = bit_arr_to_dec(
-            packet[HEADER_OFFSET:HEADER_OFFSET+bitsToLook])
-        curr = HEADER_OFFSET+bitsToLook
+            packet[HEADER_OFFSET : HEADER_OFFSET + bitsToLook]
+        )
+        curr = HEADER_OFFSET + bitsToLook
         while totalSubPackets > 0:
             subPacket: Packet = parse_packet(packet[curr:])
             packetObj.subPackets.append(subPacket)
@@ -156,6 +161,7 @@ def sum_packet_versions(packet: Packet) -> int:
 
     return total
 
+
 ################################################################################
 
 
@@ -167,11 +173,12 @@ def day16p1():
         # hex_to_bit_arr(packet, 'Len Original:', len(packet)
         packet = hex_to_bit_arr(packet)
         syntax_tree = parse_packet(packet)
-        print('ST:', syntax_tree)
+        print("ST:", syntax_tree)
         packetVersionSum = sum_packet_versions(syntax_tree)
         result.append(packetVersionSum)
 
-    return list(map(lambda x: f'Sum: {x}', result))
+    return list(map(lambda x: f"Sum: {x}", result))
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -180,6 +187,7 @@ def day16p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -193,7 +201,7 @@ OPERATIONS = {
     3: max,
     5: lambda sps: sps[0] > sps[1],
     6: lambda sps: sps[0] < sps[1],
-    7: lambda sps: sps[0] == sps[1]
+    7: lambda sps: sps[0] == sps[1],
 }
 
 
@@ -217,20 +225,20 @@ def day16p2():
         st = parse_packet(packet)
         result = execute_packets(st)
         results.append(result)
-    return 'Results:', results
+    return "Results:", results
 
 
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 16 - Part 1", '-'*n)
-    print('Result =>', day16p1())
+    print("-" * (n), "Day 16 - Part 1", "-" * n)
+    print("Result =>", day16p1())
     print()
-    print('-'*(n), "Day 16 - Part 2", '-'*n)
-    print('Result =>', day16p2())
+    print("-" * (n), "Day 16 - Part 2", "-" * n)
+    print("Result =>", day16p2())
     print()
 
 

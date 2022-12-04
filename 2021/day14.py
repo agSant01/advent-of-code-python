@@ -1,6 +1,4 @@
 import collections
-import copy
-import functools
 
 
 def get_filename(test=False):
@@ -10,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,7 +20,7 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    line = line.split(' -> ')
+    line = line.split(" -> ")
     if len(line) == 0:
         return None
     if len(line) == 1:
@@ -43,12 +42,12 @@ def get_polymer(start: str, mapping, steps):
         letters[char] += 1
 
     for pair in zip(start, start[1:]):
-        pairs[''.join(pair)] += 1
+        pairs["".join(pair)] += 1
 
     for _ in range(steps):
         tmp = collections.defaultdict(int)
         for pair in pairs.copy():
-            pair = ''.join(pair)
+            pair = "".join(pair)
             letters[mapping[pair]] += pairs[pair]
             tmp[pair[0] + mapping[pair]] += pairs[pair]
             tmp[mapping[pair] + pair[1]] += pairs[pair]
@@ -60,6 +59,7 @@ def get_polymer(start: str, mapping, steps):
     _, min_ = min(items, key=lambda x: x[1])
 
     return mx - min_
+
 
 ################################################################################
 
@@ -84,6 +84,7 @@ def day14p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -105,14 +106,14 @@ def day14p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 14 - Part 1", '-'*n)
-    print('Result =>', day14p1())
+    print("-" * (n), "Day 14 - Part 1", "-" * n)
+    print("Result =>", day14p1())
     print()
-    print('-'*(n), "Day 14 - Part 2", '-'*n)
-    print('Result =>', day14p2())
+    print("-" * (n), "Day 14 - Part 2", "-" * n)
+    print("Result =>", day14p2())
     print()
 
 

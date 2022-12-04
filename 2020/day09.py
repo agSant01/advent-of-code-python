@@ -30,7 +30,7 @@ def day09p1():
         cur += 1
 
     while cur < len(data):
-        res = find(data[cur], valid_numbers[(cur-preamble):cur])
+        res = find(data[cur], valid_numbers[(cur - preamble) : cur])
         if not res:
             return data[cur]
 
@@ -48,7 +48,7 @@ def findInvalidNum(data, preamble=25):
         cur += 1
 
     while cur < len(data):
-        res = find(data[cur], valid_numbers[(cur-preamble):cur])
+        res = find(data[cur], valid_numbers[(cur - preamble) : cur])
         if not res:
             return data[cur]
 
@@ -60,18 +60,18 @@ def contSumRec(numToSum, data, window):
     curr = 0
     sum_ = sum(data[0:window])
 
-    while curr < len(data) - window-1:
+    while curr < len(data) - window - 1:
         sum_ -= data[curr]
-        sum_ += data[curr+window]
+        sum_ += data[curr + window]
         curr += 1
         if sum_ == numToSum:
-            return data[curr:(curr+window)]
+            return data[curr : (curr + window)]
 
-    return contSumRec(numToSum, data, window-1)
+    return contSumRec(numToSum, data, window - 1)
 
 
 def contSum(numToSum, data):
-    return contSumRec(numToSum, data, len(data)-1)
+    return contSumRec(numToSum, data, len(data) - 1)
 
 
 def day09p2():
@@ -79,7 +79,7 @@ def day09p2():
 
     invalid_num = findInvalidNum(data)
     seq = contSum(invalid_num, data)
-    return min(seq)+max(seq)
+    return min(seq) + max(seq)
 
 
 def main():

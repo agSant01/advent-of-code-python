@@ -1,4 +1,3 @@
-from os import curdir
 
 
 def get_filename(test=False):
@@ -8,10 +7,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -19,7 +19,8 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return list(map(int, line.split('-')))
+    return list(map(int, line.split("-")))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -32,7 +33,7 @@ def day20p1():
     data = sorted(data, key=lambda x: x[0])
 
     for i in range(1, len(data)):
-        prev = data[i-1]
+        prev = data[i - 1]
         curr = data[i]
 
         if curr[0] < prev[1]:
@@ -45,6 +46,7 @@ def day20p1():
             return prev[1] + 1
 
     return None
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -69,7 +71,7 @@ def day20p2():
     allowed = 0
 
     for i in range(1, len(data)):
-        prev = data[i-1]
+        prev = data[i - 1]
         curr = data[i]
 
         if curr[0] < prev[1]:
@@ -87,14 +89,14 @@ def day20p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 20 - Part 1", '-'*n)
-    print('Result =>', day20p1())
+    print("-" * (n), "Day 20 - Part 1", "-" * n)
+    print("Result =>", day20p1())
     print()
-    print('-'*(n), "Day 20 - Part 2", '-'*n)
-    print('Result =>', day20p2())
+    print("-" * (n), "Day 20 - Part 2", "-" * n)
+    print("Result =>", day20p2())
     print()
 
 

@@ -1,6 +1,6 @@
 def get_input(filename):
     data = []
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line))
     return data
@@ -17,7 +17,7 @@ def day3p1():
     for y in range(1, len(trees)):
         tree = trees[y]
         x += 3
-        if tree[x % len(tree)] == '#':
+        if tree[x % len(tree)] == "#":
             trees_seen += 1
 
     return trees_seen
@@ -29,14 +29,14 @@ def traverse_with_slope(deltaRight, deltaDown, trees):
     for y in range(deltaDown, len(trees), deltaDown):
         tree = trees[y]
         x += deltaRight
-        if tree[x % len(tree)] == '#':
+        if tree[x % len(tree)] == "#":
             trees_seen += 1
 
     return trees_seen
 
 
 def day3p2():
-    trees = get_input('day03_input_test.txt')
+    trees = get_input("day03_input_test.txt")
 
     # tupple (deltaRight , deltaDown)
     slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]

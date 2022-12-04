@@ -5,10 +5,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -16,7 +17,7 @@ def get_input(parse, test=False):
 
 
 def parse1(line):
-    data = line.split(' | ')
+    data = line.split(" | ")
     return [data[0].split(), data[1].split()]
 
 
@@ -38,6 +39,7 @@ def day08p1():
 
     return c
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -45,6 +47,7 @@ def day08p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -75,31 +78,31 @@ def day08p2():
                 mapping_[8] = signal
 
         # interpret result
-        res = ''
+        res = ""
         for digit in finals:
             digit = set(digit)
             if len(digit) == 2:
-                res += '1'
+                res += "1"
             elif len(digit) == 3:
-                res += '7'
+                res += "7"
             elif len(digit) == 4:
-                res += '4'
+                res += "4"
             elif len(digit) == 7:
-                res += '8'
+                res += "8"
             elif len(digit) == 5:
                 if len(digit.intersection(mapping_[1])) == 2:
-                    res += '3'
+                    res += "3"
                 elif len(digit.intersection(mapping_[4])) == 3:
-                    res += '5'
+                    res += "5"
                 else:
-                    res += '2'
+                    res += "2"
             elif len(digit) == 6:
                 if len(digit.intersection(mapping_[1])) == 1:
-                    res += '6'
+                    res += "6"
                 elif len(digit.intersection(mapping_[4])) == 4:
-                    res += '9'
+                    res += "9"
                 else:
-                    res += '0'
+                    res += "0"
 
         total += int(res)
     return total
@@ -108,14 +111,14 @@ def day08p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), 'Day 08 - Part 1', '-'*n)
-    print('Result =>', day08p1())
+    print("-" * (n), "Day 08 - Part 1", "-" * n)
+    print("Result =>", day08p1())
     print()
-    print('-'*(n), 'Day 08 - Part 2', '-'*n)
-    print('Result =>', day08p2())
+    print("-" * (n), "Day 08 - Part 2", "-" * n)
+    print("Result =>", day08p2())
     print()
 
 

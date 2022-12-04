@@ -1,6 +1,6 @@
 import collections
 import sys
-from typing import List, Dict
+from typing import Dict, List
 
 
 def get_filename(test=False):
@@ -10,10 +10,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,11 +23,11 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     info: List[str] = line.split()
-    weight = info[1].replace('(', '').replace(')', '')
+    weight = info[1].replace("(", "").replace(")", "")
 
     children = []
     if len(info) > 2:
-        children = list(map(lambda x: x.replace(',', ''), info[3:]))
+        children = list(map(lambda x: x.replace(",", ""), info[3:]))
 
     return Disk(info[0], int(weight), children)
 
@@ -48,7 +49,10 @@ class Disk:
         return [table[nb_name] for nb_name in self.children]
 
     def __str__(self) -> str:
-        return f'<Disk name={self.name} weight={self.weight} tw={self.sub_tree_weight} parent={self.parent.name if self.parent else None} children={self.children}>'
+        return (
+            "<Disk"
+            f" name={self.name} weight={self.weight} tw={self.sub_tree_weight} parent={self.parent.name if self.parent else None} children={self.children}>"
+        )
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -88,6 +92,7 @@ def build_table(data: List[Disk]):
         _table[disk.name] = disk
     return _table
 
+
 ################################################################################
 
 
@@ -108,6 +113,7 @@ def day07p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -167,7 +173,7 @@ def day07p2():
 
     get_weights(disk_mapping_table, root)
 
-    print('root', root)
+    print("root", root)
     dw = balance_weights(disk_mapping_table, root)
     return dw
 
@@ -175,7 +181,7 @@ def day07p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -186,12 +192,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 07 - Part 1", '-'*n)
-        print('Result =>', day07p1())
+        print("-" * (n), "Day 07 - Part 1", "-" * n)
+        print("Result =>", day07p1())
         print()
     if run_two:
-        print('-'*(n), "Day 07 - Part 2", '-'*n)
-        print('Result =>', day07p2())
+        print("-" * (n), "Day 07 - Part 2", "-" * n)
+        print("Result =>", day07p2())
     print()
 
 

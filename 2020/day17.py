@@ -1,5 +1,3 @@
-import collections
-from copy import deepcopy
 
 
 def get_filename(test=False):
@@ -9,14 +7,14 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
 
 
 def parse1(line):
-    return [1 if char == '#' else 0 for char in line]
+    return [1 if char == "#" else 0 for char in line]
 
 
 """
@@ -40,8 +38,8 @@ def getOnNb3D(on_bulbs, coordinate):
     for i in deltas:
         for j in deltas:
             for k in deltas:
-                if (x+i, y+j, z+k) in on_bulbs:
-                    adj.add((x+i, y+j, z+k))
+                if (x + i, y + j, z + k) in on_bulbs:
+                    adj.add((x + i, y + j, z + k))
 
     adj.discard((x, y, z))
 
@@ -93,8 +91,8 @@ def getOnNb4D(on_bulbs, coordinate):
         for j in deltas:
             for k in deltas:
                 for l in deltas:
-                    if (x+i, y+j, z+k, w+l) in on_bulbs:
-                        adj.add((x+i, y+j, z+k, w+l))
+                    if (x + i, y + j, z + k, w + l) in on_bulbs:
+                        adj.add((x + i, y + j, z + k, w + l))
 
     adj.discard((x, y, z, w))
 

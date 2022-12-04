@@ -5,7 +5,7 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
@@ -19,13 +19,12 @@ def getRules(currLine, data):
     rules = {}
     while currLine < len(data) and len(data[currLine]) != 0:
         line = data[currLine]
-        line = line.split(':')
-        ranges = list(map(lambda x: x.strip(), line[1].split(' or ')))
+        line = line.split(":")
+        ranges = list(map(lambda x: x.strip(), line[1].split(" or ")))
 
         key = line[0]
 
-        rules[key] = list(
-            map(lambda x: list(map(int, x.split('-'))), ranges))
+        rules[key] = list(map(lambda x: list(map(int, x.split("-"))), ranges))
 
         currLine += 1
     return rules, currLine
@@ -34,7 +33,7 @@ def getRules(currLine, data):
 def parseTickets(currLine, data):
     nearby_tickets = []
     while currLine < len(data) and len(data[currLine]) != 0:
-        nearby_tickets.append(list(map(int, data[currLine].split(','))))
+        nearby_tickets.append(list(map(int, data[currLine].split(","))))
         currLine += 1
     return nearby_tickets, currLine
 
@@ -100,7 +99,7 @@ def day16p2():
     rules, currLine = getRules(0, data)
     # Get My Ticket
     currLine += 2
-    my_ticket = list(map(int, data[currLine].split(',')))
+    my_ticket = list(map(int, data[currLine].split(",")))
     # Get Nearby Ticket
     currLine += 3
     nearby_tickets, currLine = parseTickets(currLine, data)
@@ -164,8 +163,7 @@ def day16p2():
         used.update(labels)
 
     # filter the columns by those that contain 'departure'
-    filtered_cols = list(
-        filter(lambda x: 'departure' in x[1], my_tckt_map.items()))
+    filtered_cols = list(filter(lambda x: "departure" in x[1], my_tckt_map.items()))
 
     # get the multiplication of the Values on the Labels
     res = 1

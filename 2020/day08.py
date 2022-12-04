@@ -1,4 +1,3 @@
-from os import curdir
 import yearutils as yu
 
 
@@ -26,15 +25,15 @@ def day08p1():
 
         curr_inst = data[curr_]
 
-        if curr_inst[0] == 'acc':
+        if curr_inst[0] == "acc":
             cntr += curr_inst[1]
             curr_ += 1
-        elif curr_inst[0] == 'jmp':
+        elif curr_inst[0] == "jmp":
             curr_ += curr_inst[1]
-        elif curr_inst[0] == 'nop':
+        elif curr_inst[0] == "nop":
             curr_ += 1
         else:
-            print('Invalid cmd:', data[curr_][0], 'Instr:', curr_)
+            print("Invalid cmd:", data[curr_][0], "Instr:", curr_)
             exit(1)
 
     return cntr
@@ -42,12 +41,12 @@ def day08p1():
 
 def switch_instr(curr, instr):
     prev = instr[curr]
-    if prev[0] == 'jmp':
-        instr[curr] = ('nop', int(prev[1]))
-    elif prev[0] == 'nop':
-        instr[curr] = ('jmp', int(prev[1]))
+    if prev[0] == "jmp":
+        instr[curr] = ("nop", int(prev[1]))
+    elif prev[0] == "nop":
+        instr[curr] = ("jmp", int(prev[1]))
     else:
-        print('INvalid op')
+        print("INvalid op")
         exit(1)
 
     return instr
@@ -67,15 +66,15 @@ def run_boot(data):
 
         curr_inst = data[curr_]
 
-        if curr_inst[0] == 'acc':
+        if curr_inst[0] == "acc":
             cntr += curr_inst[1]
             curr_ += 1
-        elif curr_inst[0] == 'jmp':
+        elif curr_inst[0] == "jmp":
             curr_ += curr_inst[1]
-        elif curr_inst[0] == 'nop':
+        elif curr_inst[0] == "nop":
             curr_ += 1
         else:
-            print('Invalid cmd:', data[curr_][0], 'Instr:', curr_)
+            print("Invalid cmd:", data[curr_][0], "Instr:", curr_)
             return None
 
     return cntr
@@ -85,7 +84,7 @@ def day08p2():
     original = yu.get_input(get_filename(test=False), parse)
     check_points = []
     for idx, val in enumerate(original):
-        if val[0] in ['jmp', 'nop']:
+        if val[0] in ["jmp", "nop"]:
             check_points.append(idx)
 
     for cp in check_points:

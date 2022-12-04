@@ -1,4 +1,3 @@
-from os import getresgid
 import yearutils as yu
 
 
@@ -7,7 +6,7 @@ def get_filename(test=False):
 
 
 def parse(line):
-    return list(map(lambda x: int(x), line.split('x')))
+    return list(map(lambda x: int(x), line.split("x")))
 
 
 def getArea(a):
@@ -15,19 +14,19 @@ def getArea(a):
     l = a[0]
     w = a[1]
     h = a[2]
-    return 2*l*w + 2*w*h + 2*l*h + min(l*w, w*h, l*h)
+    return 2 * l * w + 2 * w * h + 2 * l * h + min(l * w, w * h, l * h)
 
 
 def getRibonWrap(a):
     sorted_ = sorted(a)
-    return 2*sorted_[0] + 2*sorted_[1]
+    return 2 * sorted_[0] + 2 * sorted_[1]
 
 
 def getBow(a):
     l = a[0]
     w = a[1]
     h = a[2]
-    return l*w*h
+    return l * w * h
 
 
 def day02p1():

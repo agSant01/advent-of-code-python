@@ -5,14 +5,14 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
 
 
 def parse1(line: str):
-    return list(map(lambda x: int(x), line.strip().split(',')))
+    return list(map(lambda x: int(x), line.strip().split(",")))
 
 
 def day15p1():
@@ -28,18 +28,18 @@ def day15p1():
         history[item] = idx + 1
         lastSpoken = item
 
-    lastSpoken = data[-1]   # get last Spoken number
+    lastSpoken = data[-1]  # get last Spoken number
 
-    for turn in range(len(data)+1, ieth+1):
+    for turn in range(len(data) + 1, ieth + 1):
         if lastSpoken in history:
             # number has been spoken before
             # get the age
             age = turn - history[lastSpoken] - 1
-            history[lastSpoken] = turn-1
+            history[lastSpoken] = turn - 1
             lastSpoken = age
         else:
             # set turn of last spoken as last
-            history[lastSpoken] = turn-1
+            history[lastSpoken] = turn - 1
             lastSpoken = 0
 
     return lastSpoken
@@ -63,18 +63,18 @@ def day15p2():
         history[item] = idx + 1
         lastSpoken = item
 
-    lastSpoken = data[-1]   # get last Spoken number
+    lastSpoken = data[-1]  # get last Spoken number
 
-    for turn in range(len(data)+1, ieth+1):
+    for turn in range(len(data) + 1, ieth + 1):
         if lastSpoken in history:
             # number has been spoken before
             # get the age
             age = turn - history[lastSpoken] - 1
-            history[lastSpoken] = turn-1
+            history[lastSpoken] = turn - 1
             lastSpoken = age
         else:
             # set turn of last spoken as last
-            history[lastSpoken] = turn-1
+            history[lastSpoken] = turn - 1
             lastSpoken = 0
 
     return lastSpoken

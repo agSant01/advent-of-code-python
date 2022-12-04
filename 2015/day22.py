@@ -1,5 +1,3 @@
-from itertools import filterfalse
-import random
 import copy
 import math
 
@@ -11,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,7 +21,8 @@ def get_input(parse, test=False):
 
 
 def parse1(line):
-    return int(line.split(':')[1])
+    return int(line.split(":")[1])
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -32,11 +32,11 @@ def parse1(line):
 # SPELLS
 # Cost, Damage, Heal, TurnsActive, ArmorIncrease, ManaIncrease
 SPELLS = [
-    ['MagicMissile', [53, 4, 0, 0, 0, 0]],
-    ['Drain', [73, 2, 2, 0, 0, 0]],
-    ['Shield', [113, 0, 0, 6, 7, 0]],
-    ['Poison', [173, 3, 0, 6, 0, 0]],
-    ['Recharge', [229, 0, 0, 5, 0, 101]]
+    ["MagicMissile", [53, 4, 0, 0, 0, 0]],
+    ["Drain", [73, 2, 2, 0, 0, 0]],
+    ["Shield", [113, 0, 0, 6, 7, 0]],
+    ["Poison", [173, 3, 0, 6, 0, 0]],
+    ["Recharge", [229, 0, 0, 5, 0, 101]],
 ]
 
 
@@ -61,7 +61,11 @@ class Player:
         return plyr
 
     def __str__(self) -> str:
-        return f'Player {{ Hitpoints:{self.hitpoints} | Damage:{self.damage} | Armor:{self.armor} | RemMana:{self.remaining_mana} | UsedMana:{self.used_mana} }}'
+        return (
+            f"Player {{ Hitpoints:{self.hitpoints} | Damage:{self.damage} |"
+            f" Armor:{self.armor} | RemMana:{self.remaining_mana} |"
+            f" UsedMana:{self.used_mana} }}"
+        )
 
 
 class Container:
@@ -70,10 +74,7 @@ class Container:
         self.boss = boss_stats
 
     def __copy__(self):
-        return Container(
-            copy.copy(self.player),
-            copy.copy(self.boss)
-        )
+        return Container(copy.copy(self.player), copy.copy(self.boss))
 
 
 class Effects:
@@ -130,7 +131,7 @@ class Effects:
         return eff
 
     def __str__(self) -> str:
-        return f'Shield:{self.Shield} | Poison:{self.Poison} | Recharge:{self.Recharge}'
+        return f"Shield:{self.Shield} | Poison:{self.Poison} | Recharge:{self.Recharge}"
 
 
 class Result:
@@ -138,10 +139,17 @@ class Result:
     PLAYER: Player = None
 
     def __str__(self) -> str:
-        return f'Result {{ GLOBAL_MIN: {self.GLOBAL_MIN}, PLAYER: {str(self.PLAYER)} }}'
+        return f"Result {{ GLOBAL_MIN: {self.GLOBAL_MIN}, PLAYER: {str(self.PLAYER)} }}"
 
 
-def fight_round(turn: int, spell_to_use: int, container: Container, effects_active: Effects, result: Result, hard_mode=False):
+def fight_round(
+    turn: int,
+    spell_to_use: int,
+    container: Container,
+    effects_active: Effects,
+    result: Result,
+    hard_mode=False,
+):
     if container.player.used_mana >= result.GLOBAL_MIN:
         return
 
@@ -177,8 +185,7 @@ def fight_round(turn: int, spell_to_use: int, container: Container, effects_acti
     container.player.used_mana += Cost
     container.player.remaining_mana -= Cost
     container.player.hitpoints += Heal
-    container.player.plays.append(
-        (SPELLS[spell_to_use][0], str(container.player)))
+    container.player.plays.append((SPELLS[spell_to_use][0], str(container.player)))
 
     if spell_to_use != 3:
         container.boss.hitpoints -= max(Damage, 1)
@@ -198,8 +205,7 @@ def fight_round(turn: int, spell_to_use: int, container: Container, effects_acti
             result.PLAYER = copy.copy(container.player)
         return
 
-    container.player.hitpoints -= max(container.boss.damage -
-                                      container.player.armor, 1)
+    container.player.hitpoints -= max(container.boss.damage - container.player.armor, 1)
 
     if container.player.hitpoints <= 0:
         return
@@ -208,7 +214,13 @@ def fight_round(turn: int, spell_to_use: int, container: Container, effects_acti
 
     for id in range(len(SPELLS)):
         fight_round(
-            turn+1, id, copy.copy(container), copy.copy(effects_active), result, hard_mode)
+            turn + 1,
+            id,
+            copy.copy(container),
+            copy.copy(effects_active),
+            result,
+            hard_mode,
+        )
 
 
 ################################################################################
@@ -225,7 +237,7 @@ def day22p1():
 
     # Hit Points, Damage
     evil_wizard = get_input(parse1, test=is_test)
-    print('Evil Wiz', evil_wizard)
+    print("Evil Wiz", evil_wizard)
 
     if is_test:
         player = Player(10, 0, 0, 250, 0)
@@ -239,20 +251,18 @@ def day22p1():
 
     result = Result()
 
-    print('[Debug] Player:', player)
-    print('[Debug] Boss:', boss)
+    print("[Debug] Player:", player)
+    print("[Debug] Boss:", boss)
 
     for spell in range(len(SPELLS)):
-        container = Container(
-            copy.copy(player),
-            copy.copy(boss)
-        )
+        container = Container(copy.copy(player), copy.copy(boss))
         fight_round(0, spell, container, Effects(), result)
 
     for id, i in enumerate(result.PLAYER.plays):
-        print('id:', id, str(i))
+        print("id:", id, str(i))
 
     return result.GLOBAL_MIN
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -261,6 +271,7 @@ def day22p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -273,7 +284,7 @@ def day22p2():
 
     # Hit Points, Damage
     evil_wizard = get_input(parse1, test=is_test)
-    print('Evil Wiz', evil_wizard)
+    print("Evil Wiz", evil_wizard)
 
     if is_test:
         player = Player(10, 0, 0, 250, 0)
@@ -287,18 +298,15 @@ def day22p2():
 
     result = Result()
 
-    print('[Debug] Player:', player)
-    print('[Debug] Boss:', boss)
+    print("[Debug] Player:", player)
+    print("[Debug] Boss:", boss)
 
     for spell in range(len(SPELLS)):
-        container = Container(
-            copy.copy(player),
-            copy.copy(boss)
-        )
+        container = Container(copy.copy(player), copy.copy(boss))
         fight_round(0, spell, container, Effects(), result, hard_mode=True)
 
     for id, i in enumerate(result.PLAYER.plays):
-        print('id:', id, str(i))
+        print("id:", id, str(i))
 
     return result.GLOBAL_MIN
 
@@ -306,14 +314,14 @@ def day22p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 22 - Part 1", '-'*n)
-    print('Result =>', day22p1())
+    print("-" * (n), "Day 22 - Part 1", "-" * n)
+    print("Result =>", day22p1())
     print()
-    print('-'*(n), "Day 22 - Part 2", '-'*n)
-    print('Result =>', day22p2())
+    print("-" * (n), "Day 22 - Part 2", "-" * n)
+    print("Result =>", day22p2())
     print()
 
 

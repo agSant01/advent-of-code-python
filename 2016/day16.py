@@ -1,5 +1,5 @@
-import functools
 import copy
+import functools
 
 
 def get_filename(test=False):
@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -27,11 +28,12 @@ def parse1(line):
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
+
 def neg(bit: str):
-    if bit == '0':
-        return '1'
-    if bit == '1':
-        return '0'
+    if bit == "0":
+        return "1"
+    if bit == "1":
+        return "0"
 
 
 @functools.lru_cache()
@@ -44,7 +46,7 @@ def dragon_curve(initial: str, max_len=0):
         b: str = reversed(copy.copy(internal))
         b = "".join(map(neg, b))
         len_ += 1 + len(b)
-        internal += '0' + b
+        internal += "0" + b
 
     return internal
 
@@ -52,22 +54,23 @@ def dragon_curve(initial: str, max_len=0):
 @functools.lru_cache()
 def checksum(bitstring: str):
     i = 0
-    resulting = ''
+    resulting = ""
     while i < len(bitstring):
-        c = bitstring[i:i+2]
+        c = bitstring[i : i + 2]
         if c[0] == c[1]:
-            resulting += '1'
+            resulting += "1"
         else:
-            resulting += '0'
+            resulting += "0"
         i += 2
 
     return resulting
+
 
 ################################################################################
 
 
 def day16p1():
-    data = '01111010110010011'
+    data = "01111010110010011"
 
     max_len = 272
     data = dragon_curve(data, max_len)
@@ -80,6 +83,7 @@ def day16p1():
 
     return data, chk
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -88,6 +92,7 @@ def day16p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -95,7 +100,7 @@ def parse2(line):
 
 ################################################################################
 def day16p2():
-    data = '01111010110010011'
+    data = "01111010110010011"
 
     max_len = 35651584
     data = dragon_curve(data, max_len)
@@ -112,14 +117,14 @@ def day16p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 16 - Part 1", '-'*n)
-    print('Result =>', day16p1())
+    print("-" * (n), "Day 16 - Part 1", "-" * n)
+    print("Result =>", day16p1())
     print()
-    print('-'*(n), "Day 16 - Part 2", '-'*n)
-    print('Result =>', day16p2())
+    print("-" * (n), "Day 16 - Part 2", "-" * n)
+    print("Result =>", day16p2())
     print()
 
 

@@ -1,8 +1,8 @@
 def parse(filename):
     data = []
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
-            data.append(tuple(line.strip().replace(':', '').split()))
+            data.append(tuple(line.strip().replace(":", "").split()))
     return data
 
 
@@ -18,7 +18,7 @@ def day2p1():
     passwords = parse("day02_input.txt")
     valid = 0
     for p in passwords:
-        lower, upper = p[0].split('-')
+        lower, upper = p[0].split("-")
         if int(lower) <= char_count(p[2], p[1]) <= int(upper):
             valid += 1
 
@@ -29,12 +29,12 @@ def day2p2():
     passwords = parse("day02_input.txt")
     valid = 0
     for p in passwords:
-        lower, upper = p[0].split('-')
+        lower, upper = p[0].split("-")
 
-        if p[2][int(lower)-1] == p[1] and p[2][int(upper)-1] == p[1]:
+        if p[2][int(lower) - 1] == p[1] and p[2][int(upper) - 1] == p[1]:
             continue
 
-        if p[2][int(lower)-1] == p[1] or p[2][int(upper)-1] == p[1]:
+        if p[2][int(lower) - 1] == p[1] or p[2][int(upper) - 1] == p[1]:
             valid += 1
 
     return valid

@@ -8,10 +8,11 @@ def get_filename(test=False):
 
 def get_input(parse, test=False):
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         # for line in file:
         #     data.append(parse(line.strip()))
-        return file.read().split('\n\n')
+        return file.read().split("\n\n")
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,6 +22,7 @@ def get_input(parse, test=False):
 def parse1(line):
     return line
 
+
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
@@ -29,8 +31,8 @@ def parse1(line):
 def getTileMap(lines):
     tile_map = {}
     for d in lines:
-        tile_lines = d.split('\n')
-        tile = tile_lines[0].replace('Tile ', '').replace(':', '').strip()
+        tile_lines = d.split("\n")
+        tile = tile_lines[0].replace("Tile ", "").replace(":", "").strip()
         tile_map[int(tile)] = tile_lines[1:]
     return tile_map
 
@@ -46,30 +48,32 @@ def getCorners(tiles):
         down = tile[-1]
 
         # left and right
-        left = ''.join([x[0] for x in tile])
-        right = ''.join([x[-1] for x in tile])
+        left = "".join([x[0] for x in tile])
+        right = "".join([x[-1] for x in tile])
 
         if up[::-1] in corners_map:
-            corners_map[up[::-1]].append((id, 'up'))
+            corners_map[up[::-1]].append((id, "up"))
         else:
-            corners_map[up].append((id, 'up'))
+            corners_map[up].append((id, "up"))
 
         if down[::-1] in corners_map:
-            corners_map[down[::-1]].append((id, 'down'))
+            corners_map[down[::-1]].append((id, "down"))
         else:
-            corners_map[down].append((id, 'down'))
+            corners_map[down].append((id, "down"))
 
         if right[::-1] in corners_map:
-            corners_map[right[::-1]].append((id, 'right'))
+            corners_map[right[::-1]].append((id, "right"))
         else:
-            corners_map[right].append((id, 'right'))
+            corners_map[right].append((id, "right"))
 
         if left[::-1] in corners_map:
-            corners_map[left[::-1]].append((id, 'left'))
+            corners_map[left[::-1]].append((id, "left"))
         else:
-            corners_map[left].append((id, 'left'))
+            corners_map[left].append((id, "left"))
 
     return corners_map
+
+
 ################################################################################
 
 
@@ -80,11 +84,9 @@ def day20p1():
 
     canvas_xy = int(math.sqrt(len(map_tiles)))
 
-    canvas = [[None for _ in range(canvas_xy)]
-              for _ in range(canvas_xy)]
+    [[None for _ in range(canvas_xy)] for _ in range(canvas_xy)]
 
-    map_corners = list(filter(lambda crnr: len(
-        crnr[1]) > 1, map_corners.items()))
+    map_corners = list(filter(lambda crnr: len(crnr[1]) > 1, map_corners.items()))
 
     freq_id = collections.defaultdict(int)
 
@@ -101,6 +103,7 @@ def day20p1():
 
     return result
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -109,28 +112,30 @@ def day20p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
 
 
 def convertSideToCoord(side):
-    if side == 'left':
+    if side == "left":
         return (0, -1)
-    if side == 'right':
+    if side == "right":
         return (0, 1)
-    if side == 'up':
+    if side == "up":
         return (-1, 0)
-    if side == 'down':
+    if side == "down":
         return (1, 0)
-    raise Exception('Invalid side', side)
+    raise Exception("Invalid side", side)
+
 
 # def rotateLeft(tile):
 
 
 def rotateToMatch(tile1, tile2, side):
-
     return sideToMatch
+
 
 ################################################################################
 
@@ -146,11 +151,9 @@ def day20p2():
 
     canvas_xy = int(math.sqrt(len(map_tiles)))
 
-    canvas = [[None for _ in range(canvas_xy)]
-              for _ in range(canvas_xy)]
+    canvas = [[None for _ in range(canvas_xy)] for _ in range(canvas_xy)]
 
-    map_corners = dict(filter(lambda crnr: len(
-        crnr[1]) > 1, map_corners.items()))
+    map_corners = dict(filter(lambda crnr: len(crnr[1]) > 1, map_corners.items()))
     print(map_corners)
 
     freq_id = collections.defaultdict(int)
@@ -166,7 +169,7 @@ def day20p2():
             c_0 = id
             break
 
-    print('-'*20)
+    print("-" * 20)
     nbs_map = collections.defaultdict(list)
     for _, ids in map_corners.items():
         for id in ids:
@@ -188,7 +191,6 @@ def day20p2():
         nb_ls = nbs_map[currTile]
 
         for nbs in nb_ls:
-
             s.append(nbs[0])
 
     # for x in range(canvas_xy):
@@ -201,14 +203,14 @@ def day20p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 20 - Part 1", '-'*n)
-    print('Result =>', day20p1())
+    print("-" * (n), "Day 20 - Part 1", "-" * n)
+    print("Result =>", day20p1())
     print()
-    print('-'*(n), "Day 20 - Part 2", '-'*n)
-    print('Result =>', day20p2())
+    print("-" * (n), "Day 20 - Part 2", "-" * n)
+    print("Result =>", day20p2())
     print()
 
 

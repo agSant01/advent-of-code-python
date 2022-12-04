@@ -1,6 +1,7 @@
-from typing import List
-import numpy
 import sys
+from typing import List
+
+import numpy
 
 
 def get_filename(test=False):
@@ -10,10 +11,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -24,12 +26,13 @@ def parse1(line: str):
     d = []
     div = 0
     for _ in range(3):
-        div = line.index('=', div)+2
-        end = line.index('>', div)
-        values = tuple(map(int, line[div:end].split(',')))
+        div = line.index("=", div) + 2
+        end = line.index(">", div)
+        values = tuple(map(int, line[div:end].split(",")))
         d.append(values)
 
     return Particle(*d)
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -40,7 +43,7 @@ def add(t_1: tuple, t_2: tuple):
     return tuple(sum(i) for i in zip(t_1, t_2))
 
 
-class Particle():
+class Particle:
     def __init__(self, x_0, v, a) -> None:
         self.x_0 = numpy.array(x_0)
         self.x = self.x_0.copy()
@@ -52,7 +55,7 @@ class Particle():
         return add(i for i in self.x)
 
     def position_at_frame(self, frame):
-        return self.x_0 + (self.v_0 * frame) + (0.5 * (self.acc) * (frame*frame))
+        return self.x_0 + (self.v_0 * frame) + (0.5 * (self.acc) * (frame * frame))
 
     def move(self):
         self.v += self.acc
@@ -63,11 +66,16 @@ class Particle():
         return self.__str__()
 
     def __str__(self) -> str:
-        return f'<Particle x_0={self.x_0} x={self.x} v_0={self.v_0} v={self.v} a={self.acc}>'
+        return (
+            "<Particle"
+            f" x_0={self.x_0} x={self.x} v_0={self.v_0} v={self.v} a={self.acc}>"
+        )
 
 
 def manhattan_distance(vector):
     return sum(abs(i) for i in vector)
+
+
 ################################################################################
 
 
@@ -85,6 +93,7 @@ def day20p1():
 
     return pid, closest_particle
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -92,6 +101,7 @@ def day20p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -123,7 +133,7 @@ def day20p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -134,12 +144,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 20 - Part 1", '-'*n)
-        print('Result =>', day20p1())
+        print("-" * (n), "Day 20 - Part 1", "-" * n)
+        print("Result =>", day20p1())
         print()
     if run_two:
-        print('-'*(n), "Day 20 - Part 2", '-'*n)
-        print('Result =>', day20p2())
+        print("-" * (n), "Day 20 - Part 2", "-" * n)
+        print("Result =>", day20p2())
     print()
 
 

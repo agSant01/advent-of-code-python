@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import Dict, List, Tuple
 
 
 def get_filename(test=False):
@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,6 +21,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -79,6 +81,7 @@ def boards_to_dicts(lines: str) -> List[Dict[int, Tuple[int, int]]]:
             tmp_board.append(list(map(int, line.split())))
     return boards
 
+
 ################################################################################
 
 
@@ -93,7 +96,7 @@ def day04p1():
     data = get_input(parse1, test=False)
 
     # Play list
-    numbers: List[int] = list(map(int, data[0].split(',')))
+    numbers: List[int] = list(map(int, data[0].split(",")))
 
     # O(TB * n * m )
     boards = boards_to_dicts(data[2:])
@@ -111,12 +114,12 @@ def day04p1():
             if has_bingo(board_plays[idx]):
                 # Sum of non-used values is: O(m*n)
                 sum_all = sum(
-                    map(lambda kv: kv[0],
-                        filter(
-                            lambda kv: kv[1] not in board_plays[idx],
-                            board.items()
-                    )))
-                return play*sum_all
+                    map(
+                        lambda kv: kv[0],
+                        filter(lambda kv: kv[1] not in board_plays[idx], board.items()),
+                    )
+                )
+                return play * sum_all
 
 
 ################################################################################
@@ -127,6 +130,7 @@ def day04p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -135,7 +139,7 @@ def parse2(line):
 ################################################################################
 def day04p2():
     data = get_input(parse2, test=False)
-    numbers = list(map(int, data[0].split(',')))
+    numbers = list(map(int, data[0].split(",")))
 
     boards = boards_to_dicts(data[2:])
 
@@ -152,9 +156,15 @@ def day04p2():
             board_plays[idx].add(board[play])
             if has_bingo(board_plays[idx]):
                 if last_winner:
-                    sum_all = sum(map(lambda kv: kv[0],
-                                      filter(lambda kv: kv[1] not in board_plays[idx], board.items())))
-                    return play*(sum_all)
+                    sum_all = sum(
+                        map(
+                            lambda kv: kv[0],
+                            filter(
+                                lambda kv: kv[1] not in board_plays[idx], board.items()
+                            ),
+                        )
+                    )
+                    return play * (sum_all)
                 loosers.remove(idx)
 
     # for play in numbers:
@@ -164,14 +174,14 @@ def day04p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 04 - Part 1", '-'*n)
-    print('Result =>', day04p1())
+    print("-" * (n), "Day 04 - Part 1", "-" * n)
+    print("Result =>", day04p1())
     print()
-    print('-'*(n), "Day 04 - Part 2", '-'*n)
-    print('Result =>', day04p2())
+    print("-" * (n), "Day 04 - Part 2", "-" * n)
+    print("Result =>", day04p2())
     print()
 
 

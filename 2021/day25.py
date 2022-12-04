@@ -1,4 +1,3 @@
-import queue
 from typing import List
 
 
@@ -9,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,9 +20,9 @@ def get_input(parse, test=False):
 
 
 MAP_ = {
-    '>': 0,
-    'v': 1,
-    '.': None,
+    ">": 0,
+    "v": 1,
+    ".": None,
 }
 
 
@@ -34,16 +34,17 @@ def parse1(line: str):
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
+
 def pretty_print(east, south, xw, yw):
-    sea_map = [['.' for _ in range(xw)] for _ in range(yw)]
+    sea_map = [["." for _ in range(xw)] for _ in range(yw)]
 
     for x, y in east:
-        sea_map[y][x] = '>'
+        sea_map[y][x] = ">"
     for x, y in south:
-        sea_map[y][x] = 'v'
+        sea_map[y][x] = "v"
 
     for r in sea_map:
-        print(''.join(r))
+        print("".join(r))
 
 
 def run_sim(sea_map: List[List[int]]):
@@ -96,6 +97,7 @@ def run_sim(sea_map: List[List[int]]):
 
     return iterations
 
+
 ################################################################################
 
 
@@ -104,6 +106,7 @@ def day25p1():
 
     return run_sim(data)
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -111,6 +114,7 @@ def day25p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -127,14 +131,14 @@ def day25p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 25 - Part 1", '-'*n)
-    print('Result =>', day25p1())
+    print("-" * (n), "Day 25 - Part 1", "-" * n)
+    print("Result =>", day25p1())
     print()
-    print('-'*(n), "Day 25 - Part 2", '-'*n)
-    print('Result =>', day25p2())
+    print("-" * (n), "Day 25 - Part 2", "-" * n)
+    print("Result =>", day25p2())
     print()
 
 

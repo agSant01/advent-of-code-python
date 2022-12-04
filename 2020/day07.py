@@ -1,13 +1,13 @@
 import yearutils as yu
 
 
-def get_filename(test=False, opt=''):
+def get_filename(test=False, opt=""):
     return f'day07_input{f"_test{opt}" if test else ""}.txt'
 
 
 def parse1(line: str):
     # (adj color) : { (adj color):qty }
-    bags = line.split('contain')
+    bags = line.split("contain")
 
     restOfBags = bags[1].strip()
 
@@ -15,40 +15,43 @@ def parse1(line: str):
     dict_to_ret = dict()
     bags_dict = set()
 
-    dict_to_ret[bags[0].replace('bags', '').replace(
-        'bag', '').strip()] = bags_dict
-    for bag_data in restOfBags.split(','):
+    dict_to_ret[bags[0].replace("bags", "").replace("bag", "").strip()] = bags_dict
+    for bag_data in restOfBags.split(","):
         qty = bag_data.split()[0]
 
-        if qty == 'no':
+        if qty == "no":
             continue
 
-        bag = " ".join(bag_data.split()[1:]).replace(
-            'bags', '').replace('bag', '').strip()
-        bags_dict.add(bag.replace('.', '').strip())
+        bag = (
+            " ".join(bag_data.split()[1:]).replace("bags", "").replace("bag", "").strip()
+        )
+        bags_dict.add(bag.replace(".", "").strip())
 
     return dict_to_ret
 
 
 def parse2(line: str):
     # (adj color) : { (adj color):qty }
-    bags = line.split('contain')
+    bags = line.split("contain")
 
     restOfBags = bags[1].strip()
 
     bags_dict = dict()
     dict_to_ret = dict()
 
-    dict_to_ret[bags[0].replace(' bags', '').strip()] = bags_dict
-    for bag_data in restOfBags.split(','):
+    dict_to_ret[bags[0].replace(" bags", "").strip()] = bags_dict
+    for bag_data in restOfBags.split(","):
         qty = bag_data.split()[0]
 
-        if qty == 'no':
+        if qty == "no":
             continue
 
-        bag = " ".join(bag_data.split()[1:]).replace(
-            ' bags', '').replace(
-            ' bag', '').replace('.', '')
+        bag = (
+            " ".join(bag_data.split()[1:])
+            .replace(" bags", "")
+            .replace(" bag", "")
+            .replace(".", "")
+        )
         bags_dict[bag] = qty
 
     return dict_to_ret
@@ -70,7 +73,7 @@ def day07p1():
         g_dict.update(d)
 
     can_contain = set()
-    stack = ['shiny gold']
+    stack = ["shiny gold"]
     visited = []
     while len(stack) != 0:
         bag = stack.pop()
@@ -99,7 +102,7 @@ def find_childs(parent, g_dict):
 
 
 def day07p2():
-    data = yu.get_input(get_filename(test=False, opt=''), parse2)
+    data = yu.get_input(get_filename(test=False, opt=""), parse2)
     g_dict = dict()
 
     for d in data:
@@ -107,7 +110,7 @@ def day07p2():
 
     total_sum = 0
 
-    stack = [('shiny gold', 1)]
+    stack = [("shiny gold", 1)]
     while len(stack) != 0:
         bag, qty = stack.pop()
 

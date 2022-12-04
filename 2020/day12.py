@@ -5,7 +5,7 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
@@ -25,7 +25,7 @@ def manhattan_distance(p, q):
 def day12p1():
     dirs = get_input(parse1, test=False)
 
-    conversions = {'S': 0, 'W': 1, 'N': 2, 'E': 3, 'R': 4, 'L': 5, 'F': 6}
+    conversions = {"S": 0, "W": 1, "N": 2, "E": 3, "R": 4, "L": 5, "F": 6}
     circle: list = list(conversions.values())[0:4]
 
     changed = []
@@ -53,7 +53,7 @@ def day12p1():
             cycles = qty // 90
             c = curr_direction
             for i in range(cycles):
-                curr_direction = circle[(c+1) % 4]
+                curr_direction = circle[(c + 1) % 4]
                 c += 1
 
         if d == 5:
@@ -61,7 +61,7 @@ def day12p1():
             cycles = qty // 90
             c = curr_direction
             for i in range(cycles):
-                curr_direction = circle[(c-1) % 4]
+                curr_direction = circle[(c - 1) % 4]
                 c -= 1
 
         if d == 6:
@@ -71,10 +71,10 @@ def day12p1():
     # print(curr_position)
     # print(curr_position[1:], (0, 0, 0, 0))
 
-    curr_position = (abs(
-        curr_position[0] - curr_position[2]
-    ), abs(
-        curr_position[1] - curr_position[3]))
+    curr_position = (
+        abs(curr_position[0] - curr_position[2]),
+        abs(curr_position[1] - curr_position[3]),
+    )
 
     # print(curr_position)
 
@@ -88,7 +88,7 @@ def parse2(line):
 def day12p2():
     dirs = get_input(parse2, test=False)
 
-    conversions = {'S': 0, 'W': 1, 'N': 2, 'E': 3, 'R': 4, 'L': 5, 'F': 6}
+    conversions = {"S": 0, "W": 1, "N": 2, "E": 3, "R": 4, "L": 5, "F": 6}
 
     changed = []
     for d in dirs:
@@ -117,24 +117,26 @@ def day12p2():
         if d == 4:
             # rotate clockwise
             cycles = qty // 90
-            waypoint = waypoint[-(cycles % len(
-                waypoint)):] + waypoint[:-(cycles % len(waypoint))]
+            waypoint = (
+                waypoint[-(cycles % len(waypoint)) :]
+                + waypoint[: -(cycles % len(waypoint))]
+            )
 
         if d == 5:
             # rotate counter-clockwise
             cycles = qty // 90
 
-            waypoint = waypoint[cycles % len(
-                waypoint):] + waypoint[:cycles % len(waypoint)]
+            waypoint = (
+                waypoint[cycles % len(waypoint) :] + waypoint[: cycles % len(waypoint)]
+            )
 
         if d == 6:
-            curr_position = [a + b*qty for a,
-                             b in zip(curr_position, waypoint)]
+            curr_position = [a + b * qty for a, b in zip(curr_position, waypoint)]
 
-    curr_position = (abs(
-        curr_position[0] - curr_position[2]
-    ), abs(
-        curr_position[1] - curr_position[3]))
+    curr_position = (
+        abs(curr_position[0] - curr_position[2]),
+        abs(curr_position[1] - curr_position[3]),
+    )
 
     # print(curr_position)
 

@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -50,13 +51,11 @@ def execute_instructions(instructions, registers, pc=0):
         opcode, *values = instructions[pc]
         # print(opcode, values, registers, pc)
 
-        if opcode == 'rcv':
+        if opcode == "rcv":
             to_cmp = registers[values[0]]
             if to_cmp > 0:
-                return {
-                    'rcv': last_played_sound
-                }
-        elif opcode == 'snd':
+                return {"rcv": last_played_sound}
+        elif opcode == "snd":
             # play sound
             last_played_sound = registers[values[0]]
         else:
@@ -65,15 +64,15 @@ def execute_instructions(instructions, registers, pc=0):
             else:
                 value_to_use = int(values[1])
 
-            if opcode == 'set':
+            if opcode == "set":
                 registers[values[0]] = value_to_use
-            elif opcode == 'add':
+            elif opcode == "add":
                 registers[values[0]] += value_to_use
-            elif opcode == 'mul':
+            elif opcode == "mul":
                 registers[values[0]] *= value_to_use
-            elif opcode == 'mod':
+            elif opcode == "mod":
                 registers[values[0]] %= value_to_use
-            elif opcode == 'jgz':
+            elif opcode == "jgz":
                 if is_register(values[0]):
                     conditional = registers[values[0]]
                 else:
@@ -83,6 +82,8 @@ def execute_instructions(instructions, registers, pc=0):
                     pc += value_to_use
                     continue
         pc += 1
+
+
 ################################################################################
 
 
@@ -93,6 +94,7 @@ def day18p1():
     pc = execute_instructions(data, registers, pc)
     return pc
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -101,30 +103,31 @@ def day18p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
 
 
-class Sockets():
+class Sockets:
     def __init__(self) -> None:
         self.messages = collections.defaultdict(list)
         self.msg_count = collections.defaultdict(int)
 
     def send(self, message, to_program_id: int, by_pid: int):
-        print(f'[PID:{by_pid}] Send to PID: {to_program_id} | Msg: {message}')
+        print(f"[PID:{by_pid}] Send to PID: {to_program_id} | Msg: {message}")
         self.messages[to_program_id].insert(0, message)
         self.msg_count[by_pid] += 1
 
     def rcv(self, program_id: int):
-        print(f'[PID:{program_id}] Reading from message queue...')
+        print(f"[PID:{program_id}] Reading from message queue...")
         return self.messages[program_id].pop()
 
     def has_msg(self, program_id: int):
         return len(self.messages[program_id]) > 0
 
     def __repr__(self) -> str:
-        return f'<Sockets messages={self.messages} msg_count={self.msg_count}>'
+        return f"<Sockets messages={self.messages} msg_count={self.msg_count}>"
 
 
 class DeadlockDetector:
@@ -147,27 +150,34 @@ class DeadlockDetector:
         self.cnt = 0
 
     def __repr__(self) -> str:
-        return f'<DeadlockDetector pids_waiting_status={self.pids}>'
+        return f"<DeadlockDetector pids_waiting_status={self.pids}>"
 
 
-def execute_program(program_id: int, parallel_program_id: int, sockets: Sockets,
-                    instructions, registers, deadlock_detector: DeadlockDetector, pc):
-    print(f'[PID:{program_id}] Resumed Process...')
+def execute_program(
+    program_id: int,
+    parallel_program_id: int,
+    sockets: Sockets,
+    instructions,
+    registers,
+    deadlock_detector: DeadlockDetector,
+    pc,
+):
+    print(f"[PID:{program_id}] Resumed Process...")
     while pc < len(instructions):
         if deadlock_detector.has_deadlock():
             break
         opcode, *values = instructions[pc]
         # print(opcode, values, registers, pc)
-        if opcode == 'rcv':
+        if opcode == "rcv":
             deadlock_detector.waiting_rcv(program_id)
             if sockets.has_msg(program_id):
                 rcv_msg = sockets.rcv(program_id)
                 registers[values[0]] = rcv_msg
                 deadlock_detector.exit_rcv(program_id)
             else:
-                print(f'[PID:{program_id}] No msg. waiting....')
+                print(f"[PID:{program_id}] No msg. waiting....")
                 break
-        elif opcode == 'snd':
+        elif opcode == "snd":
             # play sound
             if is_register(values[0]):
                 vtu = registers[values[0]]
@@ -180,15 +190,15 @@ def execute_program(program_id: int, parallel_program_id: int, sockets: Sockets,
             else:
                 value_to_use = int(values[1])
 
-            if opcode == 'set':
+            if opcode == "set":
                 registers[values[0]] = value_to_use
-            elif opcode == 'add':
+            elif opcode == "add":
                 registers[values[0]] += value_to_use
-            elif opcode == 'mul':
+            elif opcode == "mul":
                 registers[values[0]] *= value_to_use
-            elif opcode == 'mod':
+            elif opcode == "mod":
                 registers[values[0]] %= value_to_use
-            elif opcode == 'jgz':
+            elif opcode == "jgz":
                 if is_register(values[0]):
                     conditional = registers[values[0]]
                 else:
@@ -199,6 +209,7 @@ def execute_program(program_id: int, parallel_program_id: int, sockets: Sockets,
                     continue
         pc += 1
     return pc
+
 
 ################################################################################
 
@@ -211,23 +222,19 @@ def day18p2():
 
     pc_a = 0
     registers_a = collections.defaultdict(int)
-    registers_a['p'] = 0
-    pc_a = execute_program(0, 1, sockets, data,
-                           registers_a, deadlock_detector, pc_a)
+    registers_a["p"] = 0
+    pc_a = execute_program(0, 1, sockets, data, registers_a, deadlock_detector, pc_a)
 
     pc_b = 0
     registers_b = collections.defaultdict(int)
-    registers_b['p'] = 1
-    pc_b = execute_program(1, 0, sockets, data,
-                           registers_b, deadlock_detector, pc_b)
+    registers_b["p"] = 1
+    pc_b = execute_program(1, 0, sockets, data, registers_b, deadlock_detector, pc_b)
 
     while not deadlock_detector.has_deadlock():
         print(sockets)
-        pc_a = execute_program(0, 1, sockets, data,
-                               registers_a, deadlock_detector, pc_a)
+        pc_a = execute_program(0, 1, sockets, data, registers_a, deadlock_detector, pc_a)
         print(sockets)
-        pc_b = execute_program(1, 0, sockets, data,
-                               registers_b, deadlock_detector, pc_b)
+        pc_b = execute_program(1, 0, sockets, data, registers_b, deadlock_detector, pc_b)
 
     return sockets.msg_count
 
@@ -235,7 +242,7 @@ def day18p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -246,12 +253,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 18 - Part 1", '-'*n)
-        print('Result =>', day18p1())
+        print("-" * (n), "Day 18 - Part 1", "-" * n)
+        print("Result =>", day18p1())
         print()
     if run_two:
-        print('-'*(n), "Day 18 - Part 2", '-'*n)
-        print('Result =>', day18p2())
+        print("-" * (n), "Day 18 - Part 2", "-" * n)
+        print("Result =>", day18p2())
     print()
 
 

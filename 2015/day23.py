@@ -5,10 +5,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -16,9 +17,10 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    opcode, params = line.split(' ', 1)
-    params = params.replace(' ', '').split(',')
+    opcode, params = line.split(" ", 1)
+    params = params.replace(" ", "").split(",")
     return (opcode, params)
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -36,19 +38,19 @@ jio r, offset is like jmp, but only jumps if register r is 1 ("jump if one", not
 
 
 def execute(pc, register, opcode, params):
-    r = 0 if params[0] == 'a' else 1
-    if opcode == 'hlf':
+    r = 0 if params[0] == "a" else 1
+    if opcode == "hlf":
         register[r] //= 2
-    if opcode == 'tpl':
+    if opcode == "tpl":
         register[r] *= 3
-    if opcode == 'inc':
+    if opcode == "inc":
         register[r] += 1
-    if opcode == 'jmp':
+    if opcode == "jmp":
         pc += int(params[0]) - 1
-    if opcode == 'jie':
+    if opcode == "jie":
         if register[r] % 2 == 0:
             pc += int(params[1]) - 1
-    if opcode == 'jio':
+    if opcode == "jio":
         if register[r] == 1:
             pc += int(params[1]) - 1
 
@@ -62,6 +64,7 @@ def run_program(registers: list, instructions: list):
         instruction = instructions[pc]
         pc = execute(pc, registers, instruction[0], instruction[1])
 
+
 ################################################################################
 
 
@@ -74,7 +77,7 @@ def day23p1():
 
     run_program(registers, data)
 
-    print('registers', registers)
+    print("registers", registers)
 
     return registers[1]
 
@@ -86,6 +89,7 @@ def day23p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -103,7 +107,7 @@ def day23p2():
 
     run_program(registers, data)
 
-    print('registers', registers)
+    print("registers", registers)
 
     return registers[1]
 
@@ -111,14 +115,14 @@ def day23p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 23 - Part 1", '-'*n)
-    print('Result =>', day23p1())
+    print("-" * (n), "Day 23 - Part 1", "-" * n)
+    print("Result =>", day23p1())
     print()
-    print('-'*(n), "Day 23 - Part 2", '-'*n)
-    print('Result =>', day23p2())
+    print("-" * (n), "Day 23 - Part 2", "-" * n)
+    print("Result =>", day23p2())
     print()
 
 

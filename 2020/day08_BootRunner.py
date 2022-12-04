@@ -1,4 +1,4 @@
-class BootRunner():
+class BootRunner:
     def __init__(self, instrc_lines, start=0, end=None) -> None:
         super().__init__()
         self.instrc_lines = instrc_lines
@@ -22,16 +22,20 @@ class BootRunner():
 
             curr_inst = self.instrc_lines[self.current_inst]
 
-            if curr_inst[0] == 'acc':
+            if curr_inst[0] == "acc":
                 self.acc += curr_inst[1]
                 self.current_inst += 1
-            elif curr_inst[0] == 'jmp':
+            elif curr_inst[0] == "jmp":
                 self.current_inst += curr_inst[1]
-            elif curr_inst[0] == 'nop':
+            elif curr_inst[0] == "nop":
                 self.current_inst += 1
             else:
-                print('Invalid cmd:',
-                      self.instrc_lines[self.current_inst][0], 'Instr:', self.current_inst)
+                print(
+                    "Invalid cmd:",
+                    self.instrc_lines[self.current_inst][0],
+                    "Instr:",
+                    self.current_inst,
+                )
                 return None
 
         return self.acc

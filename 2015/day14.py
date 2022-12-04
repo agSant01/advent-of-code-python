@@ -1,5 +1,4 @@
 import collections
-from os import stat
 
 
 def get_filename(test=False):
@@ -9,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,15 +20,18 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    line = line \
-        .replace('seconds, but then must rest for', '') \
-        .replace('can fly', '') \
-        .replace('km/s for', '') \
-        .replace('seconds', '') \
-        .replace('.', '') \
-        .strip().split()
+    line = (
+        line.replace("seconds, but then must rest for", "")
+        .replace("can fly", "")
+        .replace("km/s for", "")
+        .replace("seconds", "")
+        .replace(".", "")
+        .strip()
+        .split()
+    )
     reindeer, speed, run_time, rest_time = line
     return (reindeer, int(speed), int(run_time), int(rest_time))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -57,9 +60,8 @@ def calculate_distance(reindeer_info, race_time):
     #   runing_seconds += race_time
     # END BLOCK
 
-    cycles = race_time//cycle_t
-    runing_seconds = cycles * run_t + \
-        min(run_t, race_time % cycle_t)
+    cycles = race_time // cycle_t
+    runing_seconds = cycles * run_t + min(run_t, race_time % cycle_t)
 
     return runing_seconds * speed
 
@@ -81,6 +83,7 @@ def day14p1():
 
     return max(map(lambda x: x[1], result))
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -88,6 +91,7 @@ def day14p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -115,11 +119,11 @@ def day14p2():
             # calc dist for this second
             name, speed, run_t, wait_t = r
             if name not in state:
-                state[name] = ['RUNNING', run_t]
+                state[name] = ["RUNNING", run_t]
 
-            if state[name][0] == 'WAITING':
+            if state[name][0] == "WAITING":
                 if state[name][1] <= 0:
-                    state[name] = ['RUNNING', run_t]
+                    state[name] = ["RUNNING", run_t]
                 else:
                     state[name][1] -= 1
                     continue
@@ -129,16 +133,15 @@ def day14p2():
             state[name][1] -= 1
 
             if state[name][1] == 0:
-                state[name] = ['WAITING', wait_t]
+                state[name] = ["WAITING", wait_t]
 
         max_ = max(list(position.values()))
 
-        names = filter(
-            lambda distance: distance[1] == max_, position.items())
+        names = filter(lambda distance: distance[1] == max_, position.items())
         for name, _ in names:
             points[name] += 1
 
-    print('Points:', points, 'Position:', position)
+    print("Points:", points, "Position:", position)
 
     return max(map(lambda x: x[1], points.items()))
 
@@ -146,14 +149,14 @@ def day14p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 14 - Part 1", '-'*n)
-    print('Result =>', day14p1())
+    print("-" * (n), "Day 14 - Part 1", "-" * n)
+    print("Result =>", day14p1())
     print()
-    print('-'*(n), "Day 14 - Part 2", '-'*n)
-    print('Result =>', day14p2())
+    print("-" * (n), "Day 14 - Part 2", "-" * n)
+    print("Result =>", day14p2())
     print()
 
 

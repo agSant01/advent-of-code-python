@@ -13,9 +13,9 @@ def day01p1():
     result = yu.get_input(get_filename(test=False), parse)
     floor = 0
     for paren in result[0]:
-        if paren == '(':
+        if paren == "(":
             floor += 1
-        if paren == ')':
+        if paren == ")":
             floor -= 1
     return floor
 
@@ -24,9 +24,9 @@ def day01p2():
     result = yu.get_input(get_filename(test=False), parse)
     floor = 0
     for idx, paren in enumerate(result[0]):
-        if paren == '(':
+        if paren == "(":
             floor += 1
-        if paren == ')':
+        if paren == ")":
             floor -= 1
 
         if floor == -1:

@@ -1,7 +1,7 @@
 import functools
-import operator
-import math
 import itertools
+import math
+import operator
 
 
 def get_filename(test=False):
@@ -11,10 +11,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -23,6 +24,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return int(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -53,7 +55,7 @@ def find_gs(total, items):
     return t, r == 0
 
 
-find_gs(20, [10, 8, 2,  7, 5, 4, 3, 1])
+find_gs(20, [10, 8, 2, 7, 5, 4, 3, 1])
 
 
 def day24p1():
@@ -70,14 +72,16 @@ def day24p1():
         for comb in itertools.combinations(data, k):
             total_sum = sum(comb)
 
-            if total_sum != sum(data)/3:
+            if total_sum != sum(data) / 3:
                 continue
 
             if qe(comb) < min_qe:
                 min_qe = qe(comb)
                 min_front_item = k
 
-    return 'QE', min_qe, 'ITEMS', min_front_item
+    return "QE", min_qe, "ITEMS", min_front_item
+
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -85,6 +89,7 @@ def day24p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -106,27 +111,27 @@ def day24p2():
         for comb in itertools.combinations(data, k):
             total_sum = sum(comb)
 
-            if total_sum != sum(data)/4:
+            if total_sum != sum(data) / 4:
                 continue
 
             if qe(comb) < min_qe:
                 min_qe = qe(comb)
                 min_front_item = k
 
-    return 'QE', min_qe, 'ITEMS', min_front_item
+    return "QE", min_qe, "ITEMS", min_front_item
 
 
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 24 - Part 1", '-'*n)
-    print('Result =>', day24p1())
+    print("-" * (n), "Day 24 - Part 1", "-" * n)
+    print("Result =>", day24p1())
     print()
-    print('-'*(n), "Day 24 - Part 2", '-'*n)
-    print('Result =>', day24p2())
+    print("-" * (n), "Day 24 - Part 2", "-" * n)
+    print("Result =>", day24p2())
     print()
 
 

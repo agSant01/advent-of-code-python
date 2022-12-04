@@ -1,8 +1,7 @@
-import functools
 import collections
-import re
+import functools
 import hashlib
-from typing import Tuple
+import re
 
 
 def get_filename(test=False):
@@ -12,10 +11,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -24,6 +24,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -35,9 +36,9 @@ def parse1(line):
 
 def day14p1():
     test = False
-    salt = 'cuanljph'
+    salt = "cuanljph"
     if test:
-        salt = 'abc'
+        salt = "abc"
 
     index = 0
     key_cnt = 0
@@ -47,8 +48,8 @@ def day14p1():
 
     keys = []
 
-    COMPILED_3 = re.compile(r'(.)\1{2}')
-    COMPILED_5 = re.compile(r'(.)\1{4}')
+    COMPILED_3 = re.compile(r"(.)\1{2}")
+    COMPILED_5 = re.compile(r"(.)\1{4}")
 
     while key_cnt < 64:
         h = hashlib.md5(str(salt + str(index)).encode()).hexdigest()
@@ -78,6 +79,7 @@ def day14p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -86,28 +88,27 @@ def parse2(line):
 @functools.lru_cache(maxsize=None)
 def getlongmd5(s):
     for _ in range(2017):
-        s = hashlib.md5(s.encode('utf-8')).hexdigest()
+        s = hashlib.md5(s.encode("utf-8")).hexdigest()
     return s
+
 
 ################################################################################
 
 
 def day14p2():
     test = False
-    salt = 'cuanljph'
+    salt = "cuanljph"
     if test:
-        salt = 'abc'
+        salt = "abc"
 
-    COMPILED_3 = re.compile(r'([abcdef0-9])\1{2}')
-    COMPILED_5 = re.compile(r'([abcdef0-9])\1{4}')
+    COMPILED_3 = re.compile(r"([abcdef0-9])\1{2}")
+    COMPILED_5 = re.compile(r"([abcdef0-9])\1{4}")
 
     map_ = collections.defaultdict(list)
-    import heapq
 
     keys = set()
 
     index = 0
-    key_cnt = 0
     md5Hash = None
 
     while len(keys) < 64:
@@ -117,7 +118,7 @@ def day14p2():
         if match5:
             indices = map_[match5.group(0)[0]]
             for idx in indices:
-                if index <= idx+1000:
+                if index <= idx + 1000:
                     keys.add(idx)
 
         match3 = COMPILED_3.search(md5Hash)
@@ -132,14 +133,14 @@ def day14p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 14 - Part 1", '-'*n)
-    print('Result =>', day14p1())
+    print("-" * (n), "Day 14 - Part 1", "-" * n)
+    print("Result =>", day14p1())
     print()
-    print('-'*(n), "Day 14 - Part 2", '-'*n)
-    print('Result =>', day14p2())
+    print("-" * (n), "Day 14 - Part 2", "-" * n)
+    print("Result =>", day14p2())
     print()
 
 

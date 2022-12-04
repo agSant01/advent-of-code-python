@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,6 +21,7 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     return line.split()
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -42,64 +44,61 @@ def io_stdout(value):
 
 def read_from_stream():
     if STREAM.qsize() == 0:
-        return '<empty>'
+        return "<empty>"
     return STREAM.get()
 
 
 def execute(instruction, registers, pc, program):
     opcode = instruction[0]
 
-    if opcode == 'inc':
+    if opcode == "inc":
         x = instruction[1]
         registers[x] += 1
-    elif opcode == 'dec':
+    elif opcode == "dec":
         x = instruction[1]
         registers[x] -= 1
-    elif opcode == 'jnz':
+    elif opcode == "jnz":
         x, y = instruction[1:]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[x]
-        if y in 'abcd':
+        if y in "abcd":
             y = registers[y]
         if int(x) != 0:
             pc += int(y) - 1
-    elif opcode == 'cpy':
+    elif opcode == "cpy":
         x, y = instruction[1:]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[x]
         registers[y] = int(x)
-    elif opcode == 'tgl':
+    elif opcode == "tgl":
         x = instruction[1]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[x]
 
-        if 0 <= pc+x < len(program):
-            target_inst = program[pc+x]
+        if 0 <= pc + x < len(program):
+            target_inst = program[pc + x]
             if len(target_inst[1:]) == 1:
-                if target_inst[0] == 'inc':
-                    program[pc+x][0] = 'dec'
+                if target_inst[0] == "inc":
+                    program[pc + x][0] = "dec"
                 else:
-                    program[pc+x][0] = 'inc'
+                    program[pc + x][0] = "inc"
             else:
-                if target_inst[0] == 'jnz':
-                    program[pc+x][0] = 'cpy'
+                if target_inst[0] == "jnz":
+                    program[pc + x][0] = "cpy"
                 else:
-                    program[pc+x][0] = 'jnz'
-    elif opcode == 'out':
+                    program[pc + x][0] = "jnz"
+    elif opcode == "out":
         x = instruction[1]
-        if x in 'abcd':
+        if x in "abcd":
             x = registers[x]
         io_stdout(x)
     else:
-        raise Exception('INVALID OPCODE:' + opcode)
+        raise Exception("INVALID OPCODE:" + opcode)
 
     return pc + 1
 
 
-next_ = {
-    1: 0,
-    0: 1
-}
+next_ = {1: 0, 0: 1}
 
 
 def run_program(program, registers):
@@ -114,7 +113,7 @@ def run_program(program, registers):
 
         out = read_from_stream()
 
-        if out == '<empty>':
+        if out == "<empty>":
             continue
 
         # print('stdout:', out)
@@ -136,12 +135,14 @@ def day25p1():
     program = get_input(parse1, test=False)
 
     for i in range(30, 500):
-        registers = {'a': i, 'b': 0, 'c': 0, 'd': 0}
+        registers = {"a": i, "b": 0, "c": 0, "d": 0}
         exit_result = run_program(program, registers)
         if exit_result == 0:
-            return f'a: {i}', registers
+            return f"a: {i}", registers
 
     return registers
+
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -149,6 +150,7 @@ def day25p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -165,14 +167,14 @@ def day25p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 25 - Part 1", '-'*n)
-    print('Result =>', day25p1())
+    print("-" * (n), "Day 25 - Part 1", "-" * n)
+    print("Result =>", day25p1())
     print()
-    print('-'*(n), "Day 25 - Part 2", '-'*n)
-    print('Result =>', day25p2())
+    print("-" * (n), "Day 25 - Part 2", "-" * n)
+    print("Result =>", day25p2())
     print()
 
 

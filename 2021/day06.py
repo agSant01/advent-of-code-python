@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -20,7 +21,8 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return list(map(int, line.split(',')))
+    return list(map(int, line.split(",")))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -43,6 +45,7 @@ def day06p1():
         usage = tmp
     return len(usage)
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -50,6 +53,7 @@ def day06p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -81,14 +85,14 @@ def day06p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 06 - Part 1", '-'*n)
-    print('Result =>', day06p1())
+    print("-" * (n), "Day 06 - Part 1", "-" * n)
+    print("Result =>", day06p1())
     print()
-    print('-'*(n), "Day 06 - Part 2", '-'*n)
-    print('Result =>', day06p2())
+    print("-" * (n), "Day 06 - Part 2", "-" * n)
+    print("Result =>", day06p2())
     print()
 
 

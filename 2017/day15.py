@@ -1,5 +1,5 @@
-from ctypes import c_int16
 import sys
+from ctypes import c_int16
 
 
 def get_filename(test=False):
@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,6 +22,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return int(line.split()[-1])
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -32,19 +34,19 @@ def next_a(prev):
     # print((prev*16807) % 2147483647)
     # print((prev*16807) >> 31)
 
-    n = (prev*16807)
+    n = prev * 16807
     a = n & 2147483647
     b = n >> 31
     # return (prev*16807) % 2147483647
-    return a+b
+    return a + b
 
 
 def next_b(prev):
-    n = (prev*48271)
+    n = prev * 48271
     a = n & 2147483647
     b = n >> 31
     # return (prev*48271) % 2147483647
-    return a+b
+    return a + b
 
 
 ################################################################################
@@ -65,6 +67,7 @@ def day15p1():
 
     return matching_pairs
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -73,6 +76,7 @@ def day15p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
@@ -80,29 +84,29 @@ def parse2(line):
 
 # Returns true if n is a multiple of 4.
 def isMultipleOf4(n):
-    if (n == 0):
+    if n == 0:
         return True
-    return (((n >> 2) << 2) == n)
+    return ((n >> 2) << 2) == n
 
 
 # Returns true if n is a multiple of 4.
 def isMultipleOf8(n):
-    if (n == 0):
+    if n == 0:
         return True
-    return (((n >> 3) << 3) == n)
+    return ((n >> 3) << 3) == n
 
 
 def next_a_by4(prev):
     # n = (prev*16807)
     # a = n & 2147483647
     # b = n >> 31
-    n = (prev*16807) % 2147483647
+    n = (prev * 16807) % 2147483647
     # while (a+b) % 4 != 0:
     while not isMultipleOf4(n):
         # n *= 16807
         # a = n & 2147483647
         # b = n >> 31
-        n = (n*16807) % 2147483647
+        n = (n * 16807) % 2147483647
 
     # return a+b
     return n
@@ -113,14 +117,16 @@ def next_b_by8(prev):
     # a = n & 2147483647
     # b = n >> 31
     # while (a+b) % 8 != 0:
-    n = (prev*48271) % 2147483647
+    n = (prev * 48271) % 2147483647
     while not isMultipleOf8(n):
         # n *= 48271
         # a = n & 2147483647
         # b = n >> 31
-        n = (n*48271) % 2147483647
+        n = (n * 48271) % 2147483647
 
     return n
+
+
 ################################################################################
 
 
@@ -141,7 +147,7 @@ def day15p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
 
     run_one = any(arg == "1" for arg in sys.argv)
@@ -152,12 +158,12 @@ def main():
 
     if run_one:
         print()
-        print('-'*(n), "Day 15 - Part 1", '-'*n)
-        print('Result =>', day15p1())
+        print("-" * (n), "Day 15 - Part 1", "-" * n)
+        print("Result =>", day15p1())
         print()
     if run_two:
-        print('-'*(n), "Day 15 - Part 2", '-'*n)
-        print('Result =>', day15p2())
+        print("-" * (n), "Day 15 - Part 2", "-" * n)
+        print("Result =>", day15p2())
     print()
 
 

@@ -1,6 +1,5 @@
-import collections
 import queue
-from typing import List, Set
+from typing import List
 
 
 def get_filename(test=False):
@@ -10,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -23,9 +23,10 @@ def get_input(parse, test=False):
 def parse1(line: str):
     if len(line) == 0:
         return None
-    if 'scanner' in line:
+    if "scanner" in line:
         return line
-    return tuple(map(int, line.split(',')))
+    return tuple(map(int, line.split(",")))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -39,7 +40,7 @@ def parse_beacon(data: List[str]) -> List[List[str]]:
     for line in data[1:]:
         if line == None:
             continue
-        if 'scanner' in line:
+        if "scanner" in line:
             scanner_list.append((i, beacon_set))
             beacon_set = []
             i += 1
@@ -96,12 +97,17 @@ def has_intersection(origin, target, origin_loc):
                 tx = beacon1[0] - rb[0]
                 ty = beacon1[1] - rb[1]
                 tz = beacon1[2] - rb[2]
-                trans_beacons_2 = set([(bx + tx, by + ty, bz + tz)
-                                       for bx, by, bz in rotated_beacons])
+                trans_beacons_2 = set(
+                    [(bx + tx, by + ty, bz + tz) for bx, by, bz in rotated_beacons]
+                )
                 if len(trans_beacons_2.intersection(origin)) >= 12:
-                    return True, rotated_beacons, (origin_loc[0] + tx, origin_loc[1]+ty, origin_loc[2] + tz)
+                    return (
+                        True,
+                        rotated_beacons,
+                        (origin_loc[0] + tx, origin_loc[1] + ty, origin_loc[2] + tz),
+                    )
 
-    return False, None,  None
+    return False, None, None
 
 
 ################################################################################
@@ -123,16 +129,17 @@ def day19p1():
     has_int = False
     while q.qsize() > 0:
         i, scanner1 = q.get()
-    # for i, scanner1 in enumerate(sclist):
+        # for i, scanner1 in enumerate(sclist):
         # print(scanner1)
         # print('i', i, scanner1)
         # print('i', i)
         for j, scanner2 in planes.items():
             # print(j)
             has_int, rotated_plane, location = has_intersection(
-                scanner2, scanner1, locations[j])
+                scanner2, scanner1, locations[j]
+            )
             if has_int:
-                print('Intersection found...', f'{j} => {i}')
+                print("Intersection found...", f"{j} => {i}")
                 locations[i] = location
                 planes[i] = rotated_plane
                 break
@@ -146,7 +153,8 @@ def day19p1():
     for i, location in locations.items():
         plane = planes[i]
         total_beacons.update(
-            [(x+location[0], y+location[1], z+location[2]) for x, y, z in plane])
+            [(x + location[0], y + location[1], z + location[2]) for x, y, z in plane]
+        )
 
     return len(total_beacons), locations
 
@@ -158,6 +166,7 @@ def day19p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -171,13 +180,14 @@ def max_manhattan(coordinates: list):
     for i in range(N):
         sum = 0
         for j in range(i + 1, N):
-
             # Find Manhattan distance
             # using the formula
             # |x1 - x2| + |y1 - y2|
-            sum = (abs(coordinates[i][0] - coordinates[j][0]) +
-                   abs(coordinates[i][1] - coordinates[j][1]) +
-                   abs(coordinates[i][2] - coordinates[j][2]))
+            sum = (
+                abs(coordinates[i][0] - coordinates[j][0])
+                + abs(coordinates[i][1] - coordinates[j][1])
+                + abs(coordinates[i][2] - coordinates[j][2])
+            )
 
             # Updating the maximum
             maximum = max(maximum, sum)
@@ -196,15 +206,15 @@ def day19p2(part1_result):
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 19 - Part 1", '-'*n)
+    print("-" * (n), "Day 19 - Part 1", "-" * n)
     result1 = day19p1()
-    print('Result =>', result1)
+    print("Result =>", result1)
     print()
-    print('-'*(n), "Day 19 - Part 2", '-'*n)
-    print('Result =>', day19p2(result1))
+    print("-" * (n), "Day 19 - Part 2", "-" * n)
+    print("Result =>", day19p2(result1))
     print()
 
 

@@ -1,4 +1,3 @@
-import re
 
 
 def get_filename(test=False):
@@ -8,10 +7,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,27 +21,28 @@ def get_input(parse, test=False):
 def parse1(line):
     return line
 
+
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
 
-def decompress(line: str,  only_count: bool = True):
+def decompress(line: str, only_count: bool = True):
     index = 0
     count = 0
     res = []
     while index < len(line):
-        if line[index] == '(':
-            closing_paren = line.find(')', index)
+        if line[index] == "(":
+            closing_paren = line.find(")", index)
 
-            format: str = line[index+1:closing_paren]
+            format: str = line[index + 1 : closing_paren]
 
-            span, repetitions = map(int, format.split('x'))
+            span, repetitions = map(int, format.split("x"))
 
-            repeat = line[closing_paren+1:closing_paren+span+1]
+            repeat = line[closing_paren + 1 : closing_paren + span + 1]
 
             if not only_count:
-                res.append(repeat*repetitions)
+                res.append(repeat * repetitions)
 
             count += span * repetitions
 
@@ -54,7 +55,8 @@ def decompress(line: str,  only_count: bool = True):
     if only_count:
         return count, None
 
-    return count, ''.join(res)
+    return count, "".join(res)
+
 
 ################################################################################
 # 13867 - Wrong
@@ -70,7 +72,8 @@ def day09p1():
     for line in lines:
         dec_len += decompress(line, only_count=True)[0]
 
-    return 'Decompressed len', dec_len
+    return "Decompressed len", dec_len
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -80,36 +83,37 @@ def day09p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
 
 
-def decompress_v2(line: str,  only_count: bool = True):
+def decompress_v2(line: str, only_count: bool = True):
     index = 0
     count = 0
     res = []
     while index < len(line):
-        if line[index] == '(':
-            closing_paren = line.find(')', index)
+        if line[index] == "(":
+            closing_paren = line.find(")", index)
 
-            format: str = line[index+1:closing_paren]
+            format: str = line[index + 1 : closing_paren]
 
-            span, repetitions = map(int, format.split('x'))
+            span, repetitions = map(int, format.split("x"))
 
-            repeat = line[closing_paren+1:closing_paren+span+1]
+            repeat = line[closing_paren + 1 : closing_paren + span + 1]
 
-            if '(' in repeat:
+            if "(" in repeat:
                 # print('Rep', repeat)
                 dcount, text = decompress_v2(repeat, only_count)
-                count += dcount*repetitions
+                count += dcount * repetitions
                 if text:
-                    res.append(text*repetitions)
+                    res.append(text * repetitions)
             else:
                 count += span * repetitions
 
                 if not only_count:
-                    res.append(repeat*repetitions)
+                    res.append(repeat * repetitions)
 
             index = closing_paren + span + 1
 
@@ -121,7 +125,8 @@ def decompress_v2(line: str,  only_count: bool = True):
     if only_count:
         return count, None
 
-    return count, ''.join(res)
+    return count, "".join(res)
+
 
 ################################################################################
 
@@ -132,24 +137,24 @@ def day09p2():
     dec_len = 0
     for line in data:
         # print('New', line)
-        count, string = decompress_v2(line,  only_count=True)
+        count, string = decompress_v2(line, only_count=True)
         # print('Dec:', string, 'Len:', count)
         dec_len += count
 
-    return 'V2 Decompressed Len ', dec_len
+    return "V2 Decompressed Len ", dec_len
 
 
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 09 - Part 1", '-'*n)
-    print('Result =>', day09p1())
+    print("-" * (n), "Day 09 - Part 1", "-" * n)
+    print("Result =>", day09p1())
     print()
-    print('-'*(n), "Day 09 - Part 2", '-'*n)
-    print('Result =>', day09p2())
+    print("-" * (n), "Day 09 - Part 2", "-" * n)
+    print("Result =>", day09p2())
     print()
 
 

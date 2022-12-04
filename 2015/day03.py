@@ -1,4 +1,5 @@
 import collections
+
 import yearutils as yu
 
 
@@ -22,17 +23,17 @@ def day03p1():
     # north (^), south (v), east (>), or west (<)
     for d in data[0]:
         x, y = current_coord
-        if d == '^':
-            current_coord = (x, y+1)
+        if d == "^":
+            current_coord = (x, y + 1)
             houses[current_coord] += 1
-        if d == '>':
-            current_coord = (x+1, y)
+        if d == ">":
+            current_coord = (x + 1, y)
             houses[current_coord] += 1
-        if d == 'v':
-            current_coord = (x, y-1)
+        if d == "v":
+            current_coord = (x, y - 1)
             houses[current_coord] += 1
-        if d == '<':
-            current_coord = (x-1, y)
+        if d == "<":
+            current_coord = (x - 1, y)
             houses[current_coord] += 1
 
     # houses at least 1
@@ -42,17 +43,17 @@ def day03p1():
 def deliverToy(direction, curr_pos, houses):
     x, y = curr_pos
     current_coord = None
-    if direction == '^':
-        current_coord = (x, y+1)
+    if direction == "^":
+        current_coord = (x, y + 1)
         houses[current_coord] += 1
-    if direction == '>':
-        current_coord = (x+1, y)
+    if direction == ">":
+        current_coord = (x + 1, y)
         houses[current_coord] += 1
-    if direction == 'v':
-        current_coord = (x, y-1)
+    if direction == "v":
+        current_coord = (x, y - 1)
         houses[current_coord] += 1
-    if direction == '<':
-        current_coord = (x-1, y)
+    if direction == "<":
+        current_coord = (x - 1, y)
         houses[current_coord] += 1
 
     return current_coord

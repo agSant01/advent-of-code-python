@@ -4,7 +4,6 @@ Problem Statement: https://adventofcode.com/2015/day/13
 
 
 import itertools
-import sys
 
 
 def get_filename(test=False):
@@ -14,10 +13,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -25,17 +25,19 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    line = line \
-        .replace('happiness units by sitting next to', '') \
-        .replace('would', '') \
-        .replace('.', '') \
+    line = (
+        line.replace("happiness units by sitting next to", "")
+        .replace("would", "")
+        .replace(".", "")
         .split()
+    )
     guest, sign, amount, side = line
     amount = int(amount)
-    if sign == 'lose':
+    if sign == "lose":
         amount *= -1
 
     return (guest, amount, side)
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -82,6 +84,8 @@ def calculate_best_happiness(guests, happiness):
             success_perm = permutation
 
     return result, success_perm, costs
+
+
 ################################################################################
 
 
@@ -102,7 +106,7 @@ def day13p1():
 
     result, success_perm, costs = calculate_best_happiness(guests, happiness)
 
-    print('perm', success_perm, 'costs', costs, 'map', gm)
+    print("perm", success_perm, "costs", costs, "map", gm)
 
     return result
 
@@ -114,6 +118,7 @@ def day13p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -129,7 +134,7 @@ def day13p2():
     for d in data:
         guests_set.add(d[0])
 
-    guests_set.add('Me')
+    guests_set.add("Me")
 
     for idx, g in enumerate(sorted(guests_set)):
         gm.update({g: idx})
@@ -140,7 +145,7 @@ def day13p2():
 
     result, success_perm, costs = calculate_best_happiness(guests, happiness)
 
-    print('perm', success_perm, 'costs', costs, 'map', gm)
+    print("perm", success_perm, "costs", costs, "map", gm)
 
     return result
 
@@ -148,14 +153,14 @@ def day13p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 13 - Part 1", '-'*n)
-    print('Result =>', day13p1())
+    print("-" * (n), "Day 13 - Part 1", "-" * n)
+    print("Result =>", day13p1())
     print()
-    print('-'*(n), "Day 13 - Part 2", '-'*n)
-    print('Result =>', day13p2())
+    print("-" * (n), "Day 13 - Part 2", "-" * n)
+    print("Result =>", day13p2())
     print()
 
 

@@ -1,5 +1,5 @@
-import math
 import hashlib
+import math
 
 
 def get_filename(test=False):
@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,15 +23,16 @@ def get_input(parse, test=False):
 def parse1(line):
     return line
 
+
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
 
 ################################################################################
-SHORTEST_SEQ = ''
+SHORTEST_SEQ = ""
 SHORTEST = math.inf
-OPEN = 'bcdef'
+OPEN = "bcdef"
 
 
 def shortest_path_vault(hash_, sequence, pos_x, pos_y):
@@ -51,29 +53,29 @@ def shortest_path_vault(hash_, sequence, pos_x, pos_y):
             SHORTEST = len(sequence)
         return
 
-    directions = hashlib.md5(str(hash_+sequence).encode()).hexdigest()
+    directions = hashlib.md5(str(hash_ + sequence).encode()).hexdigest()
 
     # up
     if directions[0] in OPEN:
-        shortest_path_vault(hash_, sequence+'U', pos_x, pos_y-1)
+        shortest_path_vault(hash_, sequence + "U", pos_x, pos_y - 1)
 
     # down
     if directions[1] in OPEN:
-        shortest_path_vault(hash_, sequence+'D', pos_x, pos_y+1)
+        shortest_path_vault(hash_, sequence + "D", pos_x, pos_y + 1)
 
     # left
     if directions[2] in OPEN:
-        shortest_path_vault(hash_, sequence+'L', pos_x-1, pos_y)
+        shortest_path_vault(hash_, sequence + "L", pos_x - 1, pos_y)
 
     # right
     if directions[3] in OPEN:
-        shortest_path_vault(hash_, sequence+'R', pos_x+1, pos_y)
+        shortest_path_vault(hash_, sequence + "R", pos_x + 1, pos_y)
 
 
 def day17p1():
     global SHORTEST_SEQ
 
-    shortest_path_vault('ihgpwlah', '', 0, 0)
+    shortest_path_vault("ihgpwlah", "", 0, 0)
 
     return SHORTEST_SEQ
 
@@ -86,12 +88,13 @@ def day17p1():
 def parse2(line):
     return parse1(line)
 
+
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
 ################################################################################
 
 
-LONGEST_SEQ = ''
+LONGEST_SEQ = ""
 LONGEST = -math.inf
 
 
@@ -110,43 +113,43 @@ def longest_path_vault(hash_, sequence, pos_x, pos_y):
             LONGEST = len(sequence)
         return
 
-    directions = hashlib.md5(str(hash_+sequence).encode()).hexdigest()
+    directions = hashlib.md5(str(hash_ + sequence).encode()).hexdigest()
 
     # up
     if directions[0] in OPEN:
-        longest_path_vault(hash_, sequence+'U', pos_x, pos_y-1)
+        longest_path_vault(hash_, sequence + "U", pos_x, pos_y - 1)
 
     # down
     if directions[1] in OPEN:
-        longest_path_vault(hash_, sequence+'D', pos_x, pos_y+1)
+        longest_path_vault(hash_, sequence + "D", pos_x, pos_y + 1)
 
     # left
     if directions[2] in OPEN:
-        longest_path_vault(hash_, sequence+'L', pos_x-1, pos_y)
+        longest_path_vault(hash_, sequence + "L", pos_x - 1, pos_y)
 
     # right
     if directions[3] in OPEN:
-        longest_path_vault(hash_, sequence+'R', pos_x+1, pos_y)
+        longest_path_vault(hash_, sequence + "R", pos_x + 1, pos_y)
 
 
 ################################################################################
 def day17p2():
-    passcode = 'njfxhljp'
-    longest_path_vault(passcode, '', 0, 0)
+    passcode = "njfxhljp"
+    longest_path_vault(passcode, "", 0, 0)
     return LONGEST
 
 
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 17 - Part 1", '-'*n)
-    print('Result =>', day17p1())
+    print("-" * (n), "Day 17 - Part 1", "-" * n)
+    print("Result =>", day17p1())
     print()
-    print('-'*(n), "Day 17 - Part 2", '-'*n)
-    print('Result =>', day17p2())
+    print("-" * (n), "Day 17 - Part 2", "-" * n)
+    print("Result =>", day17p2())
     print()
 
 

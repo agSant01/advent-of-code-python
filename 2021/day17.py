@@ -8,7 +8,7 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
@@ -20,7 +20,13 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return list(map(int, re.findall(r'target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)', line)[0]))
+    return list(
+        map(
+            int,
+            re.findall(r"target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)", line)[0],
+        )
+    )
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -60,7 +66,7 @@ def day17p1():
 
         maxy = -10
         mS = None
-        for x in range(xmax+1):
+        for x in range(xmax + 1):
             for y in range(-ymin):
                 steps, isL = find_path((x, y), xmin, xmax, ymin, ymax)
                 if isL:
@@ -70,6 +76,7 @@ def day17p1():
                         mS = maxS
         return mS
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -77,6 +84,7 @@ def day17p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -90,9 +98,9 @@ def day17p2():
     xmin, xmax, ymin, ymax = data
 
     total_steps = 0
-    for x in range(xmax+1):
-        for y in range(ymin, -ymin+1):
-            _, isL = find_path((x, y),  xmin, xmax, ymin, ymax)
+    for x in range(xmax + 1):
+        for y in range(ymin, -ymin + 1):
+            _, isL = find_path((x, y), xmin, xmax, ymin, ymax)
             if isL:
                 total_steps += 1
 
@@ -102,14 +110,14 @@ def day17p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 17 - Part 1", '-'*n)
-    print('Result =>', day17p1())
+    print("-" * (n), "Day 17 - Part 1", "-" * n)
+    print("Result =>", day17p1())
     print()
-    print('-'*(n), "Day 17 - Part 2", '-'*n)
-    print('Result =>', day17p2())
+    print("-" * (n), "Day 17 - Part 2", "-" * n)
+    print("Result =>", day17p2())
     print()
 
 

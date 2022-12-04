@@ -8,10 +8,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -19,7 +20,9 @@ def get_input(parse, test=False):
 
 
 PAT = re.compile(
-    r'(children|cats|samoyeds|pomeranians|akitas|vizslas|goldfish|trees|cars|perfumes): ([0-9]+)')
+    r"(children|cats|samoyeds|pomeranians|akitas|vizslas|goldfish|trees|cars|perfumes):"
+    r" ([0-9]+)"
+)
 
 
 def parse1(line: str):
@@ -29,22 +32,23 @@ def parse1(line: str):
 
     return dict_
 
+
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
 ################################################################################
 
 
 UNKNOWN_AUNT = {
-    'children': 3,
-    'cats': 7,
-    'samoyeds': 2,
-    'pomeranians': 3,
-    'akitas': 0,
-    'vizslas': 0,
-    'goldfish': 5,
-    'trees': 3,
-    'cars': 2,
-    'perfumes': 1
+    "children": 3,
+    "cats": 7,
+    "samoyeds": 2,
+    "pomeranians": 3,
+    "akitas": 0,
+    "vizslas": 0,
+    "goldfish": 5,
+    "trees": 3,
+    "cars": 2,
+    "perfumes": 1,
 }
 
 
@@ -66,6 +70,8 @@ def day16p1():
             posible_aunts.append(idx + 1)
 
     return posible_aunts
+
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -73,6 +79,7 @@ def day16p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -89,10 +96,10 @@ def day16p2():
         aunt: dict = aunt
         is_aunt = True
         for tag in aunt.keys():
-            if tag in ['cats', 'trees']:
+            if tag in ["cats", "trees"]:
                 if aunt[tag] <= UNKNOWN_AUNT[tag]:
                     is_aunt = False
-            elif tag in ['pomeranians', 'goldfish']:
+            elif tag in ["pomeranians", "goldfish"]:
                 if aunt[tag] >= UNKNOWN_AUNT[tag]:
                     is_aunt = False
             elif UNKNOWN_AUNT[tag] != aunt[tag]:
@@ -108,14 +115,14 @@ def day16p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 16 - Part 1", '-'*n)
-    print('Result =>', day16p1())
+    print("-" * (n), "Day 16 - Part 1", "-" * n)
+    print("Result =>", day16p1())
     print()
-    print('-'*(n), "Day 16 - Part 2", '-'*n)
-    print('Result =>', day16p2())
+    print("-" * (n), "Day 16 - Part 2", "-" * n)
+    print("Result =>", day16p2())
     print()
 
 

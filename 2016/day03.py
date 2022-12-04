@@ -1,5 +1,5 @@
-import itertools
 import functools
+import itertools
 
 
 def get_filename(test=False):
@@ -9,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -21,6 +22,7 @@ def get_input(parse, test=False):
 
 def parse1(line: str):
     return list(map(int, line.split()))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -37,6 +39,7 @@ def day03p1():
             valid_ts += 1
     return valid_ts
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -44,6 +47,7 @@ def day03p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -60,27 +64,27 @@ def day03p2():
         functools.reduce(
             itertools.chain,  # reduced
             (  # iterable
-                map(lambda column:  # all items in column <column>
-                    map(lambda row: row[column], lines),
-                    range(len(lines[0]))  # get columns indexes
-                    )
+                map(
+                    lambda column: map(  # all items in column <column>
+                        lambda row: row[column], lines
+                    ),
+                    range(len(lines[0])),  # get columns indexes
+                )
             ),  # end of iterable
-            []  # initial value
+            [],  # initial value
         )
     )
 
     # make every 3 NUMBERS into groups;
     # Each groups is the 3 sides of a triangle
     grouped_sides = map(
-        lambda index: sorted(sides[index:index+3]),
-        range(0, len(sides), 3)  # [0, 3, 6, ...]
+        lambda index: sorted(sides[index : index + 3]),
+        range(0, len(sides), 3),  # [0, 3, 6, ...]
     )
 
     # filter valid triangles
     valid_triangles = functools.reduce(
-        lambda count, sides: count + (sides[0] + sides[1] > sides[2]),
-        grouped_sides,
-        0
+        lambda count, sides: count + (sides[0] + sides[1] > sides[2]), grouped_sides, 0
     )
 
     return valid_triangles
@@ -89,14 +93,14 @@ def day03p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 03 - Part 1", '-'*n)
-    print('Result =>', day03p1())
+    print("-" * (n), "Day 03 - Part 1", "-" * n)
+    print("Result =>", day03p1())
     print()
-    print('-'*(n), "Day 03 - Part 2", '-'*n)
-    print('Result =>', day03p2())
+    print("-" * (n), "Day 03 - Part 2", "-" * n)
+    print("Result =>", day03p2())
     print()
 
 

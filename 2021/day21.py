@@ -1,8 +1,4 @@
 import collections
-import itertools
-import copy
-from enum import unique
-import queue
 import re
 from typing import Dict, Tuple
 
@@ -14,7 +10,7 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
@@ -26,7 +22,8 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return tuple(map(int, re.findall(r'Player (\d+) starting position: (\d+)', line)[0]))
+    return tuple(map(int, re.findall(r"Player (\d+) starting position: (\d+)", line)[0]))
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -82,7 +79,7 @@ def day21p1():
 
         dice_rolls += 3
 
-        next_position = (positions[player]+steps) % LEN_TRACK
+        next_position = (positions[player] + steps) % LEN_TRACK
 
         if next_position == 0:
             next_position = 10
@@ -102,6 +99,7 @@ def day21p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -128,7 +126,7 @@ def play_game(positions: list) -> None:
     for i in range(1, 4):
         for j in range(1, 4):
             for k in range(1, 4):
-                rolls[i+j+k] += 1
+                rolls[i + j + k] += 1
 
     while len(universes) > 0:
         temp = dict(universes)
@@ -137,7 +135,7 @@ def play_game(positions: list) -> None:
             (score_p1, score_p2), (pos_p1, pos_p2) = state
             for roll_p1, created_branches in rolls.items():
                 p1_branches = current_branches * created_branches
-                new_position_p1 = (pos_p1+roll_p1-1) % LEN_TRACK + 1
+                new_position_p1 = (pos_p1 + roll_p1 - 1) % LEN_TRACK + 1
                 new_score_p1 = score_p1 + new_position_p1
                 if new_score_p1 >= 21:
                     universal_wins[0] += p1_branches
@@ -145,16 +143,19 @@ def play_game(positions: list) -> None:
 
                 for roll_p2, created_branches_p2 in rolls.items():
                     p2_branches = p1_branches * created_branches_p2
-                    new_position_p2 = (pos_p2+roll_p2-1) % LEN_TRACK + 1
+                    new_position_p2 = (pos_p2 + roll_p2 - 1) % LEN_TRACK + 1
                     new_score_p2 = score_p2 + new_position_p2
                     if new_score_p2 >= 21:
                         universal_wins[1] += p2_branches
                         continue
-                    new_state = ((new_score_p1, new_score_p2),
-                                 (new_position_p1, new_position_p2))
+                    new_state = (
+                        (new_score_p1, new_score_p2),
+                        (new_position_p1, new_position_p2),
+                    )
                     universes[new_state] += p2_branches
 
     return universal_wins
+
 
 ################################################################################
 
@@ -172,14 +173,14 @@ def day21p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 21 - Part 1", '-'*n)
-    print('Result =>', day21p1())
+    print("-" * (n), "Day 21 - Part 1", "-" * n)
+    print("Result =>", day21p1())
     print()
-    print('-'*(n), "Day 21 - Part 2", '-'*n)
-    print('Result =>', day21p2())
+    print("-" * (n), "Day 21 - Part 2", "-" * n)
+    print("Result =>", day21p2())
     print()
 
 

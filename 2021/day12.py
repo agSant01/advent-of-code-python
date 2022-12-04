@@ -1,6 +1,4 @@
-import copy
 import collections
-from os import path
 from typing import Dict, List
 
 
@@ -11,10 +9,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -22,7 +21,7 @@ def get_input(parse, test=False):
 
 
 def parse1(line: str):
-    return line.split('-')
+    return line.split("-")
 
 
 ################################################################################
@@ -45,7 +44,9 @@ def occurrences(items: list):
     return occs
 
 
-def find_all_paths(start, end, path: List[str], vertices: Dict[str, List[str]], part: int) -> None:
+def find_all_paths(
+    start, end, path: List[str], vertices: Dict[str, List[str]], part: int
+) -> None:
     global paths
 
     if start == end:
@@ -53,10 +54,10 @@ def find_all_paths(start, end, path: List[str], vertices: Dict[str, List[str]], 
         return
 
     if part == 2:
-        if path.count('start') > 1:
+        if path.count("start") > 1:
             return
 
-        if path.count('end') > 1:
+        if path.count("end") > 1:
             return
 
     for vert in vertices[start]:
@@ -65,8 +66,12 @@ def find_all_paths(start, end, path: List[str], vertices: Dict[str, List[str]], 
                 continue
         elif part == 2:
             if vert.islower() and path.count(vert) + 1 >= 2:
-                tmp = list(filter(lambda x: x.islower() and x !=
-                                  'start' and x != 'end', path+[vert]))
+                tmp = list(
+                    filter(
+                        lambda x: x.islower() and x != "start" and x != "end",
+                        path + [vert],
+                    )
+                )
                 occ = occurrences(tmp)
 
                 if len(tmp) > 0 and occ[2] > 1:
@@ -79,6 +84,7 @@ def find_all_paths(start, end, path: List[str], vertices: Dict[str, List[str]], 
 
 
 ################################################################################
+
 
 def day12p1():
     global paths
@@ -93,9 +99,10 @@ def day12p1():
     # print(vertices)
 
     paths = []
-    find_all_paths('start', 'end', ['start'], vertices, 1)
+    find_all_paths("start", "end", ["start"], vertices, 1)
 
     return len(paths)
+
 
 ################################################################################
 ############################### Start of Part 2 ################################
@@ -104,6 +111,7 @@ def day12p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -126,7 +134,7 @@ def day12p2():
     print(vertices)
 
     paths = []
-    find_all_paths('start', 'end', ['start'], vertices, 2)
+    find_all_paths("start", "end", ["start"], vertices, 2)
 
     if test:
         print(paths)
@@ -140,14 +148,14 @@ def day12p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 12 - Part 1", '-'*n)
-    print('Result =>', day12p1())
+    print("-" * (n), "Day 12 - Part 1", "-" * n)
+    print("Result =>", day12p1())
     print()
-    print('-'*(n), "Day 12 - Part 2", '-'*n)
-    print('Result =>', day12p2())
+    print("-" * (n), "Day 12 - Part 2", "-" * n)
+    print("Result =>", day12p2())
     print()
 
 

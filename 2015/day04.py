@@ -1,6 +1,5 @@
-import string
 import hashlib
-import crypt
+
 import yearutils as yu
 
 
@@ -19,7 +18,7 @@ def day04p1():
         toH = input + str(i)
 
         hash = hashlib.md5(toH.encode())
-        if hash.hexdigest()[:5] == '00000':
+        if hash.hexdigest()[:5] == "00000":
             print(toH, i, hash.hexdigest())
             return i
         i += 1
@@ -32,7 +31,7 @@ def day04p2():
     while True:
         toH = data + str(i)
         hash = hashlib.md5(toH.encode())
-        if hash.hexdigest()[:6] == '000000':
+        if hash.hexdigest()[:6] == "000000":
             print(toH, i, hash.hexdigest())
             return i
         i += 1

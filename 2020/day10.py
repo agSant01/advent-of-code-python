@@ -1,8 +1,6 @@
-import itertools
-import math
 import collections
-from os import stat
-from typing import Collection, List
+from typing import List
+
 import yearutils as yu
 
 
@@ -21,8 +19,8 @@ def find_jolt_diffs(joltages: List[int]):
 
     joltage_diffs = collections.defaultdict(int)
 
-    for i in range(0, len(joltages)-1):
-        diff = joltages[i+1] - joltages[i]
+    for i in range(0, len(joltages) - 1):
+        diff = joltages[i + 1] - joltages[i]
         if diff <= 3:
             joltage_diffs[diff] += 1
 
@@ -42,13 +40,13 @@ def parse2(line):
 
 
 def find_arr_rec(joltages, DP, idx):
-    if idx == len(joltages)-1:
+    if idx == len(joltages) - 1:
         return 1
 
     if idx in DP:
         return DP[idx]
 
-    curr_s = idx+1
+    curr_s = idx + 1
     ans = 0
     while curr_s < len(joltages):
         if joltages[curr_s] - joltages[idx] <= 3:
@@ -67,7 +65,7 @@ def day10p2():
     joltages.append(max(joltages) + 3)
     joltages.sort()
 
-    return find_arr_rec(joltages,  {}, 0)
+    return find_arr_rec(joltages, {}, 0)
 
 
 def main():

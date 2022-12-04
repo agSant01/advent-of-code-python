@@ -5,10 +5,11 @@ def get_filename(test=False):
 def get_input(parse, test=False):
     data = []
     filename = get_filename(test)
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             data.append(parse(line.strip()))
     return data
+
 
 ################################################################################
 ############################### Start of Part 1 ################################
@@ -17,6 +18,7 @@ def get_input(parse, test=False):
 
 def parse1(line):
     return line
+
 
 ################################################################################
 ########################## Helper Functions of Part 1 ##########################
@@ -30,12 +32,13 @@ def get_next(code):
 def get_code(start, row, column):
     d = column + row - 1
 
-    iterations = sum(i for i in range(1, d+1)) - row + 1
+    iterations = sum(i for i in range(1, d + 1)) - row + 1
 
     for _ in range(1, iterations):
         start = get_next(start)
 
     return start
+
 
 ################################################################################
 
@@ -57,6 +60,7 @@ def day25p1():
 
     return x
 
+
 ################################################################################
 ############################### Start of Part 2 ################################
 ################################################################################
@@ -64,6 +68,7 @@ def day25p1():
 
 def parse2(line):
     return parse1(line)
+
 
 ################################################################################
 ########################## Helper Functions of Part 2 ##########################
@@ -80,14 +85,14 @@ def day25p2():
 def main():
     divs = 40
     msg = 15
-    n = (divs-msg)//2
+    n = (divs - msg) // 2
     divs += 1
     print()
-    print('-'*(n), "Day 25 - Part 1", '-'*n)
-    print('Result =>', day25p1())
+    print("-" * (n), "Day 25 - Part 1", "-" * n)
+    print("Result =>", day25p1())
     print()
-    print('-'*(n), "Day 25 - Part 2", '-'*n)
-    print('Result =>', day25p2())
+    print("-" * (n), "Day 25 - Part 2", "-" * n)
+    print("Result =>", day25p2())
     print()
 
 

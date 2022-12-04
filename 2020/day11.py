@@ -12,8 +12,8 @@ def parse1(line):
 def findAdjacent(seats, x, y):
     adj = []
 
-    for i in range(max(0, x-1), min(len(seats), x+2)):
-        for j in range(max(0, y-1), min(len(seats[0]), y+2)):
+    for i in range(max(0, x - 1), min(len(seats), x + 2)):
+        for j in range(max(0, y - 1), min(len(seats[0]), y + 2)):
             adj.append((i, j))
 
     adj.remove((x, y))
@@ -26,13 +26,13 @@ def changeState(seats, x, y):
     # Otherwise, the seat's state does not change.
 
     if seats[x][y] == ".":
-        return '.', False
+        return ".", False
 
     if seats[x][y] == "L":
         occupied = 0
         adj = findAdjacent(seats, x, y)
         for i, j in adj:
-            if seats[i][j] == '#':
+            if seats[i][j] == "#":
                 occupied += 1
 
         if occupied == 0:
@@ -43,7 +43,7 @@ def changeState(seats, x, y):
         adj = findAdjacent(seats, x, y)
         # print(seats[x][y], x, y, adj)
         for i, j in adj:
-            if seats[i][j] == '#':
+            if seats[i][j] == "#":
                 occupied += 1
 
         if occupied >= 4:
@@ -56,7 +56,7 @@ def findSeated(seats):
     seated = 0
     for line in seats:
         for seat in line:
-            if seat == '#':
+            if seat == "#":
                 seated += 1
     return seated
 
@@ -82,7 +82,6 @@ def day11p1():
     change = True
 
     newSeats = seats.copy()
-    i = 0
     while change:
         newSeats, change = ripple(newSeats)
 
@@ -98,14 +97,14 @@ def parse2(line):
 
 def findAdjacentWithDirection(seats, x, y):
     adj = []
-    d1 = ['up', None, 'down']
-    d2 = ['left', None, 'right']
+    d1 = ["up", None, "down"]
+    d2 = ["left", None, "right"]
 
-    for i in range(max(0, x-1), min(len(seats), x+2)):
-        for j in range(max(0, y-1), min(len(seats[0]), y+2)):
+    for i in range(max(0, x - 1), min(len(seats), x + 2)):
+        for j in range(max(0, y - 1), min(len(seats[0]), y + 2)):
             if (i, j) == (x, y):
                 continue
-            adj.append(((i, j), (d1[i-(x-1)], d2[j-(y-1)])))
+            adj.append(((i, j), (d1[i - (x - 1)], d2[j - (y - 1)])))
 
     return adj
 
@@ -113,17 +112,17 @@ def findAdjacentWithDirection(seats, x, y):
 def findInSightRec(seats, x, y, direction):
     new_x = x
     new_y = y
-    if seats[x][y] == '.':
-        if direction[0] == 'up':
+    if seats[x][y] == ".":
+        if direction[0] == "up":
             new_x -= 1
-        if direction[0] == 'down':
+        if direction[0] == "down":
             new_x += 1
-        if direction[1] == 'left':
+        if direction[1] == "left":
             new_y -= 1
-        if direction[1] == 'right':
+        if direction[1] == "right":
             new_y += 1
 
-        if new_x < 0 or new_x > len(seats)-1 or new_y < 0 or new_y > len(seats[0])-1:
+        if new_x < 0 or new_x > len(seats) - 1 or new_y < 0 or new_y > len(seats[0]) - 1:
             return seats[x][y]
 
         return findInSightRec(seats, new_x, new_y, direction)
@@ -138,6 +137,7 @@ def findInSight(seats, x, y):
     # print(directions)
 
     import collections
+
     valTo = collections.defaultdict(int)
 
     for idx, (adj, direction) in enumerate(adj):
@@ -149,8 +149,7 @@ def findInSight(seats, x, y):
 
 
 def ripple2(seats):
-    newSeats = [[seats[i][j]
-                 for j in range(len(seats[0]))] for i in range(len(seats))]
+    newSeats = [[seats[i][j] for j in range(len(seats[0]))] for i in range(len(seats))]
     hasChangedState = False
     for i in range(len(seats)):
         for j in range(len(seats[0])):
@@ -158,7 +157,7 @@ def ripple2(seats):
             # If a seat is occupied (#) and four or more seats adjacent to it are also occupied, the seat becomes empty.
             # Otherwise, the seat's state does not change.
 
-            if seats[i][j] == '.':
+            if seats[i][j] == ".":
                 # newSeats[i][j] = '.'
                 continue
 
@@ -166,14 +165,14 @@ def ripple2(seats):
             # print(seats[i][j], i, j, sight_dict)
             # [print(''.join(i)) for i in seats]
 
-            if seats[i][j] == 'L' and sight_dict['#'] == 0:
+            if seats[i][j] == "L" and sight_dict["#"] == 0:
                 # print('L -> #')
-                newSeats[i][j] = '#'
+                newSeats[i][j] = "#"
                 hasChangedState = True
 
-            if seats[i][j] == '#' and sight_dict['#'] >= 5:
+            if seats[i][j] == "#" and sight_dict["#"] >= 5:
                 # print('# -> L')
-                newSeats[i][j] = 'L'
+                newSeats[i][j] = "L"
                 hasChangedState = True
 
     # [print(''.join(i)) for i in seats]
