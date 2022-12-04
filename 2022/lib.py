@@ -1,9 +1,9 @@
-from typing import Any, Iterable, Set, Tuple
+from typing import Any, Sequence, Set
 
 
 class Day03:
     @staticmethod
-    def get_common_items(*items: Iterable[Any]) -> Set[Any]:
+    def get_common_items(*items: Sequence[Any]) -> Set[Any]:
         if len(items) == 0:
             return set()
         g_set = set(items[0])
@@ -14,7 +14,7 @@ class Day03:
 
 class Day04:
     @staticmethod
-    def is_full_overlap(range1: Iterable[int], range2: Iterable[int]) -> bool:
+    def is_full_overlap(range1: Sequence[int], range2: Sequence[int]) -> bool:
         if range1[0] >= range2[0] and range1[1] <= range2[1]:
             return True
         if range2[0] >= range1[0] and range2[1] <= range1[1]:
@@ -22,7 +22,7 @@ class Day04:
         return False
 
     @staticmethod
-    def is_partial_overlap(range1: Iterable[int], range2: Iterable[int]) -> bool:
+    def is_partial_overlap(range1: Sequence[int], range2: Sequence[int]) -> bool:
         if range1[0] < range2[0]:
             return range1[1] >= range2[0]
         return range2[1] >= range1[0]

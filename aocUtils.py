@@ -5,7 +5,7 @@ import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Union
+from typing import Any, Dict, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -14,7 +14,6 @@ from markdownify import markdownify
 from templates import day as day_template
 
 BASE_URL = "https://adventofcode.com"
-CONFIG = {}
 PREV_VERSIONS = [1]
 VERSION = 2
 
@@ -48,18 +47,6 @@ def __init_args():
         "--force", "-f", action="store_true", default=False, required=False
     )
 
-    # Left for compatibility with Version 1.0
-    # Version 2 scripts manage the part selection internally
-    parser.add_argument(
-        "--part",
-        "-p",
-        type=int,
-        choices=(1, 2),
-        nargs=1,
-        help="Run part 1 or 2",
-        required=False,
-    )
-
     parser.add_argument(
         "--comp",
         type=int,
@@ -79,7 +66,7 @@ ARGS = __init_args()
 
 
 def __config():
-    cfg = {}
+    cfg: Dict[str, str] = {}
     with open(".env") as f:
         for line in f:
             if line.startswith("#"):
@@ -91,18 +78,18 @@ def __config():
     return cfg
 
 
-def console(msg):
+CONFIG = __config()
+
+
+def console(msg: Any):
     print(f"==>", msg)
 
 
-def error(msg):
+def error(msg: Any):
     print(f"[ERROR]", msg)
 
 
-def init_year(year: int = None):
-    if not year:
-        year = datetime.today().year
-
+def init_year(year: int = datetime.today().year):
     console(f"Initializing year directory: ./{year}")
 
     if os.path.isdir(str(year)):
@@ -112,10 +99,8 @@ def init_year(year: int = None):
         os.makedirs(str(year))
 
 
-def create_instruction_file(day, year=None):
-    day = str(day).zfill(2)
-    if not year:
-        year = datetime.today().year
+def create_instruction_file(day_str: str, year: int = datetime.today().year):
+    day = str(day_str).zfill(2)
 
     file_path = Path(str(year), f"day{day}", "instructions.md")
     console(f"Downloading instructions file: {file_path}")
@@ -134,7 +119,7 @@ def create_instruction_file(day, year=None):
 
     tags = soup.find_all("article", class_=re.compile("day-desc"))
 
-    def remove_dash(tag):
+    def remove_dash(tag: Any):
         str_ = tag.h2.string.replace("---", "").strip()
         tag.h2.string.replace_with(str_)
         return str(tag)
@@ -147,10 +132,8 @@ def create_instruction_file(day, year=None):
     console("Created instructions MD file...")
 
 
-def create_input_files(day, year=None, force=False):
+def create_input_files(day: str, year: int = datetime.today().year, force: bool = False):
     day = str(day).zfill(2)
-    if not year:
-        year = datetime.today().year
 
     console("Creating Input files...")
 
@@ -161,24 +144,21 @@ def create_input_files(day, year=None, force=False):
         console(f"Creating Input file: {input_test_file}")
         input_test_file.touch()
 
-    data = get_input_data(day, year)
-    if not data:
-        exit(1)
-
     input_file: Path = Path(str(year), f"day{day}", "input.txt")
-
     if input_file.exists() and not force:
         console(f"File: {input_file} already exists!")
     else:
+        data = get_input_data(day, year)
+        if not data:
+            exit(1)
+
         console(f"Creating Input file: {input_file}")
         with open(input_file, "w") as f:
             f.write(data)
 
 
-def get_input_data(day, year=None) -> Union[str, None]:
-    day = int(day)
-    if not year:
-        year = datetime.today().year
+def get_input_data(day_str: str, year: int = datetime.today().year) -> Union[str, None]:
+    day = int(day_str)
 
     console(f"Get input data for year: {year} \u272D day:{day}")
 
@@ -199,10 +179,8 @@ def get_input_data(day, year=None) -> Union[str, None]:
     return data.content.decode()
 
 
-def create_day(day: str, year: str = None):
+def create_day(day: str, year: int = datetime.today().year):
     day = str(day).zfill(2)
-    if not year:
-        year = datetime.today().year
 
     daycode_filepath: Path = Path(str(year), f"day{day}")
 
@@ -222,10 +200,8 @@ def create_day(day: str, year: str = None):
     create_instruction_file(day, year)
 
 
-def run(day, year=None, part: List[str] = None):
+def run(day: str, year: int = datetime.today().year):
     day = str(day).zfill(2)
-    if not year:
-        year = datetime.today().year
     if ARGS.comp < 2:
         console(f"Running script: ./{year}/day{day}.py")
         os.chdir(f"./{year}")
@@ -247,7 +223,7 @@ def main():
     # console(args)
 
     if bool(ARGS.run):
-        run(ARGS.run, ARGS.year, ARGS.part)
+        run(ARGS.run, ARGS.year)
         exit()
 
     if ARGS.init_year is None or bool(ARGS.init_year):
@@ -262,5 +238,4 @@ def main():
 
 
 if __name__ == "__main__":
-    CONFIG = __config()
     main()
