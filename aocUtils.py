@@ -157,9 +157,9 @@ def create_input_files(day, year=None, force=False):
     input_test_file: Path = Path(str(year), f"day{day}", "input_test.txt")
     if input_test_file.exists() and not force:
         console(f"File: {input_test_file} already exists!")
-        exit(1)
-    console(f"Creating Input file: {input_test_file}")
-    input_test_file.touch()
+    else:
+        console(f"Creating Input file: {input_test_file}")
+        input_test_file.touch()
 
     data = get_input_data(day, year)
     if not data:
@@ -169,11 +169,10 @@ def create_input_files(day, year=None, force=False):
 
     if input_file.exists() and not force:
         console(f"File: {input_file} already exists!")
-        exit(1)
-
-    console(f"Creating Input file: {input_file}")
-    with open(input_file, "w") as f:
-        f.write(data)
+    else:
+        console(f"Creating Input file: {input_file}")
+        with open(input_file, "w") as f:
+            f.write(data)
 
 
 def get_input_data(day, year=None) -> Union[str, None]:
