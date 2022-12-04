@@ -2,9 +2,10 @@ import argparse
 import datetime
 import os
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -47,6 +48,8 @@ def __init_args():
         "--force", "-f", action="store_true", default=False, required=False
     )
 
+    # Left for compatibility with Version 1.0
+    # Version 2 scripts manage the part selection internally
     parser.add_argument(
         "--part",
         "-p",
@@ -69,7 +72,7 @@ def __init_args():
         default=VERSION,
     )
 
-    return parser.parse_args()
+    return parser.parse_known_args()[0]
 
 
 ARGS = __init_args()
@@ -103,7 +106,7 @@ def init_year(year: int = None):
     console(f"Initializing year directory: ./{year}")
 
     if os.path.isdir(str(year)):
-        console(f"[ERROR] Directory: ./{year} already exists!!!")
+        console(f"[ERROR] Directory: ./{year} already exists!")
         exit(1)
     else:
         os.makedirs(str(year))
@@ -149,29 +152,31 @@ def create_input_files(day, year=None, force=False):
     if not year:
         year = datetime.today().year
 
-    data = get_input_data(day, year, force)
-
     console("Creating Input files...")
+
+    input_test_file: Path = Path(str(year), f"day{day}", "input_test.txt")
+    if input_test_file.exists() and not force:
+        console(f"File: {input_test_file} already exists!")
+        exit(1)
+    console(f"Creating Input file: {input_test_file}")
+    input_test_file.touch()
+
+    data = get_input_data(day, year)
+    if not data:
+        exit(1)
 
     input_file: Path = Path(str(year), f"day{day}", "input.txt")
 
     if input_file.exists() and not force:
-        console(f"File: {input_file} already exists!!!")
+        console(f"File: {input_file} already exists!")
         exit(1)
 
     console(f"Creating Input file: {input_file}")
     with open(input_file, "w") as f:
         f.write(data)
 
-    input_test_file: Path = Path(str(year), f"day{day}", "input_test.txt")
-    if input_test_file.exists() and not force:
-        console(f"File: {input_test_file} already exists!!!")
-        exit(1)
-    console(f"Creating Input file: {input_test_file}")
-    input_test_file.touch()
 
-
-def get_input_data(day, year=None, force=False):
+def get_input_data(day, year=None) -> Union[str, None]:
     day = int(day)
     if not year:
         year = datetime.today().year
@@ -190,7 +195,7 @@ def get_input_data(day, year=None, force=False):
     else:
         console(f"Error:  {data.status_code}")
         console(f"Response Content: {data.content}")
-        exit(1)
+        return None
 
     return data.content.decode()
 
@@ -205,7 +210,7 @@ def create_day(day: str, year: str = None):
     console(f"Creating day template: ./{daycode_filepath}")
 
     if daycode_filepath.exists():
-        console(f"File: {daycode_filepath} already exists!!!")
+        console(f"File: {daycode_filepath} already exists!")
         exit(1)
 
     daycode_filepath.mkdir()
@@ -224,7 +229,8 @@ def run(day, year=None, part: List[str] = None):
         year = datetime.today().year
     if ARGS.comp < 2:
         console(f"Running script: ./{year}/day{day}.py")
-        os.system(f'python3.8 ./{year}/day{day}.py {part[0] if part else ""}')
+        os.chdir(f"./{year}")
+        os.system(f"python3.8 ./day{day}.py {' '.join(sys.argv[1:])}")
     else:
         try:
             console(f"Running script: ./{year}/day{day}/day{day}_code.py")
@@ -232,7 +238,7 @@ def run(day, year=None, part: List[str] = None):
             if not fp.exists():
                 error("FileNotFoundError: Try using compatibility mode --comp")
             else:
-                os.system(f'python3.8 {fp.absolute()} {part[0] if part else ""}')
+                os.system(f"python3.8 {fp.absolute()} {' '.join(sys.argv[1:])}")
         except FileNotFoundError:
             error("FileNotFoundError: Try using compatibility mode --comp")
 
