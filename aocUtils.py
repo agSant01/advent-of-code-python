@@ -38,7 +38,9 @@ def __init_args():
 
     parser.add_argument("--run", "-r", type=int, required=False)
 
-    parser.add_argument("--year", "-y", type=int, default=None, required=False)
+    parser.add_argument(
+        "--year", "-y", type=int, default=datetime.today().year, required=False
+    )
     parser.add_argument(
         "--init-year", "-iy", type=int, nargs="?", default=False, required=False
     )
