@@ -89,7 +89,10 @@ def error(msg: Any):
     print(f"[ERROR]", msg)
 
 
-def init_year(year: int = datetime.today().year):
+def init_year(year: int = None):  # type:ignore
+    if not year:
+        year: int = datetime.today().year  # type:ignore
+
     console(f"Initializing year directory: ./{year}")
 
     if os.path.isdir(str(year)):
@@ -99,8 +102,10 @@ def init_year(year: int = datetime.today().year):
         os.makedirs(str(year))
 
 
-def create_instruction_file(day_str: str, year: int = datetime.today().year):
+def create_instruction_file(day_str: str, year: int = None):  # type:ignore
     day = str(day_str).zfill(2)
+    if not year:
+        year: int = datetime.today().year  # type:ignore
 
     file_path = Path(str(year), f"day{day}", "instructions.md")
     console(f"Downloading instructions file: {file_path}")
@@ -132,8 +137,10 @@ def create_instruction_file(day_str: str, year: int = datetime.today().year):
     console("Created instructions MD file...")
 
 
-def create_input_files(day: str, year: int = datetime.today().year, force: bool = False):
+def create_input_files(day: str, year: int = None, force: bool = False):  # type:ignore
     day = str(day).zfill(2)
+    if not year:
+        year: int = datetime.today().year  # type:ignore
 
     console("Creating Input files...")
 
@@ -157,8 +164,10 @@ def create_input_files(day: str, year: int = datetime.today().year, force: bool 
             f.write(data)
 
 
-def get_input_data(day_str: str, year: int = datetime.today().year) -> Union[str, None]:
+def get_input_data(day_str: str, year: int = None) -> Union[str, None]:  # type:ignore
     day = int(day_str)
+    if not year:
+        year: int = datetime.today().year  # type:ignore
 
     console(f"Get input data for year: {year} \u272D day:{day}")
 
@@ -179,8 +188,10 @@ def get_input_data(day_str: str, year: int = datetime.today().year) -> Union[str
     return data.content.decode()
 
 
-def create_day(day: str, year: int = datetime.today().year):
+def create_day(day: str, year: int = None):  # type: ignore
     day = str(day).zfill(2)
+    if not year:
+        year: int = datetime.today().year  # type: ignore
 
     daycode_filepath: Path = Path(str(year), f"day{day}")
 
@@ -200,7 +211,10 @@ def create_day(day: str, year: int = datetime.today().year):
     create_instruction_file(day, year)
 
 
-def run(day: str, year: int = datetime.today().year):
+def run(day: str, year: int = None):  # type: ignore
+    print(day, year)
+    if not year:
+        year: int = datetime.today().year  # type: ignore
     day = str(day).zfill(2)
     if ARGS.comp < 2:
         console(f"Running script: ./{year}/day{day}.py")
