@@ -1,7 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import Callable, List
+from typing import Callable, List, TypeVar
 
 ###########################################################################
 ############################### Setup #####################################
@@ -33,9 +33,10 @@ arg_parser.add_argument(
 )
 args, _ = arg_parser.parse_known_args(sys.argv)
 
+ParsedInput = TypeVar("ParsedInput")
 
-def get_input(parse: Callable[[str], str], puzzle: bool = False) -> List[str]:
-    data: List[str] = []
+def get_input(parse: Callable[[str], ParsedInput], puzzle: bool = False) -> List[ParsedInput]:
+    data: List[ParsedInput] = []
     if args.input:
         filename = Path(args.input)
     else:
