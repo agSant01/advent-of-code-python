@@ -9,7 +9,7 @@ from typing import Any, Dict, Union
 
 import requests
 from bs4 import BeautifulSoup
-from markdownify import markdownify
+from markdownify import markdownify  # type:ignore
 
 from templates import day as day_template
 
@@ -39,7 +39,11 @@ def __init_args():
     parser.add_argument("--run", "-r", type=int, required=False)
 
     parser.add_argument(
-        "--year", "-y", type=int, default=datetime.today().year, required=False
+        "--year",
+        "-y",
+        type=int,
+        default=datetime.today().year,  # type:ignore
+        required=False,
     )
     parser.add_argument(
         "--init-year", "-iy", type=int, nargs="?", default=False, required=False
@@ -131,10 +135,12 @@ def create_instruction_file(day_str: str, year: int = None):  # type:ignore
         tag.h2.string.replace_with(str_)
         return str(tag)
 
-    markdown = markdownify("".join(map(remove_dash, tags)), heading_style="ATX")
+    markdown = markdownify(  # type:ignore
+        "".join(map(remove_dash, tags)), heading_style="ATX"  # type:ignore
+    )
 
     with open(file_path, "w") as f:
-        f.write(markdown)
+        f.write(markdown)  # type:ignore
 
     console("Created instructions MD file...")
 
@@ -214,7 +220,6 @@ def create_day(day: str, year: int = None):  # type: ignore
 
 
 def run(day: str, year: int = None):  # type: ignore
-    print(day, year)
     if not year:
         year: int = datetime.today().year  # type: ignore
     day = str(day).zfill(2)
