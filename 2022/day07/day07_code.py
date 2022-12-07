@@ -50,14 +50,17 @@ def get_input(
     if args.input:
         filename = Path(args.input)
     else:
-        filename: Path = Path(__file__).parent / f'input{"" if puzzle else "_test"}.txt'
+        filename: Path = (
+            Path(__file__).parents[0] / f'input{"" if puzzle else "_test"}.txt'
+        )
         if not filename.exists():
             print(f"[Warning] {filename.absolute()} does not exists.")
             print(
-                f"[Info] Defaulting to {filename.parent / 'input_test.txt'} for input."
+                f"[Info] Defaulting to {filename.parents[0] / 'input_test.txt'} for"
+                " input."
             )
             print("-" * 42)
-            filename = Path(__file__).parent / "input_test.txt"
+            filename = Path(__file__).parents[0] / "input_test.txt"
 
     with open(filename, "r") as file:
         for line in file:
