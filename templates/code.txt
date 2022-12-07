@@ -1,7 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import Callable, List, TypeVar
+from typing import Any, Callable, List, TypeVar
 
 ###########################################################################
 ############################### Setup #####################################
@@ -31,6 +31,15 @@ arg_parser.add_argument(
     action="store_true",
     required=False,
 )
+arg_parser.add_argument(
+    "--debug",
+    help="Debug mode.",
+    default=False,
+    action="store_true",
+    required=False,
+)
+args, _ = arg_parser.parse_known_args(sys.argv)
+
 args, _ = arg_parser.parse_known_args(sys.argv)
 
 ParsedInput = TypeVar("ParsedInput")
@@ -53,6 +62,10 @@ def get_input(parse: Callable[[str], ParsedInput], puzzle: bool = False) -> List
         for line in file:
             data.append(parse(line.strip()))
     return data
+
+def debug_print(*s: Any):
+    if args.debug:
+        print(*s)
 ###########################################################################
 
 ################################################################################

@@ -1,8 +1,9 @@
-from typing import Any, List, Sequence, Set, Tuple
+from typing import Any, Callable, Generator, List, Sequence, Set, Tuple, TypeVar
 
 
 def convert_to_int(seq: Sequence[str]) -> Tuple[int]:
     return tuple(map(int, seq))
+
 
 class Day03:
     @staticmethod
@@ -30,14 +31,40 @@ class Day04:
             return range1[1] >= range2[0]
         return range2[1] >= range1[0]
 
+
 class Day06:
     @staticmethod
-    def index_non_repeating_window(data_stream: str, width: int, start_: int = 0) -> int
+    def index_non_repeating_window(data_stream: str, width: int, start_: int = 0) -> int:
         window: List[str] = list(data_stream[start_:width])
-        for i in range(start_+width, len(data_stream)):
+        for i in range(start_ + width, len(data_stream)):
             if len(set(window)) != width:
                 window.pop(0)
                 window.append(data_stream[i])
             else:
                 return i
         return -1
+
+
+E = TypeVar("E")
+K = TypeVar("K")
+
+
+def dfs(
+    points: Sequence[E],
+    visitor_function: Callable[[E], K],
+    neighbor_iter: Callable[[E], List[E]],
+) -> Generator[K, None, None]:
+    to_visit: List[E] = [points[0]]
+    visited: Set[E] = set()
+
+    while len(to_visit) > 0:
+        c = to_visit.pop(0)
+
+        if c in visited:
+            continue
+
+        yield visitor_function(c)
+
+        to_visit.extend(neighbor_iter(c))
+
+    return None
