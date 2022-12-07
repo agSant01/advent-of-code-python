@@ -68,3 +68,27 @@ def dfs(
         to_visit.extend(neighbor_iter(c))
 
     return None
+
+
+def sorted_insert(array: List[E], value: E):
+    if len(array) == 0:
+        array.append(value)
+        return
+
+    left = 0
+    right = len(array) - 1
+    mid = 0
+
+    while left < right:
+        mid = (right + left) // 2
+        if value < array[mid]:  # type: ignore
+            right = mid
+        elif value > array[mid]:  # type: ignore
+            left = mid + 1
+        else:
+            break
+
+    if value > array[mid]:  # type: ignore
+        mid += 1
+
+    array.insert(mid, value)

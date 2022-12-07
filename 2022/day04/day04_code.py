@@ -6,8 +6,6 @@ from typing import Callable, List
 ###########################################################################
 ############################### Setup #####################################
 ###########################################################################
-sys.path.append(Path(__file__).parent.parent.as_posix())
-import lib
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument(
