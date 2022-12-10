@@ -1,15 +1,11 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import Any, Callable, List, Literal, Sequence, Set, Tuple, TypeVar
-from unicodedata import digit
+from typing import Any, Callable, List, Set, Tuple, TypeVar
 
 ###########################################################################
 ############################### Setup #####################################
 ###########################################################################
-sys.path.append(Path(__file__).parent.parent.as_posix())
-import lib
-
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument(
     "--input", "-i", help="Input file path.", type=Path, required=False
