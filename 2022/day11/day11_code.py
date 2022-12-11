@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+from functools import reduce
 from operator import add, mul
 from pathlib import Path
 from typing import Any, Callable, List, TypeVar
@@ -171,9 +172,7 @@ def parse2(line: str):
 def day11p2():
     monkeys = parse_monkeys(get_input(parse2, args.puzzle))
 
-    lcm = 1
-    for m in monkeys:
-        lcm *= lcm * m.test_div
+    lcm = reduce(lambda a, m: m.test_div * a, monkeys, 1)
 
     for _ in range(10000):
         for monk in monkeys:
