@@ -1,4 +1,15 @@
-from typing import Any, Callable, Generator, List, Sequence, Set, Tuple, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Generator,
+    List,
+    NamedTuple,
+    Sequence,
+    Set,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 
 def convert_to_int(seq: Sequence[str]) -> Tuple[int]:
@@ -49,27 +60,6 @@ E = TypeVar("E")
 K = TypeVar("K")
 
 
-def dfs(
-    points: Sequence[E],
-    visitor_function: Callable[[E], K],
-    neighbor_iter: Callable[[E], List[E]],
-) -> Generator[K, None, None]:
-    to_visit: List[E] = [points[0]]
-    visited: Set[E] = set()
-
-    while len(to_visit) > 0:
-        c = to_visit.pop(0)
-
-        if c in visited:
-            continue
-
-        yield visitor_function(c)
-
-        to_visit.extend(neighbor_iter(c))
-
-    return None
-
-
 def sorted_insert(array: List[E], value: E):
     if len(array) == 0:
         array.append(value)
@@ -92,3 +82,40 @@ def sorted_insert(array: List[E], value: E):
         mid += 1
 
     array.insert(mid, value)
+
+
+class ToVisit(NamedTuple):
+    starting_point: Tuple[int, int]
+    steps: int
+    trail: List[Tuple[int, int]]
+
+
+def find_paths(
+    get_neighbors: Callable[[Tuple[int, int]], List[Tuple[int, int]]],
+    is_end: Union[Callable[[Tuple[int, int]], bool], None],
+    starting_point: Tuple[int, int] = (0, 0),
+) -> List[ToVisit]:
+    to_visit: List[Tuple[Tuple[int, int], int, List[Tuple[int, int]]]] = [
+        ToVisit(starting_point, 0, [])
+    ]
+    visited = set()
+    result = []
+
+    while len(to_visit) > 0:
+        c_c, steps, trail = to_visit.pop(0)
+
+        if c_c in visited:
+            continue
+
+        visited.add(c_c)
+
+        if is_end and is_end(c_c):
+            result.append(ToVisit(c_c, steps, trail))
+            continue
+
+        for nb in get_neighbors(c_c):
+            if nb not in visited:
+                new_trail = trail + [c_c]
+                to_visit.append(ToVisit(nb, steps + 1, new_trail))
+
+    return result
