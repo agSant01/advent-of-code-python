@@ -65,6 +65,13 @@ def __init_args():
         default=VERSION,
     )
 
+    parser.add_argument(
+        "--shelp",
+        help="Print day script help",
+        type=int,
+        required=False,
+    )
+
     return parser.parse_known_args()[0]
 
 
@@ -239,10 +246,21 @@ def run(day: str, year: int = None):  # type: ignore
             error("FileNotFoundError: Try using compatibility mode --comp")
 
 
+def day_help(day: str, year: int = None):  # type: ignore
+    if not year:
+        year: int = datetime.today().year  # type: ignore
+    day = str(day).zfill(2)
+    console(f"Help for script: ./{year}/day{day}/day{day}_code.py")
+    fp = Path(str(year), f"day{day}", f"day{day}_code.py")
+    if not fp.exists():
+        error("FileNotFoundError: Help supported for aocUtils >= V2")
+    else:
+        os.system(f"python3.8 {fp.absolute()} -h")
+
+
 def main():
     # Debug
     # console(args)
-
     if bool(ARGS.run):
         run(ARGS.run, ARGS.year)
         exit()
@@ -256,6 +274,9 @@ def main():
         create_input_files(ARGS.input_data, ARGS.year, ARGS.force)
     elif ARGS.day_desc:
         create_instruction_file(ARGS.day_desc, ARGS.year)
+    elif ARGS.shelp:
+        print("?")
+        day_help(ARGS.shelp, ARGS.year)
 
 
 if __name__ == "__main__":
