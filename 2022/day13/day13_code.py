@@ -91,7 +91,7 @@ def parse1(line: str) -> Union[None, List[Any]]:
 ################################################################################
 
 
-class State(enum.IntEnum):
+class Order(enum.IntEnum):
     RIGHT = -1
     EQ = 0
     WRONG = 1
@@ -100,14 +100,14 @@ class State(enum.IntEnum):
 def is_right_order(
     left: Union[int, List[int], List[List[int]]],
     right: Union[int, List[int], List[List[int]]],
-) -> State:
+) -> Order:
     if isinstance(left, int) and isinstance(right, int):
         debug_print("int and int", left, right)
         if left - right > 0:
-            return State.WRONG
+            return Order.WRONG
         elif left - right < 0:
-            return State.RIGHT
-        return State.EQ
+            return Order.RIGHT
+        return Order.EQ
     elif isinstance(left, list) and isinstance(right, list):
         l_l = len(left)
         l_r = len(right)
@@ -115,16 +115,16 @@ def is_right_order(
 
         for l, r in zip(left, right):
             res = is_right_order(l, r)
-            if res != State.EQ:
+            if res != Order.EQ:
                 return res
 
         # can't conclude after comparing all elements, need check length
         if l_l > l_r:
-            return State.WRONG
+            return Order.WRONG
         elif l_l < l_r:
-            return State.RIGHT
+            return Order.RIGHT
 
-        return State.EQ
+        return Order.EQ
     else:
         debug_print("list and int", left, right)
         if isinstance(left, int):
@@ -154,7 +154,7 @@ def day13p1():
 
         debug_print(f"Pair {idx} | Is right order: {(str(res))}")
 
-        if res != State.WRONG:
+        if res != Order.WRONG:
             result.append(idx)
 
     debug_print("Indexes:", result)
