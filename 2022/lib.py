@@ -60,25 +60,29 @@ E = TypeVar("E")
 K = TypeVar("K")
 
 
-def sorted_insert(array: List[E], value: E):
+def sorted_insert(
+    array: List[E],
+    value: E,
+    comparator: Callable[[Any, Any], int] = lambda a, b: a - b,
+):
     if len(array) == 0:
         array.append(value)
         return
 
     left = 0
-    right = len(array) - 1
+    right = len(array)
     mid = 0
 
     while left < right:
         mid = (right + left) // 2
-        if value < array[mid]:  # type: ignore
+        if comparator(value, array[mid]) < 0:
             right = mid
-        elif value > array[mid]:  # type: ignore
+        elif comparator(value, array[mid]) > 0:
             left = mid + 1
         else:
             break
 
-    if value > array[mid]:  # type: ignore
+    if comparator(value, array[mid]) > 0:
         mid += 1
 
     array.insert(mid, value)
