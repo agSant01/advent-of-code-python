@@ -1,7 +1,7 @@
 from typing import (
     Any,
     Callable,
-    Generator,
+    Iterable,
     List,
     NamedTuple,
     Sequence,
@@ -12,7 +12,7 @@ from typing import (
 )
 
 
-def convert_to_int(seq: Sequence[str]) -> Tuple[int]:
+def convert_to_int(seq: Sequence[str]) -> Tuple[int, ...]:
     return tuple(map(int, seq))
 
 
@@ -98,11 +98,12 @@ def find_paths(
     get_neighbors: Callable[[Tuple[int, int]], List[Tuple[int, int]]],
     is_end: Union[Callable[[Tuple[int, int]], bool], None],
     starting_point: Tuple[int, int] = (0, 0),
-) -> List[ToVisit]:
+    return_visited=False,
+) -> Union[List[ToVisit], Set[Tuple[int, int]]]:
     to_visit: List[Tuple[Tuple[int, int], int, List[Tuple[int, int]]]] = [
         ToVisit(starting_point, 0, [])
     ]
-    visited = set()
+    visited: Set[Tuple[int, int]] = set()
     result = []
 
     while len(to_visit) > 0:
@@ -122,4 +123,11 @@ def find_paths(
                 new_trail = trail + [c_c]
                 to_visit.append(ToVisit(nb, steps + 1, new_trail))
 
+    if return_visited:
+        return visited
+
     return result
+
+
+def manhattan_distance(v1: Iterable[int], v2: Iterable[int]) -> int:
+    return sum(abs(p - q) for p, q in zip(v1, v2))
