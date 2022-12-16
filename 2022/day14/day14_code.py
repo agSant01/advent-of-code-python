@@ -1,15 +1,13 @@
 import argparse
 import sys
-from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, List, NamedTuple, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, List, Set, TypeVar
 
 ###########################################################################
 ############################### Setup #####################################
 ###########################################################################
 sys.path.append(Path(__file__).parent.parent.as_posix())
-import lib
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument(
@@ -253,7 +251,6 @@ def day14p2():
         min_x=min(wall_points, key=lambda p: p.x).x,
         max_y=max(wall_points, key=lambda p: p.y).y + 2,
     )
-
 
     layout.wall_points.add(Point(x=None, y=layout.max_y))  # type:ignore
 
