@@ -16,6 +16,18 @@ def convert_to_int(seq: Sequence[str]) -> Tuple[int, ...]:
     return tuple(map(int, seq))
 
 
+def print_range_horizontal(min_: int, max_: int, left_justify=0):
+    y = max(len(str(abs(min_))), len(str(abs(max_))))
+    values: List[str] = []
+    for x in range(min_, max_ + 1):
+        values.append(str(x).rjust(y, " ").replace("-", "~"))
+    for y in range(y):
+        print(" " * left_justify, end="")
+        for x in range(min_, max_ + 1):
+            print(values[x - min_][y], end="")
+        print()
+
+
 class Day03:
     @staticmethod
     def get_common_items(*items: Sequence[Any]) -> Set[Any]:
