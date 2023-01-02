@@ -1,5 +1,4 @@
 import argparse
-import datetime
 import os
 import re
 import sys
@@ -95,11 +94,11 @@ CONFIG = __config()
 
 
 def console(msg: Any):
-    print(f"==>", msg)
+    print("==>", msg)
 
 
 def error(msg: Any):
-    print(f"[ERROR]", msg)
+    print("[ERROR]", msg)
 
 
 def init_year(year: int = None):  # type:ignore
