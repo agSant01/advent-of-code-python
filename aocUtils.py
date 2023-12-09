@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import argparse
 import os
 import re
@@ -58,7 +60,7 @@ def __init_args():
         choices=PREV_VERSIONS + [VERSION],
         help=(
             "Run in compatibility mode.\nAvailable versions:"
-            f' {", ".join(map(str, PREV_VERSIONS + [VERSION]))}'
+            f" {', '.join(map(str, PREV_VERSIONS + [VERSION]))}"
         ),
         required=False,
         default=VERSION,
@@ -183,7 +185,7 @@ def get_input_data(day_str: str, year: int = None) -> Union[str, None]:  # type:
     if not year:
         year: int = datetime.today().year  # type:ignore
 
-    console(f"Get input data for year: {year} \u272D day:{day}")
+    console(f"Get input data for year: {year} \u272d day:{day}")
 
     complete_url = f"{BASE_URL}/{year}/day/{day}/input"
 
@@ -232,7 +234,7 @@ def run(day: str, year: int = None):  # type: ignore
     if ARGS.comp < 2:
         console(f"Running script: ./{year}/day{day}.py")
         os.chdir(f"./{year}")
-        os.system(f"python3.8 ./day{day}.py {' '.join(sys.argv[1:])}")
+        os.system(f"/usr/bin/env python3 ./day{day}.py {' '.join(sys.argv[1:])}")
     else:
         try:
             console(f"Running script: ./{year}/day{day}/day{day}_code.py")
@@ -240,7 +242,9 @@ def run(day: str, year: int = None):  # type: ignore
             if not fp.exists():
                 error("FileNotFoundError: Try using compatibility mode --comp")
             else:
-                os.system(f"python3.8 {fp.absolute()} {' '.join(sys.argv[1:])}")
+                os.system(
+                    f"/usr/bin/env python3 {fp.absolute()} {' '.join(sys.argv[1:])}"
+                )
         except FileNotFoundError:
             error("FileNotFoundError: Try using compatibility mode --comp")
 
@@ -254,7 +258,7 @@ def day_help(day: str, year: int = None):  # type: ignore
     if not fp.exists():
         error("FileNotFoundError: Help supported for aocUtils >= V2")
     else:
-        os.system(f"python3.8 {fp.absolute()} -h")
+        os.system(f"/usr/bin/env python3 {fp.absolute()} -h")
 
 
 def main():
